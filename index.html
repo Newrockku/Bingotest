@@ -17,72 +17,82 @@
             align-items: center;
         }
 
+        h1 {
+            color: #ff9800;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 4px black;
+        }
+
         /* 7x7 Grid */
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(7, 200px); /* Larger tiles to fit details */
-            gap: 15px;
+            grid-template-columns: repeat(7, 180px); /* Fixed width for columns */
+            gap: 12px;
             padding: 20px;
         }
 
-        /* The Main Tile */
+        /* The Perfect Square Tile */
         .tile {
-            background-color: #4b443c; /* Brownish-grey background */
+            background-color: #4b443c; 
             border: 2px solid #332e2a;
             position: relative;
-            aspect-ratio: 1 / 1.1; /* Slightly taller than wide to fit checklist */
+            aspect-ratio: 1 / 1; /* LOCKS TO SQUARE */
             display: flex;
             flex-direction: column;
-            padding: 12px;
+            padding: 10px;
             box-sizing: border-box;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            overflow: hidden; /* Keeps everything inside the square */
         }
 
-        /* Decorative Corners */
-        .tile::before, .tile::after {
-            content: "";
+        /* All 4 Corner Brackets */
+        .corner {
             position: absolute;
-            width: 15px;
-            height: 15px;
+            width: 12px;
+            height: 12px;
             border: 3px solid #7a756e;
             pointer-events: none;
         }
-        /* Top Left and Bottom Right Corners */
-        .tile::before { top: -2px; left: -2px; border-right: none; border-bottom: none; }
-        .tile::after { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+        .top-left     { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+        .top-right    { top: -2px; right: -2px; border-left: none; border-bottom: none; }
+        .bottom-left  { bottom: -2px; left: -2px; border-right: none; border-top: none; }
+        .bottom-right { bottom: -2px; right: -2px; border-left: none; border-top: none; }
 
         /* Header Area */
         .header-box {
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.3);
             border: 1px solid #332e2a;
-            padding: 5px;
+            padding: 4px;
             text-align: center;
             font-weight: bold;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .header-text { color: #ff9800; } /* Golden/Orange text */
-        .divider { color: #d32f2f; margin: 0 5px; } /* Red/Orange vertical bar */
+        .header-text { color: #ff9800; } 
+        .divider { color: #d32f2f; margin: 0 4px; } 
 
         /* Image Styling */
         .tile img {
-            height: 80px;
+            height: 35%; /* Scaled to fit in the square */
             object-fit: contain;
             margin: auto;
             display: block;
-            filter: drop-shadow(2px 4px 6px black);
+            filter: drop-shadow(2px 3px 4px black);
         }
 
         /* Progress Bar Area */
         .progress-container {
-            margin-top: 10px;
             width: 100%;
+            margin-bottom: 5px;
         }
 
         .progress-bg {
             background: #26211d;
-            height: 8px;
+            height: 6px;
             border: 1px solid #111;
             width: 100%;
         }
@@ -94,42 +104,40 @@
 
         /* Checklist Box */
         .checklist-box {
-            background: #2a251f; /* Dark inset */
+            background: #2a251f; 
             border: 1px solid #1a1714;
-            margin-top: 8px;
-            padding: 6px;
-            min-height: 40px;
-            flex-grow: 1;
-            text-align: left;
+            padding: 5px;
+            height: 30%; /* Fixed height to keep tile square */
             overflow-y: auto;
+            text-align: left;
         }
 
         .check-item {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #ff9800;
             display: flex;
             align-items: center;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
+            line-height: 1.1;
         }
 
         .check-mark {
-            width: 10px;
-            height: 10px;
-            background-color: #4caf50;
+            width: 8px;
+            height: 8px;
+            background-color: #4caf50; /* Green by default */
             border: 1px solid #1b5e20;
             margin-right: 5px;
-            display: inline-block;
-            position: relative;
+            flex-shrink: 0;
         }
 
-        /* Custom Scrollbar for small box */
-        .checklist-box::-webkit-scrollbar { width: 4px; }
-        .checklist-box::-webkit-scrollbar-thumb { background: #4b443c; }
+        /* Scrollbar for Checklist */
+        .checklist-box::-webkit-scrollbar { width: 3px; }
+        .checklist-box::-webkit-scrollbar-thumb { background: #5d564d; }
     </style>
 </head>
 <body>
 
-    <h1 style="color: #ff9800;">COLLECTION LOG</h1>
+    <h1>COLLECTION LOG</h1>
     
     <div class="grid-container" id="grid">
         </div>
@@ -158,8 +166,7 @@
 
                     const percent = Math.min((current / goal) * 100, 100);
                     
-                    // Colors: Green if done, Orange/Yellow if partial, Red if 0
-                    let barColor = '#d32f2f'; // Red
+                    let barColor = '#d32f2f'; 
                     if (percent === 100) barColor = '#00ff00';
                     else if (percent > 0) barColor = '#ffa500';
 
@@ -168,7 +175,6 @@
                     const tile = document.createElement('div');
                     tile.className = 'tile';
                     
-                    // Create Checklist HTML
                     let checklistHtml = '';
                     itemList.forEach(item => {
                         if(item.trim() !== "") {
@@ -177,17 +183,25 @@
                     });
 
                     tile.innerHTML = `
+                        <div class="corner top-left"></div>
+                        <div class="corner top-right"></div>
+                        <div class="corner bottom-left"></div>
+                        <div class="corner bottom-right"></div>
+                        
                         <div class="header-box">
                             <span class="header-text">${index + 1}</span>
                             <span class="divider">|</span>
                             <span class="header-text">${title}</span>
                         </div>
-                        <img src="${finalImgSrc}" alt="${title}" onerror="this.src='https://via.placeholder.com/60/4b443c/ff9800?text=?'">
+                        
+                        <img src="${finalImgSrc}" alt="${title}" onerror="this.style.display='none'">
+                        
                         <div class="progress-container">
                             <div class="progress-bg">
                                 <div class="progress-fill" style="width: ${percent}%; background: ${barColor}"></div>
                             </div>
                         </div>
+                        
                         <div class="checklist-box">
                             ${checklistHtml}
                         </div>
