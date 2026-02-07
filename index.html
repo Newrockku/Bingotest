@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Collection Log Tracker</title>
+    <title>Bingo v3</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
         /* Base Page Styling */
         body { 
             background-color: #1a1917; 
             color: #e0d7c6; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            /* Updated Font */
+            font-family: 'Cabin Condensed', sans-serif; 
             margin: 0;
             padding: 20px;
             display: flex;
@@ -36,7 +41,6 @@
             background-color: #4b443c; 
             border: 2px solid #332e2a;
             position: relative;
-            /* 1. LOCK TO SQUARE */
             aspect-ratio: 1 / 1; 
             display: flex;
             flex-direction: column;
@@ -46,10 +50,10 @@
             overflow: hidden; 
         }
 
-        /* 2. ALL 4 CORNER BRACKETS */
+        /* 4 Corner Brackets */
         .corner {
             position: absolute;
-            width: 8px; /* Slightly smaller to match your reference */
+            width: 8px;
             height: 8px;
             border: 4px solid #7a756e;
             pointer-events: none;
@@ -63,11 +67,11 @@
         .header-box {
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid #332e2a;
-            padding: 4px;
+            padding: 3px;
             text-align: center;
             font-weight: bold;
-            font-size: 0.8rem;
-            margin-bottom: 5px;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -76,9 +80,9 @@
         .header-text { color: #ffac00; } 
         .divider { color: #ffac00; margin: 0 4px; } 
 
-        /* Image Styling */
+        /* Image Styling - Larger room */
         .tile img {
-            height: 35%; 
+            height: 48%; 
             object-fit: contain;
             margin: auto;
             display: block;
@@ -103,18 +107,18 @@
             transition: width 0.5s ease;
         }
 
-        /* Checklist Box */
+        /* Checklist Box - Shrunk to 22% */
         .checklist-box {
             background: #2a251f; 
             border: 1px solid #1a1714;
-            padding: 5px;
-            height: 30%; 
+            padding: 4px;
+            height: 22%; 
             overflow-y: auto;
             text-align: left;
         }
 
         .check-item {
-            font-size: 0.65rem;
+            font-size: 0.75rem; /* Cabin Condensed is narrower, so we can go slightly larger */
             color: #ffac00;
             display: flex;
             align-items: center;
@@ -123,11 +127,11 @@
         }
 
         .check-mark {
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             background-color: #4caf50; 
             border: 1px solid #1b5e20;
-            margin-right: 5px;
+            margin-right: 4px;
             flex-shrink: 0;
         }
 
@@ -183,7 +187,6 @@
                         }
                     });
 
-                    // Injected corners + your original layout
                     tile.innerHTML = `
                         <div class="corner top-left"></div>
                         <div class="corner top-right"></div>
