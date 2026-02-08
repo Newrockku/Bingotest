@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bingo v3.5</title>
+    <title>Bingo v3.6</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cabin+Condensed:wght@400;700&display=swap" rel="stylesheet">
@@ -192,36 +192,45 @@
             border: 3px solid #6d604e;
             width: 100%;
             max-width: 450px;
-            max-height: 90vh;
+            max-height: 95vh;
             padding: 25px;
             position: relative;
             box-shadow: 0 0 40px rgba(0,0,0,0.8);
             display: flex;
             flex-direction: column;
-            /* Using Container Queries for modal too so it scales like the tile */
             container-type: inline-size;
         }
 
-        /* We reuse the tile styles inside the modal but at static/larger sizes */
         .modal-header { font-size: 1.8rem; margin-bottom: 15px; text-align: center; font-weight: bold; border-bottom: 2px solid #342e25; padding-bottom: 10px; }
-        .modal-img { height: 150px; margin-bottom: 15px; display: flex; justify-content: center; }
+        .modal-img { height: 150px; margin-bottom: 15px; display: flex; justify-content: center; flex-shrink: 0;}
         .modal-img img { max-height: 100%; filter: drop-shadow(4px 4px 6px black); }
         
-        .modal-progress { height: 20px; margin-bottom: 15px; }
-        .modal-checklist { background: #342e25; border: 1px solid #000; padding: 15px; max-height: 150px; overflow-y: auto; margin-bottom: 15px; }
-        .modal-checklist .check-item { font-size: 1.1rem; }
+        /* NEW: Modal Labels */
+        .modal-label { 
+            font-size: 0.85rem; 
+            text-transform: uppercase; 
+            color: #858476; 
+            margin-bottom: 4px; 
+            display: block; 
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .modal-progress { height: 20px; margin-bottom: 15px; flex-shrink: 0; }
+        .modal-checklist { background: #342e25; border: 1px solid #000; padding: 12px; max-height: 140px; overflow-y: auto; margin-bottom: 15px; }
+        .modal-checklist .check-item { font-size: 1.1rem; margin-bottom: 6px; }
         .modal-checklist .check-mark { width: 16px; height: 16px; }
         .modal-checklist .check-mark::after { width: 4px; height: 8px; border-width: 0 2px 2px 0; }
 
-        .modal-desc-label { font-size: 0.9rem; text-transform: uppercase; color: #858476; margin-bottom: 5px; display: block; }
         .modal-description {
             font-size: 1.1rem;
-            color: #ffac00;
+            color: #e0d7c6;
             line-height: 1.4;
             background: #2a251e;
             padding: 15px;
             border: 1px solid #000;
             overflow-y: auto;
+            flex-grow: 1;
         }
 
         .close-btn {
@@ -245,7 +254,7 @@
 </head>
 <body>
 
-    <h1>Bingo v3.5</h1>
+    <h1>Bingo v3.6</h1>
     
     <div class="grid-container" id="grid"></div>
 
@@ -259,15 +268,17 @@
                 <img id="modal-image" src="" alt="">
             </div>
             
+            <span class="modal-label">Current Progress</span>
             <div class="modal-progress">
                 <div class="progress-bg">
                     <div id="modal-bar" class="progress-fill"></div>
                 </div>
             </div>
             
+            <span class="modal-label">Collected Items</span>
             <div id="modal-list" class="modal-checklist"></div>
             
-            <span class="modal-desc-label">Description</span>
+            <span class="modal-label">Description</span>
             <div id="modal-desc" class="modal-description"></div>
         </div>
     </div>
@@ -302,7 +313,6 @@
 
                     const finalImgSrc = (imgName.includes('http')) ? imgName : `./images/${imgName}`;
 
-                    // Build the checklist HTML
                     let checklistHtml = '';
                     itemList.forEach(item => {
                         if(item.trim() !== "") {
@@ -313,7 +323,6 @@
                     const tile = document.createElement('div');
                     tile.className = 'tile';
                     
-                    // Pass all data to the openModal function
                     tile.onclick = () => openModal({
                         id: index + 1,
                         title,
@@ -362,12 +371,12 @@
             document.getElementById('modal-desc').innerText = data.description;
             
             document.getElementById('modal-overlay').style.display = 'flex';
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            document.body.style.overflow = 'hidden'; 
         }
 
         function closeModal() {
             document.getElementById('modal-overlay').style.display = 'none';
-            document.body.style.overflow = 'auto'; // Restore scrolling
+            document.body.style.overflow = 'auto'; 
         }
 
         fetchData();
