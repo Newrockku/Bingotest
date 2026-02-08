@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bingo v3.3</title>
+    <title>Bingo v3.4</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cabin+Condensed:wght@400;700&display=swap" rel="stylesheet">
@@ -51,6 +51,13 @@
             box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
             overflow: hidden; 
             container-type: inline-size;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+
+        .tile:hover {
+            transform: scale(1.02);
+            border-color: #ffac00;
         }
 
         /* Blocky corners preserved */
@@ -67,7 +74,6 @@
         .bottom-left  { bottom: -0.5cqw; left: -0.5cqw; border-right: none; border-top: none; }
         .bottom-right { bottom: -0.5cqw; right: -0.5cqw; border-left: none; border-top: none; }
 
-        /* HEADER: No-shrink logic */
         .header-box {
             background: #342e25;
             border: 1px solid #000;
@@ -77,7 +83,7 @@
             display: flex;
             justify-content: center; 
             align-items: center;
-            flex-shrink: 0; /* Prevents header from squishing */
+            flex-shrink: 0;
             overflow: hidden;
             text-align: center;
         }
@@ -99,14 +105,13 @@
             opacity: 1;
         } 
 
-        /* IMG: No-shrink logic */
         .img-container {
             height: 40%; 
             display: flex;
             justify-content: center;
             align-items: center;
             margin-bottom: 2%;
-            flex-shrink: 0; /* Prevents image area from squishing */
+            flex-shrink: 0;
         }
 
         .img-container img {
@@ -116,12 +121,11 @@
             filter: drop-shadow(2px 3px 4px black);
         }
 
-        /* PROGRESS BAR: No-shrink logic */
         .progress-container {
             margin-bottom: 2%;
             height: 4cqw;
             width: 100%;
-            flex-shrink: 0; /* THE FIX: Prevents the bar from getting squished */
+            flex-shrink: 0;
         }
 
         .progress-bg {
@@ -137,7 +141,6 @@
             transition: width 0.5s ease;
         }
 
-        /* CHECKLIST BOX: Flex-grow handles the remaining space */
         .checklist-box {
             background: #342e25; 
             border: 1px solid #000;
@@ -146,7 +149,7 @@
             width: 100%;
             overflow-y: auto;
             text-align: left;
-            min-height: 0; /* Allows the scrollable area to actually shrink its contents instead of the tile */
+            min-height: 0;
         }
 
         .check-item {
@@ -181,8 +184,57 @@
             margin-bottom: 0.5cqw;
         }
 
-        .checklist-box::-webkit-scrollbar { width: 2cqw; }
-        .checklist-box::-webkit-scrollbar-thumb { background: #858476; }
+        /* MODAL STYLES */
+        #modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #494034;
+            border: 3px solid #6d604e;
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0,0,0,0.7);
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #ffac00;
+            border-bottom: 2px solid #342e25;
+            padding-bottom: 10px;
+        }
+
+        .modal-description {
+            font-size: 1.2rem;
+            color: #e0d7c6;
+            line-height: 1.5;
+            background: #342e25;
+            padding: 15px;
+            border: 1px solid #000;
+            text-align: left;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #858476;
+        }
+
+        .close-btn:hover { color: #ffac00; }
 
         @media (max-width: 1000px) {
             .grid-container { grid-template-columns: repeat(5, 1fr); }
@@ -194,9 +246,17 @@
 </head>
 <body>
 
-    <h1>Bingo v3.3</h1>
+    <h1>Bingo v3.4</h1>
     
     <div class="grid-container" id="grid"></div>
+
+    <div id="modal-overlay" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div id="modal-title" class="modal-title"></div>
+            <div id="modal-desc" class="modal-description"></div>
+        </div>
+    </div>
 
     <script>
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRFOGe_j8BL0X5Cwvy3LNmsrWG82IAXlWpump0Sw6PKWLz-1gxbisdbPuTmJ_CmjLA_q-Q6y9jTfFwq/pub?gid=1593254680&single=true&output=csv';
@@ -219,6 +279,8 @@
                     const current = parseInt(cols[2]) || 0;
                     const goal = parseInt(cols[3]) || 1;
                     const itemList = cols[4] ? cols[4].replace(/"/g, "").trim().split(',') : [];
+                    // Capture description from Column 6 (index 5)
+                    const description = cols[5] ? cols[5].replace(/"/g, "").trim() : "No description provided.";
 
                     const percent = Math.min((current / goal) * 100, 100);
                     
@@ -230,6 +292,9 @@
 
                     const tile = document.createElement('div');
                     tile.className = 'tile';
+                    
+                    // Attach click event for modal
+                    tile.onclick = () => openModal(title, description);
                     
                     let checklistHtml = '';
                     itemList.forEach(item => {
@@ -271,6 +336,16 @@
             } catch (error) {
                 console.error("Error:", error);
             }
+        }
+
+        function openModal(title, desc) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-desc').innerText = desc;
+            document.getElementById('modal-overlay').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').style.display = 'none';
         }
 
         fetchData();
