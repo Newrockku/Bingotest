@@ -46,12 +46,10 @@
             aspect-ratio: 1 / 1; 
             display: flex;
             flex-direction: column;
-            padding: 5%; /* Relative padding */
+            padding: 4%; /* Slightly reduced padding */
             box-sizing: border-box;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
             overflow: hidden; 
-            
-            /* Enable Container Queries */
             container-type: inline-size;
         }
 
@@ -68,26 +66,32 @@
         .bottom-left  { bottom: -0.5cqw; left: -0.5cqw; border-right: none; border-top: none; }
         .bottom-right { bottom: -0.5cqw; right: -0.5cqw; border-left: none; border-top: none; }
 
-        /* Header Area - Text Scales with box width */
+        /* Header Area - Updated for readability */
         .header-box {
             background: #342e25;
             border: 1px solid #000;
-            padding: 2%;
+            padding: 1% 2%;
             text-align: center;
             font-weight: bold;
-            font-size: 9cqw; /* Dynamic scaling */
-            margin-bottom: 3%;
-            white-space: nowrap;
+            font-size: 8.5cqw; /* Slightly smaller base size */
+            margin-bottom: 2%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 18%; /* Ensures space for 2 lines if needed */
+            
+            /* Allow text to wrap instead of cutting off */
+            white-space: normal; 
+            line-height: 1;
             overflow: hidden;
-            text-overflow: ellipsis;
         }
 
         .header-text { color: #ffac00; } 
-        .divider { color: #ffac00; margin: 0 2%; } 
+        .divider { color: #ffac00; margin: 0 1.5%; } 
 
         /* Image Styling */
         .tile img {
-            height: 48%; 
+            height: 40%; /* Reduced slightly to accommodate potential header wrap */
             max-width: 90%;
             object-fit: contain;
             margin: auto;
@@ -98,7 +102,7 @@
         /* Progress Bar Area */
         .progress-container {
             width: 100%;
-            margin-bottom: 3%;
+            margin-bottom: 2%;
         }
 
         .progress-bg {
@@ -124,7 +128,7 @@
         }
 
         .check-item {
-            font-size: 7cqw; /* Dynamic scaling */
+            font-size: 7cqw;
             color: #ffac00;
             display: flex;
             align-items: center;
@@ -133,8 +137,8 @@
         }
 
         .check-mark {
-            width: 5cqw;
-            height: 5cqw;
+            width: 4.5cqw;
+            height: 4.5cqw;
             background-color: #4caf50; 
             border: 1px solid #1b5e20;
             margin-right: 3%;
@@ -145,7 +149,7 @@
         .checklist-box::-webkit-scrollbar { width: 1cqw; }
         .checklist-box::-webkit-scrollbar-thumb { background: #858476; }
 
-        /* Tablet/Mobile breakpoints to keep 7-wide from getting too tiny */
+        /* Breakpoints */
         @media (max-width: 1000px) {
             .grid-container { grid-template-columns: repeat(5, 1fr); }
         }
@@ -208,9 +212,11 @@
                         <div class="corner bottom-right"></div>
                         
                         <div class="header-box">
-                            <span class="header-text">${index + 1}</span>
-                            <span class="divider">|</span>
-                            <span class="header-text">${title}</span>
+                            <div>
+                                <span class="header-text">${index + 1}</span>
+                                <span class="divider">|</span>
+                                <span class="header-text">${title}</span>
+                            </div>
                         </div>
                         
                         <img src="${finalImgSrc}" alt="${title}" onerror="this.style.display='none'">
