@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bingo v3.028</title>
+    <title>Bingo v3.029</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cabin+Condensed:wght@400;700&display=swap" rel="stylesheet">
@@ -62,24 +62,6 @@
         }
 
         .tile.ghost { opacity: 0; pointer-events: none; }
-
-        /* Blocky corners */
-        .corner {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            border: 5px solid #858476; 
-            pointer-events: none;
-            z-index: 10;
-            filter: drop-shadow(1px 0 0 #000) drop-shadow(-1px 0 0 #000) drop-shadow(0 1px 0 #000) drop-shadow(0 -1px 0 #000);
-        }
-
-        .tile .corner { width: 6cqw; height: 6cqw; border-width: 3cqw; }
-
-        .top-left     { top: -2px; left: -2px; border-right: none; border-bottom: none; }
-        .top-right    { top: -2px; right: -2px; border-left: none; border-bottom: none; }
-        .bottom-left  { bottom: -2px; left: -2px; border-right: none; border-top: none; }
-        .bottom-right { bottom: -2px; right: -2px; border-left: none; border-top: none; }
 
         .header-box {
             padding: 2% 0; 
@@ -146,7 +128,6 @@
             min-height: 0;
         }
 
-        /* UPDATED: Tile checklist color to match modal (#ffee00) */
         .tile .check-item {
             font-size: 6.5cqw; 
             color: #ffee00;
@@ -316,14 +297,11 @@
 </head>
 <body>
 
-    <h1>Bingo v3.028</h1>
+    <h1>Bingo v3.029</h1>
     <div class="grid-container" id="grid"></div>
 
     <div id="modal-overlay" onclick="closeModal()">
         <div class="modal-content" id="modal-box" onclick="event.stopPropagation()">
-            <div class="corner top-left"></div><div class="corner top-right"></div>
-            <div class="corner bottom-left"></div><div class="corner bottom-right"></div>
-
             <span class="close-btn" onclick="closeModal()">&times;</span>
             <div id="modal-header" class="modal-header"></div>
             <div class="modal-img"><img id="modal-image" src="" alt=""></div>
@@ -382,8 +360,6 @@
                     });
 
                     tile.innerHTML = `
-                        <div class="corner top-left"></div><div class="corner top-right"></div>
-                        <div class="corner bottom-left"></div><div class="corner bottom-right"></div>
                         <div class="header-box"><div class="header-content">${index + 1} | ${title}</div></div>
                         <div class="img-container"><img src="${finalImgSrc}" onerror="this.style.visibility='hidden'"></div>
                         <div class="progress-container"><div class="progress-bg"><div class="progress-fill" style="width: ${percent}%; background: ${barColor}"></div></div></div>
