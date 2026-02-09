@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bingo v3.048</title>
+    <title>Bingo v3.050</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cabin+Condensed:wght@400;700&display=swap" rel="stylesheet">
@@ -30,10 +30,10 @@
             position: relative;
         }
 
-        /* --- Slimmed Header Dashboard --- */
+        /* --- Aligned Header Dashboard --- */
         .dashboard {
             width: 100%;
-            max-width: 1600px;
+            max-width: 1580px; 
             background: #494034;
             border: 2px solid #6d604e;
             padding: 12px 20px;
@@ -89,22 +89,40 @@
 
         .stats-container {
             display: flex;
-            gap: 20px;
+            gap: 25px; /* Increased gap for clarity */
             align-items: center;
         }
 
-        .stat-item { text-align: right; }
-        .stat-label { font-size: 0.7rem; text-transform: uppercase; color: #858476; display: block; margin-bottom: -2px; }
-        .stat-value { font-size: 1.4rem; font-weight: bold; color: #ffac00; }
+        .stat-item { 
+            text-align: center; /* Centering both label and value */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-label { 
+            font-size: 0.7rem; 
+            text-transform: uppercase; 
+            color: #858476; 
+            display: block; 
+            margin-bottom: 2px; 
+        }
+
+        .stat-value { 
+            font-size: 1.4rem; 
+            font-weight: bold; 
+            color: #ffac00; 
+            line-height: 1.2;
+        }
 
         #codeword-display {
             cursor: pointer;
             background: #221e18;
-            padding: 2px 8px;
+            padding: 2px 10px;
             border-radius: 4px;
             transition: color 0.3s;
             display: inline-block;
-            min-width: 80px;
+            min-width: 90px;
             text-align: center;
         }
         .codeword-hidden { color: #221e18; text-shadow: none; }
@@ -114,9 +132,9 @@
             display: grid;
             grid-template-columns: repeat(7, 1fr); 
             gap: 10px;
-            padding: 0 10px 60px 10px;
+            padding: 0 0 60px 0; 
             width: 100%;
-            max-width: 1600px;
+            max-width: 1580px; 
             position: relative;
             z-index: 5;
         }
@@ -124,13 +142,14 @@
         @media (max-width: 1200px) { .grid-container { grid-template-columns: repeat(5, 1fr); } }
         @media (max-width: 800px) { .grid-container { grid-template-columns: repeat(4, 1fr); } }
         @media (max-width: 600px) { 
-            .grid-container { grid-template-columns: repeat(3, 1fr); padding: 0 5px 60px 5px; } 
+            .grid-container { grid-template-columns: repeat(3, 1fr); padding-bottom: 60px; } 
             .dashboard { padding: 10px 15px; gap: 5px; }
             #event-title { font-size: 1.2rem; }
             #team-name { font-size: 0.85rem; }
             .stat-value { font-size: 1.1rem; }
             .stat-label { font-size: 0.6rem; }
-            #codeword-display { min-width: 60px; }
+            #codeword-display { min-width: 70px; }
+            .stats-container { gap: 12px; }
         }
 
         .tile {
@@ -236,7 +255,6 @@
 
         .tile.completed .checklist-box { background: #162a16; }
 
-        /* Standard Checkmark logic for Tile and Modal */
         .check-item {
             display: flex;
             align-items: center;
@@ -254,7 +272,6 @@
             align-items: center;
         }
 
-        /* The actual checkmark drawing */
         .check-mark::after {
             content: '';
             width: 0.3em;
@@ -367,12 +384,12 @@
         .version-footer {
             position: fixed;
             bottom: 10px;
-            right: 15px;
+            right: 25px;
             font-size: 0.65rem;
-            color: #4a4134; /* Darker to blend in */
+            color: #4a4134; 
             text-align: right;
             pointer-events: none;
-            z-index: 1; /* Behind grid */
+            z-index: 1; 
             opacity: 0.6;
         }
     </style>
@@ -403,7 +420,7 @@
     <div class="grid-container" id="grid"></div>
 
     <footer class="version-footer">
-        <span>Build: v3.048</span><br>
+        <span>Build: v3.050</span><br>
         <span id="last-sync">Last Sync: Never</span>
     </footer>
 
