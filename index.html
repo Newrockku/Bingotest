@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bingo v3.035</title>
+    <title>Bingo v3.036</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cabin+Condensed:wght@400;700&display=swap" rel="stylesheet">
@@ -149,14 +149,12 @@
 
         .tile.completed .checklist-box { background: #162a16; }
 
-        /* Custom Scrollbar for inner boxes */
         .checklist-box::-webkit-scrollbar,
         .modal-checklist::-webkit-scrollbar,
         .modal-description::-webkit-scrollbar { 
             width: 6px; 
         }
         
-        /* Brown Scrollbar (Default) */
         .checklist-box::-webkit-scrollbar-thumb,
         .modal-checklist::-webkit-scrollbar-thumb,
         .modal-description::-webkit-scrollbar-thumb { 
@@ -168,7 +166,6 @@
             background: #221e18; 
         }
 
-        /* Green Scrollbar (Completed) */
         .tile.completed .checklist-box::-webkit-scrollbar-thumb,
         .modal-content.completed .modal-checklist::-webkit-scrollbar-thumb,
         .modal-content.completed .modal-description::-webkit-scrollbar-thumb { 
@@ -357,7 +354,6 @@
         }
         .close-btn:hover { color: #ffac00; }
 
-        /* Global Body Scrollbar Settings */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-thumb { background: #6d604e; border-radius: 0; }
         ::-webkit-scrollbar-track { background: #221e18; }
@@ -368,7 +364,7 @@
 </head>
 <body>
 
-    <h1>Bingo v3.035</h1>
+    <h1>Bingo v3.036</h1>
     <div class="grid-container" id="grid"></div>
 
     <div id="modal-overlay" onclick="closeModal()">
@@ -396,10 +392,20 @@
 
         async function fetchData() {
             try {
-                const response = await fetch(`${sheetUrl}&cachebust=${new Date().getTime()}`);
+                // Modified fetch with Cache-Control headers to force fresh data
+                const response = await fetch(`${sheetUrl}&cachebust=${new Date().getTime()}`, {
+                    cache: "no-store",
+                    headers: {
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache'
+                    }
+                });
+                
                 const data = await response.text();
                 const rows = data.split('\n').slice(1); 
                 const grid = document.getElementById('grid');
+                
+                // Track if we need to update the UI
                 grid.innerHTML = '';
 
                 rows.forEach((row, index) => {
@@ -439,7 +445,7 @@
                     `;
                     grid.appendChild(tile);
                 });
-            } catch (error) { console.error("Error:", error); }
+            } catch (error) { console.error("Error fetching sheet:", error); }
         }
 
         function openModal(event, data) {
