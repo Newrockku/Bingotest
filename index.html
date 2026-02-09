@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bingo v3.034</title>
+    <title>Bingo v3.035</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cabin+Condensed:wght@400;700&display=swap" rel="stylesheet">
@@ -147,8 +147,38 @@
             transition: background 0.3s ease;
         }
 
-        /* Darker Green for inner boxes on completed tiles */
         .tile.completed .checklist-box { background: #162a16; }
+
+        /* Custom Scrollbar for inner boxes */
+        .checklist-box::-webkit-scrollbar,
+        .modal-checklist::-webkit-scrollbar,
+        .modal-description::-webkit-scrollbar { 
+            width: 6px; 
+        }
+        
+        /* Brown Scrollbar (Default) */
+        .checklist-box::-webkit-scrollbar-thumb,
+        .modal-checklist::-webkit-scrollbar-thumb,
+        .modal-description::-webkit-scrollbar-thumb { 
+            background: #6d604e; 
+        }
+        .checklist-box::-webkit-scrollbar-track,
+        .modal-checklist::-webkit-scrollbar-track,
+        .modal-description::-webkit-scrollbar-track { 
+            background: #221e18; 
+        }
+
+        /* Green Scrollbar (Completed) */
+        .tile.completed .checklist-box::-webkit-scrollbar-thumb,
+        .modal-content.completed .modal-checklist::-webkit-scrollbar-thumb,
+        .modal-content.completed .modal-description::-webkit-scrollbar-thumb { 
+            background: #4caf50; 
+        }
+        .tile.completed .checklist-box::-webkit-scrollbar-track,
+        .modal-content.completed .modal-checklist::-webkit-scrollbar-track,
+        .modal-content.completed .modal-description::-webkit-scrollbar-track { 
+            background: #0d1a0d; 
+        }
 
         .tile .check-item {
             font-size: 6.5cqw; 
@@ -270,7 +300,6 @@
             transition: background 0.3s ease;
         }
 
-        /* Darker Green for modal boxes on completion */
         .modal-content.completed .modal-checklist,
         .modal-content.completed .modal-description { background: #162a16; }
 
@@ -328,7 +357,8 @@
         }
         .close-btn:hover { color: #ffac00; }
 
-        ::-webkit-scrollbar { width: 6px; }
+        /* Global Body Scrollbar Settings */
+        ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-thumb { background: #6d604e; border-radius: 0; }
         ::-webkit-scrollbar-track { background: #221e18; }
 
@@ -338,7 +368,7 @@
 </head>
 <body>
 
-    <h1>Bingo v3.034</h1>
+    <h1>Bingo v3.035</h1>
     <div class="grid-container" id="grid"></div>
 
     <div id="modal-overlay" onclick="closeModal()">
