@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bingo v3.057</title>
+    <title>Bingo v3.058</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cabin+Condensed:wght@400;700&display=swap" rel="stylesheet">
@@ -11,11 +11,7 @@
     <style>
         /* Global Reset */
         * { box-sizing: border-box; }
-        
-        html { 
-            scrollbar-gutter: stable; 
-            overflow-y: scroll; 
-        }
+        html { scrollbar-gutter: stable; overflow-y: scroll; }
 
         /* --- Custom Square Scrollbar --- */
         ::-webkit-scrollbar { width: 8px; }
@@ -27,7 +23,6 @@
         .tile.completed .checklist-box::-webkit-scrollbar-track,
         .modal-content.completed .modal-checklist::-webkit-scrollbar-track,
         .modal-content.completed .modal-description::-webkit-scrollbar-track { background: #1e3a1e; }
-        
         .tile.completed .checklist-box::-webkit-scrollbar-thumb,
         .modal-content.completed .modal-checklist::-webkit-scrollbar-thumb,
         .modal-content.completed .modal-description::-webkit-scrollbar-thumb { background: #162a16; border: 2px solid #1e3a1e; }
@@ -77,7 +72,10 @@
             padding: 4px;
             border: 2px solid #6d604e;
             flex-shrink: 0;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease;
         }
+        .minimap-wrapper:hover { transform: scale(1.05); border-color: #ffac00; }
 
         .minimap-container {
             display: grid;
@@ -94,6 +92,7 @@
             border-radius: 1px;
         }
         .mini-tile.complete { background: #1e3a1e; color: #4caf50; }
+        .minimap-wrapper.ghost { opacity: 0; pointer-events: none; }
 
         /* --- Grid --- */
         .grid-container {
@@ -106,11 +105,8 @@
         }
 
         /* --- RESPONSIVE LOGIC --- */
-        
-        /* 5 tiles or fewer: Move Minimap to Floating HUD */
         @media (max-width: 1400px) {
             .grid-container { grid-template-columns: repeat(5, 1fr); }
-            
             .minimap-wrapper {
                 position: fixed;
                 bottom: 20px;
@@ -151,12 +147,45 @@
         .tile .check-item { font-size: 6cqw; color: #ffee00; }
         .tile.completed .check-item { color: #4caf50; }
 
-        /* MODAL */
+        /* --- MODAL SYSTEM --- */
         #modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(0px); transition: background 0.4s ease, backdrop-filter 0.4s ease; }
         #modal-overlay.active { background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(5px); }
+        
         .modal-content { background-color: #494034; border: 3px solid #6d604e; width: 90vw; max-width: 450px; padding: 25px; position: fixed; box-shadow: 0 0 50px rgba(0, 0, 0, 0.8); display: flex; flex-direction: column; opacity: 0; transform: translate(-50%, -50%) scale(0); transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); pointer-events: none; z-index: 2001; }
         .modal-content.completed { background-color: #1e3a1e; border-color: #4caf50; }
         .modal-content.active { opacity: 1; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%) scale(1); pointer-events: auto; }
+        
+        /* Map Modal Tweaks */
+        #map-modal-view { display: none; flex-direction: column; align-items: center; }
+        .modal-content.map-mode #map-modal-view { display: flex; }
+        .modal-content.map-mode #standard-modal-view { display: none; }
+        
+        .large-map-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            background: #221e18;
+            padding: 10px;
+            border: 2px solid #000;
+            width: 100%;
+            aspect-ratio: 1/1;
+        }
+        .large-map-tile {
+            background: #342e25;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: rgba(255,255,255,0.2);
+            border: 1px solid #494034;
+        }
+        .large-map-tile.complete {
+            background: #1e3a1e;
+            color: #4caf50;
+            border-color: #4caf50;
+        }
+
         .modal-header { font-size: 1.8rem; margin-bottom: 12px; text-align: center; font-weight: bold; color: #ffac00; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
         .modal-content.completed .modal-header { color: #4caf50; }
         .modal-img { height: 120px; margin-bottom: 12px; display: flex; justify-content: center; }
@@ -193,7 +222,7 @@
             </div>
         </div>
 
-        <aside class="minimap-wrapper">
+        <aside class="minimap-wrapper" id="mini-map-trigger" onclick="openMapModal(event)">
             <div class="minimap-container" id="minimap"></div>
         </aside>
     </header>
@@ -201,21 +230,29 @@
     <main class="grid-container" id="grid"></main>
 
     <footer class="version-footer">
-        <span>Build: v3.057</span><br>
+        <span>Build: v3.058</span><br>
         <span id="last-sync">Last Sync: Never</span>
     </footer>
 
     <div id="modal-overlay" onclick="closeModal()">
         <div class="modal-content" id="modal-box" onclick="event.stopPropagation()">
             <span class="close-btn" onclick="closeModal()">&times;</span>
-            <div id="modal-header" class="modal-header"></div>
-            <div class="modal-img"><img id="modal-image" src="" alt=""></div>
-            <div class="modal-label progress-label">Progress</div>
-            <div class="modal-progress"><div class="progress-bg"><div id="modal-bar" class="progress-fill"></div></div></div>
-            <div class="modal-label">Collected Items</div>
-            <div id="modal-list" class="modal-checklist"></div>
-            <div class="modal-label">Description</div>
-            <div id="modal-desc" class="modal-description"></div>
+            
+            <div id="standard-modal-view">
+                <div id="modal-header" class="modal-header"></div>
+                <div class="modal-img"><img id="modal-image" src="" alt=""></div>
+                <div class="modal-label progress-label">Progress</div>
+                <div class="modal-progress"><div class="progress-bg"><div id="modal-bar" class="progress-fill"></div></div></div>
+                <div class="modal-label">Collected Items</div>
+                <div id="modal-list" class="modal-checklist"></div>
+                <div class="modal-label">Description</div>
+                <div id="modal-desc" class="modal-description"></div>
+            </div>
+
+            <div id="map-modal-view">
+                <div class="modal-header">TACTICAL OVERVIEW</div>
+                <div class="large-map-grid" id="large-map-grid"></div>
+            </div>
         </div>
     </div>
 
@@ -236,9 +273,10 @@
         };
 
         let currentTeamKey = "Warriors";
-        let currentActiveTile = null;
+        let currentActiveElement = null;
         let lastSeenHash = null;
         let codewordSecret = "";
+        let completionState = []; // Track 1-49 completion for the zoom map
 
         function init() {
             const params = new URLSearchParams(window.location.search);
@@ -252,6 +290,7 @@
                 dot.id = `mini-${i}`;
                 dot.innerText = i;
                 minimap.appendChild(dot);
+                completionState.push(false);
             }
 
             fetchGlobalData();
@@ -305,6 +344,7 @@
                 const rows = rawData.split('\n').slice(1); 
                 const grid = document.getElementById('grid');
                 grid.innerHTML = '';
+                
                 rows.forEach((row, index) => {
                     const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                     if (cols.length < 4) return;
@@ -318,6 +358,9 @@
                     const isCompleted = percent === 100;
                     const barColor = getProgressColor(percent);
                     const finalImgSrc = (imgName.includes('http')) ? imgName : `./images/${imgName}`;
+                    
+                    completionState[index] = isCompleted;
+
                     const miniTile = document.getElementById(`mini-${index + 1}`);
                     if (miniTile) {
                         if (isCompleted) miniTile.classList.add('complete');
@@ -344,15 +387,20 @@
             const box = document.getElementById('modal-box');
             const tile = event.currentTarget;
             const rect = tile.getBoundingClientRect();
-            currentActiveTile = tile;
+            
+            currentActiveElement = tile;
             tile.classList.add('ghost');
+            box.classList.remove('map-mode');
+
             if (data.isCompleted) box.classList.add('completed'); else box.classList.remove('completed');
+            
             document.getElementById('modal-header').innerHTML = `${data.id} | ${data.title}`;
             document.getElementById('modal-image').src = data.img;
             document.getElementById('modal-bar').style.width = data.percent + '%';
             document.getElementById('modal-bar').style.backgroundColor = data.barColor;
             document.getElementById('modal-list').innerHTML = data.checklistHtml;
             document.getElementById('modal-desc').innerText = data.description;
+            
             box.style.top = (rect.top + rect.height / 2) + 'px';
             box.style.left = (rect.left + rect.width / 2) + 'px';
             overlay.style.display = 'flex';
@@ -360,12 +408,40 @@
             document.body.style.overflow = 'hidden'; 
         }
 
+        function openMapModal(event) {
+            const overlay = document.getElementById('modal-overlay');
+            const box = document.getElementById('modal-box');
+            const mapTrigger = document.getElementById('mini-map-trigger');
+            const rect = mapTrigger.getBoundingClientRect();
+            const largeGrid = document.getElementById('large-map-grid');
+            
+            currentActiveElement = mapTrigger;
+            mapTrigger.classList.add('ghost');
+            box.classList.add('map-mode');
+            box.classList.remove('completed'); // Map view uses standard colors
+
+            // Populate high-res map
+            largeGrid.innerHTML = '';
+            for(let i=1; i<=49; i++) {
+                const cell = document.createElement('div');
+                cell.className = `large-map-tile ${completionState[i-1] ? 'complete' : ''}`;
+                cell.innerText = i;
+                largeGrid.appendChild(cell);
+            }
+
+            box.style.top = (rect.top + rect.height / 2) + 'px';
+            box.style.left = (rect.left + rect.width / 2) + 'px';
+            overlay.style.display = 'flex';
+            setTimeout(() => { overlay.classList.add('active'); box.classList.add('active'); }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
         function closeModal() {
             const overlay = document.getElementById('modal-overlay');
             const box = document.getElementById('modal-box');
             overlay.classList.remove('active');
             box.classList.remove('active');
-            if (currentActiveTile) currentActiveTile.classList.remove('ghost');
+            if (currentActiveElement) currentActiveElement.classList.remove('ghost');
             setTimeout(() => { overlay.style.display = 'none'; document.body.style.overflow = 'auto'; }, 500);
         }
 
