@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bingo v3.061</title>
+    <title>Bingo v3.062</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cabin+Condensed:wght@400;700&display=swap" rel="stylesheet">
@@ -71,14 +71,22 @@
             padding: 4px;
             border: 2px solid #6d604e;
             flex-shrink: 0;
-            cursor: pointer;
             transition: transform 0.2s ease, border-color 0.2s ease;
         }
-        .minimap-wrapper:hover { transform: scale(1.05); border-color: #ffac00; }
+        .minimap-wrapper:hover { border-color: #ffac00; }
         .minimap-container { display: grid; grid-template-columns: repeat(7, 10px); grid-template-rows: repeat(7, 10px); gap: 2px; }
-        .mini-tile { width: 10px; height: 10px; background: #342e25; display: flex; justify-content: center; align-items: center; font-size: 7px; color: rgba(255,255,255,0.2); border-radius: 1px; }
+        
+        .mini-tile { 
+            width: 10px; height: 10px; 
+            background: #342e25; 
+            display: flex; justify-content: center; align-items: center; 
+            font-size: 7px; color: rgba(255,255,255,0.2); 
+            border-radius: 1px; 
+            cursor: pointer;
+        }
+        .mini-tile:hover { background: #6d604e; color: #fff; }
         .mini-tile.complete { background: #1e3a1e; color: #4caf50; }
-        .minimap-wrapper.ghost { opacity: 0; pointer-events: none; }
+        .mini-tile.complete:hover { background: #2e5a2e; }
 
         /* --- Grid --- */
         .grid-container {
@@ -90,7 +98,6 @@
             padding-bottom: 60px;
         }
 
-        /* --- Grid Point Badge (Bottom Right) --- */
         .point-badge {
             position: absolute;
             bottom: 5px;
@@ -106,22 +113,10 @@
         }
         .tile.completed .point-badge { border-color: #4caf50; color: #4caf50; }
 
-        /* --- Modal Layout Tweaks --- */
-        .modal-section-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 2px;
-        }
-
+        .modal-section-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2px; }
         .modal-points-inline {
-            font-size: 0.85rem;
-            background: #221e18;
-            border: 1px solid #ffac00;
-            padding: 1px 6px;
-            border-radius: 4px;
-            font-weight: bold;
-            color: #ffac00;
+            font-size: 0.85rem; background: #221e18; border: 1px solid #ffac00;
+            padding: 1px 6px; border-radius: 4px; font-weight: bold; color: #ffac00;
         }
         .modal-content.completed .modal-points-inline { border-color: #4caf50; color: #4caf50; }
 
@@ -171,8 +166,14 @@
         .modal-content.map-mode #standard-modal-view { display: none; }
         
         .large-map-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; background: #221e18; padding: 10px; border: 2px solid #000; width: 100%; aspect-ratio: 1/1; }
-        .large-map-tile { background: #342e25; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; font-weight: bold; color: rgba(255,255,255,0.2); border: 1px solid #494034; }
+        .large-map-tile { 
+            background: #342e25; display: flex; justify-content: center; align-items: center; 
+            font-size: 1.2rem; font-weight: bold; color: rgba(255,255,255,0.2); 
+            border: 1px solid #494034; cursor: pointer; transition: 0.2s;
+        }
+        .large-map-tile:hover { background: #494034; color: #fff; transform: scale(1.05); z-index: 2; border-color: #ffac00; }
         .large-map-tile.complete { background: #1e3a1e; color: #4caf50; border-color: #4caf50; }
+        .large-map-tile.complete:hover { background: #2e5a2e; }
 
         .modal-header { font-size: 1.8rem; margin-bottom: 12px; text-align: center; font-weight: bold; color: #ffac00; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
         .modal-content.completed .modal-header { color: #4caf50; }
@@ -211,15 +212,15 @@
             </div>
         </div>
 
-        <aside class="minimap-wrapper" id="mini-map-trigger" onclick="openMapModal(event)">
-            <div class="minimap-container" id="minimap"></div>
+        <aside class="minimap-wrapper" id="mini-map-trigger">
+            <div class="minimap-container" id="minimap" onclick="event.stopPropagation()"></div>
         </aside>
     </header>
 
     <main class="grid-container" id="grid"></main>
 
     <footer class="version-footer">
-        <span>Build: v3.061</span><br>
+        <span>Build: v3.062</span><br>
         <span id="last-sync">Last Sync: Never</span>
     </footer>
 
@@ -272,6 +273,7 @@
         let lastSeenHash = null;
         let codewordSecret = "";
         let completionState = [];
+        let tileDataCache = []; // To store data for easy map lookup
 
         function init() {
             const params = new URLSearchParams(window.location.search);
@@ -284,9 +286,17 @@
                 dot.className = 'mini-tile';
                 dot.id = `mini-${i}`;
                 dot.innerText = i;
+                // Dashboard map click:
+                dot.onclick = (e) => {
+                    e.stopPropagation();
+                    triggerModalFromMap(i-1, dot);
+                };
                 minimap.appendChild(dot);
                 completionState.push(false);
             }
+
+            // The wrapper itself now triggers the BIG map
+            document.getElementById('mini-map-trigger').onclick = openMapModal;
 
             fetchGlobalData();
             fetchData();
@@ -340,6 +350,7 @@
                 const rows = rawData.split('\n').slice(1); 
                 const grid = document.getElementById('grid');
                 grid.innerHTML = '';
+                tileDataCache = []; // Clear old cache
                 
                 rows.forEach((row, index) => {
                     const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
@@ -359,19 +370,22 @@
                     const finalImgSrc = (imgName.includes('http')) ? imgName : `./images/${imgName}`;
                     
                     completionState[index] = isCompleted;
+                    
+                    let checklistHtml = '';
+                    itemList.forEach(item => { if(item.trim() !== "") checklistHtml += `<div class="check-item"><span class="check-mark"></span> ${item.trim()}</div>`; });
+
+                    const tilePackage = { id: index + 1, title, img: finalImgSrc, percent, barColor, checklistHtml, description, isCompleted, points: pts };
+                    tileDataCache.push(tilePackage);
 
                     const miniTile = document.getElementById(`mini-${index + 1}`);
                     if (miniTile) {
                         if (isCompleted) miniTile.classList.add('complete');
                         else miniTile.classList.remove('complete');
                     }
-
-                    let checklistHtml = '';
-                    itemList.forEach(item => { if(item.trim() !== "") checklistHtml += `<div class="check-item"><span class="check-mark"></span> ${item.trim()}</div>`; });
                     
                     const tile = document.createElement('div');
                     tile.className = `tile ${isCompleted ? 'completed' : ''}`;
-                    tile.onclick = (e) => openModal(e, { id: index + 1, title, img: finalImgSrc, percent, barColor, checklistHtml, description, isCompleted, points: pts });
+                    tile.onclick = (e) => openModal(e, tilePackage);
                     tile.innerHTML = `
                         <div class="header-box"><div class="header-content">${index + 1} | ${title}</div></div>
                         <div class="img-container"><img src="${finalImgSrc}" onerror="this.style.visibility='hidden'"></div>
@@ -384,11 +398,22 @@
             } catch (error) { console.error(error); }
         }
 
+        function triggerModalFromMap(index, element) {
+            const data = tileDataCache[index];
+            if (!data) return;
+            // Create a fake event object for openModal
+            const fakeEvent = { currentTarget: element };
+            openModal(fakeEvent, data);
+        }
+
         function openModal(event, data) {
             const overlay = document.getElementById('modal-overlay');
             const box = document.getElementById('modal-box');
             const tile = event.currentTarget;
             const rect = tile.getBoundingClientRect();
+            
+            // Clean up previous state
+            if (currentActiveElement) currentActiveElement.classList.remove('ghost');
             
             currentActiveElement = tile;
             tile.classList.add('ghost');
@@ -427,6 +452,10 @@
                 const cell = document.createElement('div');
                 cell.className = `large-map-tile ${completionState[i-1] ? 'complete' : ''}`;
                 cell.innerText = i;
+                cell.onclick = (e) => {
+                    e.stopPropagation();
+                    triggerModalFromMap(i-1, cell);
+                };
                 largeGrid.appendChild(cell);
             }
 
