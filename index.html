@@ -148,7 +148,7 @@
         .check-item { display: flex; align-items: center; margin-bottom: 4px; }
         .check-mark { width: 1.2em; height: 1.2em; margin-right: 6px; flex-shrink: 0; position: relative; display: flex; justify-content: center; align-items: center; }
         .check-mark::after { content: ''; width: 0.3em; height: 0.6em; border: solid #4caf50; border-width: 0 0.2em 0.2em 0; transform: rotate(45deg); }
-        .tile .check-item { font-size: 6.5cqw; color: #ffee00; }
+        .tile .check-item { font-size: 5cqw; color: #ffee00; }
         .tile.completed .check-item { color: #4caf50; }
 
         /* MODAL */
@@ -170,9 +170,10 @@
         .modal-content.completed .modal-checklist, .modal-content.completed .modal-description { background: #162a16; color: #4caf50; }
         .close-btn { position: absolute; top: 5px; right: 12px; font-size: 2rem; cursor: pointer; color: #858476; z-index: 100; }
         .close-btn:hover { color: #ffac00; }
-        .version-footer { position: fixed; bottom: 10px; right: 25px; font-size: 0.65rem; color: #6d604e; text-align: right; pointer-events: none; z-index: 1; opacity: 0.6; }
+        .version-footer { position: fixed; bottom: 10px; left: 25px; font-size: 0.65rem; color: #6d604e; text-align: left; pointer-events: none; z-index: 1; opacity: 1; }
     </style>
 </head>
+
 <body>
 
     <header class="dashboard">
