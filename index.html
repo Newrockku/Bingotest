@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bingo v3.080</title>
+    <title>Bingo</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cabin+Condensed:wght@400;700&display=swap" rel="stylesheet">
@@ -89,6 +89,7 @@
             width: 38px; height: 38px; border-radius: 4px; cursor: pointer;
             display: flex; justify-content: center; align-items: center;
             transition: all 0.2s ease; flex-shrink: 0; font-size: 1.3rem; padding: 0;
+            order: 10;
         }
         .settings-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--bg-well); }
         .settings-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -107,7 +108,7 @@
         /* --- Grid --- */
         .grid-container {
             display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px;
-            width: 100%; max-width: 1580px; padding-bottom: 60px;
+            width: 100%; max-width: 1580px;
         }
 
         /* --- Tile Styles --- */
@@ -181,6 +182,21 @@
         .modal-checklist, .modal-description { background: var(--bg-well); border: 1px solid #000; padding: 8px; overflow-y: auto; color: var(--text-bright); }
         .modal-content.completed .modal-checklist, .modal-content.completed .modal-description { background: var(--bg-completed-well); color: var(--text-completed); }
 
+        /* --- Modal Back-to-Map Button --- */
+        .modal-back-btn {
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            margin-top: 12px; padding: 6px 12px;
+            background: var(--bg-well); border: 1px solid var(--border-main);
+            color: var(--text-dim); font-family: 'Cabin Condensed', sans-serif;
+            font-size: 0.85rem; cursor: pointer; border-radius: 4px;
+            transition: all 0.2s ease; width: 100%;
+        }
+        .modal-back-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--bg-tile); }
+        .modal-back-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+        .modal-content.completed .modal-back-btn { border-color: var(--border-completed); }
+        .modal-content.completed .modal-back-btn:hover { border-color: var(--text-completed); color: var(--text-completed); }
+        .modal-back-btn svg { width: 14px; height: 14px; fill: currentColor; }
+
         /* --- Large Map (Themed) --- */
         .large-map-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; background: var(--bg-body); padding: 10px; border: 2px solid var(--border-main); width: 100%; aspect-ratio: 1/1; }
         .large-map-tile { background: var(--bg-well); display: flex; justify-content: center; align-items: center; font-size: 1.2rem; font-weight: bold; color: rgba(255,255,255,0.2); border: 1px solid var(--bg-tile); cursor: pointer; transition: 0.2s; }
@@ -213,9 +229,15 @@
             text-align: center; font-size: 0.7rem; color: var(--text-dim);
             margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-main);
         }
-        
-        .version-footer { position: fixed; bottom: 10px; left: 25px; font-size: 0.65rem; color: var(--border-main); z-index: 500; }
-        .sync-btn { cursor: pointer; color: var(--text-dim); text-decoration: underline; margin-left: 5px; }
+
+        /* --- Page Footer (flows after grid) --- */
+        .page-footer {
+            width: 100%; max-width: 1580px;
+            padding: 15px 0 10px 0;
+            font-size: 0.65rem; color: var(--border-main);
+            display: flex; align-items: center; gap: 6px;
+        }
+        .sync-btn { cursor: pointer; color: var(--text-dim); text-decoration: underline; }
         .sync-btn:hover { color: var(--accent); }
         .sync-flash { animation: flash-sync 1s ease-out; }
         @keyframes flash-sync { 0% { color: var(--accent); } 100% { color: var(--border-main); } }
@@ -269,13 +291,9 @@
 
     <header class="dashboard" role="banner">
         <div class="dashboard-main">
-            <h1 id="event-title">Bingo 2026 | v3.080</h1>
+            <h1 id="event-title">Bingo 2026</h1>
             <p id="team-name">Loading Team...</p>
         </div>
-
-        <button class="settings-btn" id="settings-trigger" aria-label="Open settings" onclick="openSettingsModal(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSettingsModal(event);}">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1115.6 12 3.611 3.611 0 0112 15.6z"/></svg>
-        </button>
 
         <div class="stats-container">
             <div class="stat-item">
@@ -291,6 +309,10 @@
         <aside class="minimap-wrapper in-dashboard" id="mini-map-trigger" role="button" tabindex="0" aria-label="Open overview map" onclick="openMapModal(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMapModal(event);}">
             <div class="minimap-container" id="minimap" aria-hidden="true"></div>
         </aside>
+
+        <button class="settings-btn" id="settings-trigger" aria-label="Open settings" onclick="openSettingsModal(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSettingsModal(event);}">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1115.6 12 3.611 3.611 0 0112 15.6z"/></svg>
+        </button>
     </header>
 
     <!-- Floating minimap for smaller screens -->
@@ -300,8 +322,9 @@
 
     <main class="grid-container" id="grid" role="grid" aria-label="Bingo board"></main>
 
-    <footer class="version-footer">
-        <span>Build: v3.080</span><br>
+    <footer class="page-footer">
+        <span>v3.082</span>
+        <span>&middot;</span>
         <span id="last-sync-text" aria-live="polite">Last Sync: Never</span>
         <span class="sync-btn" role="button" tabindex="0" onclick="fetchData(true)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();fetchData(true);}">[Sync Now]</span>
     </footer>
@@ -328,6 +351,11 @@
                 
                 <div class="modal-label">Description</div>
                 <div id="modal-desc" class="modal-description" style="max-height: 80px;"></div>
+
+                <button class="modal-back-btn" onclick="openMapModalFromTile()" aria-label="Back to overview map">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 3h7v7H3V3zm0 11h7v7H3v-7zm11-11h7v7h-7V3zm0 11h7v7h-7v-7z"/></svg>
+                    Overview Map
+                </button>
             </div>
 
             <!-- Map Overview View -->
@@ -391,7 +419,7 @@
                     </div>
                 </div>
 
-                <div class="settings-version">Bingo Board &middot; v3.080</div>
+                <div class="settings-version">Bingo Board &middot; v3.082</div>
             </div>
         </div>
     </div>
@@ -400,7 +428,7 @@
         /* ============================================
            CONSTANTS & STATE
            ============================================ */
-        const APP_VERSION = '3.080';
+        const APP_VERSION = '3.082';
 
         const TEAM_MAP = {
             "Warriors": {
@@ -504,7 +532,6 @@
             document.documentElement.setAttribute('data-theme', theme);
             storageSave(STORAGE_KEYS.theme, theme);
 
-            // Keep both dropdowns in sync
             const settingsDropdown = document.getElementById('settings-theme-dropdown');
             if (settingsDropdown) settingsDropdown.value = theme;
         }
@@ -561,7 +588,6 @@
         }
 
         function updateMinimaps(index, isCompleted) {
-            // Update all minimap instances
             document.querySelectorAll(`.mini-tile[data-index="${index + 1}"]`).forEach(tile => {
                 if (isCompleted) {
                     tile.classList.add('complete');
@@ -727,10 +753,7 @@
             if (triggerEl && triggerEl.classList && triggerEl.classList.contains('tile')) {
                 currentActiveElement = triggerEl;
                 currentActiveElement.classList.add('ghost');
-            } else if (triggerEl && triggerEl.id === 'mini-map-trigger') {
-                currentActiveElement = triggerEl;
-                currentActiveElement.classList.add('ghost');
-            } else if (triggerEl && triggerEl.id === 'mini-map-floating') {
+            } else if (triggerEl && (triggerEl.id === 'mini-map-trigger' || triggerEl.id === 'mini-map-floating')) {
                 currentActiveElement = triggerEl;
                 currentActiveElement.classList.add('ghost');
             } else {
@@ -833,9 +856,61 @@
 
             box.setAttribute('aria-label', 'Bingo board overview map');
 
-            // Determine which minimap triggered this
-            const trigger = e.currentTarget || document.getElementById('mini-map-trigger');
-            showModal(trigger, true);
+            const trigger = e ? (e.currentTarget || document.getElementById('mini-map-trigger')) : null;
+            showModal(trigger, !!trigger);
+        }
+
+        /**
+         * Opens the map modal from within a tile modal (back button).
+         * No animation source — just transitions in place.
+         */
+        function openMapModalFromTile() {
+            const box = document.getElementById('modal-box');
+
+            // Clean up ghost on the tile that was open
+            if (currentActiveElement && currentActiveElement.isConnected) {
+                currentActiveElement.classList.remove('ghost');
+            }
+            currentActiveElement = null;
+
+            box.classList.add('map-mode');
+            box.classList.remove('completed');
+
+            hideAllModalViews();
+            document.getElementById('map-modal-view').style.display = 'flex';
+
+            const largeGrid = document.getElementById('large-map-grid');
+            largeGrid.innerHTML = '';
+
+            const mapFragment = document.createDocumentFragment();
+            for (let i = 1; i <= MAX_TILES; i++) {
+                const cell = document.createElement('div');
+                cell.className = `large-map-tile${completionState[i - 1] ? ' complete' : ''}`;
+                cell.innerText = i;
+                cell.setAttribute('role', 'button');
+                cell.setAttribute('tabindex', '0');
+                cell.setAttribute('aria-label', `Tile ${i}${completionState[i - 1] ? ' - Complete' : ''}`);
+
+                const tileIndex = i;
+                cell.onclick = (ev) => {
+                    ev.stopPropagation();
+                    const pkg = tileDataCache[tileIndex - 1];
+                    if (pkg) openModal({ currentTarget: cell }, pkg);
+                };
+                cell.onkeydown = (ev) => {
+                    if (ev.key === 'Enter' || ev.key === ' ') {
+                        ev.preventDefault();
+                        ev.stopPropagation();
+                        const pkg = tileDataCache[tileIndex - 1];
+                        if (pkg) openModal({ currentTarget: cell }, pkg);
+                    }
+                };
+
+                mapFragment.appendChild(cell);
+            }
+            largeGrid.appendChild(mapFragment);
+
+            box.setAttribute('aria-label', 'Bingo board overview map');
         }
 
         function openSettingsModal(e) {
@@ -845,12 +920,10 @@
             hideAllModalViews();
             document.getElementById('settings-modal-view').style.display = 'flex';
 
-            // Sync the settings dropdown with current theme
             const currentTheme = document.documentElement.getAttribute('data-theme') || 'osrs';
             const settingsDropdown = document.getElementById('settings-theme-dropdown');
             if (settingsDropdown) settingsDropdown.value = currentTheme;
 
-            // Sync the interval dropdown
             const intervalDropdown = document.getElementById('settings-sync-interval');
             if (intervalDropdown) intervalDropdown.value = String(currentSyncInterval);
 
@@ -907,24 +980,19 @@
            ============================================ */
 
         function init() {
-            // Restore persisted settings
             restoreTheme();
             restoreSyncInterval();
 
-            // Build both minimaps
             buildMinimap('minimap');
             buildMinimap('minimap-floating');
 
-            // Initialize completion state
             for (let i = 0; i < MAX_TILES; i++) {
                 completionState.push(false);
             }
 
-            // Load data
             fetchGlobalData();
             fetchData();
 
-            // Start auto-sync
             restartSyncInterval();
         }
 
