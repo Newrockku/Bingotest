@@ -459,28 +459,43 @@
             </div>
             <label for="settings-theme-dropdown" class="sr-only">Select Theme</label>
             <select id="settings-theme-dropdown" class="settings-select">
-              <optgroup label="Classic">
-                <option value="osrs">OSRS (Original)</option>
-                <option value="midnight">Midnight OLED</option>
-              </optgroup>
-              <optgroup label="Seasons">
-                <option value="spring">Spring</option>
-                <option value="summer">Summer</option>
-                <option value="autumn">Autumn</option>
-                <option value="winter">Winter</option>
-              </optgroup>
-              <optgroup label="Aesthetic">
-                <option value="abyssal">Abyssal</option>
-                <option value="volcanic">Volcanic</option>
-                <option value="cyberpunk">Cyberpunk</option>
-                <option value="bloodlust">Bloodlust</option>
-                <option value="royal">Royal</option>
-                <option value="emerald">Emerald</option>
-                <option value="solar">Solar</option>
-                <option value="vaporwave">Vaporwave</option>
-                <option value="tox">Toxic</option>
-              </optgroup>
-            </select>
+  <optgroup label="Classic">
+    <option value="osrs">OSRS (Original)</option>
+    <option value="midnight">Midnight OLED</option>
+    <option value="parchment">Parchment</option>
+  </optgroup>
+  <optgroup label="Seasons">
+    <option value="spring">Spring</option>
+    <option value="summer">Summer</option>
+    <option value="autumn">Autumn</option>
+    <option value="winter">Winter</option>
+  </optgroup>
+  <optgroup label="Aesthetic">
+    <option value="abyssal">Abyssal</option>
+    <option value="volcanic">Volcanic</option>
+    <option value="cyberpunk">Cyberpunk</option>
+    <option value="bloodlust">Bloodlust</option>
+    <option value="royal">Royal</option>
+    <option value="emerald">Emerald</option>
+    <option value="solar">Solar</option>
+    <option value="vaporwave">Vaporwave</option>
+    <option value="tox">Toxic</option>
+  </optgroup>
+  <optgroup label="Elements">
+    <option value="ocean">Ocean Depths</option>
+    <option value="frost">Frost</option>
+    <option value="sandstorm">Sandstorm</option>
+    <option value="nebula">Nebula</option>
+    <option value="forest">Enchanted Forest</option>
+  </optgroup>
+  <optgroup label="Moods">
+    <option value="noir">Film Noir</option>
+    <option value="sakura">Sakura</option>
+    <option value="copper">Copper Patina</option>
+    <option value="arctic">Arctic Aurora</option>
+    <option value="obsidian">Obsidian Gold</option>
+  </optgroup>
+</select>
           </div>
         </div>
 
@@ -537,23 +552,384 @@
     ];
 
     const THEMES = {
-      osrs: null, // means: use :root defaults from CSS
-      spring: { '--bg-body':'#2d3a2d','--bg-tile':'#4a5d4a','--bg-well':'#2d3a2d','--bg-completed':'#5d4a5d','--bg-completed-well':'#3a2d3a','--border-main':'#88b088','--border-completed':'#d896ff','--accent':'#a2ffb3','--text-main':'#a2ffb3','--text-bright':'#ffffff','--text-dim':'#b5c9b5','--text-completed':'#d896ff' },
-      summer: { '--bg-body':'#1a3a4a','--bg-tile':'#2c5d72','--bg-well':'#1a3a4a','--bg-completed':'#725d2c','--bg-completed-well':'#4a3a1a','--border-main':'#5ea3cc','--border-completed':'#ffcc33','--accent':'#33f0ff','--text-main':'#33f0ff','--text-bright':'#ffffff','--text-dim':'#92b7ca','--text-completed':'#ffcc33' },
-      autumn: { '--bg-body':'#3a1f1a','--bg-tile':'#5d322c','--bg-well':'#3a1f1a','--bg-completed':'#2c4a5d','--bg-completed-well':'#1a2d3a','--border-main':'#a35d4d','--border-completed':'#5ea3cc','--accent':'#ff7e33','--text-main':'#ff7e33','--text-bright':'#ffd1b3','--text-dim':'#ca9a92','--text-completed':'#5ea3cc' },
-      winter: { '--bg-body':'#1e252b','--bg-tile':'#343e49','--bg-well':'#1e252b','--bg-completed':'#493434','--bg-completed-well':'#2b1e1e','--border-main':'#6d8ba0','--border-completed':'#ff6d6d','--accent':'#a0e9ff','--text-main':'#a0e9ff','--text-bright':'#ffffff','--text-dim':'#7e8d9b','--text-completed':'#ff6d6d' },
+  osrs: null, // uses :root defaults from CSS
 
-      abyssal: { '--bg-body':'#050a14','--bg-tile':'#0a192f','--bg-well':'#02050a','--bg-completed':'#004d4d','--bg-completed-well':'#002626','--border-main':'#112240','--border-completed':'#64ffda','--accent':'#64ffda','--text-main':'#64ffda','--text-bright':'#ccd6f6','--text-dim':'#8892b0','--text-completed':'#64ffda' },
-      volcanic:{ '--bg-body':'#0f0c0c','--bg-tile':'#1a1515','--bg-well':'#050404','--bg-completed':'#4d1a00','--bg-completed-well':'#260d00','--border-main':'#3d2b2b','--border-completed':'#ff4d00','--accent':'#ff4d00','--text-main':'#ff4d00','--text-bright':'#ffa600','--text-dim':'#6d5e5e','--text-completed':'#ff4d00' },
-      cyberpunk:{ '--bg-body':'#0d0221','--bg-tile':'#261447','--bg-well':'#0d0221','--bg-completed':'#ff0055','--bg-completed-well':'#80002a','--border-main':'#fb3640','--border-completed':'#00f5d4','--accent':'#fee440','--text-main':'#ff0055','--text-bright':'#ffffff','--text-dim':'#9d8189','--text-completed':'#00f5d4' },
-      bloodlust:{ '--bg-body':'#1a0505','--bg-tile':'#2b0a0a','--bg-well':'#120303','--bg-completed':'#4d0a0a','--bg-completed-well':'#2b0505','--border-main':'#4d1515','--border-completed':'#ff3333','--accent':'#ff3333','--text-main':'#cc0000','--text-bright':'#ff6666','--text-dim':'#664444','--text-completed':'#ff3333' },
-      royal:   { '--bg-body':'#1e0d2d','--bg-tile':'#3c1b5a','--bg-well':'#140820','--bg-completed':'#d4af37','--bg-completed-well':'#8a6d00','--border-main':'#5a3285','--border-completed':'#ffee00','--accent':'#ffd700','--text-main':'#d4af37','--text-bright':'#ffffff','--text-dim':'#a684c7','--text-completed':'#ffee00' },
-      emerald: { '--bg-body':'#061e12','--bg-tile':'#0a3d24','--bg-well':'#04120b','--bg-completed':'#145a32','--bg-completed-well':'#0a3d24','--border-main':'#145a32','--border-completed':'#2ecc71','--accent':'#58d68d','--text-main':'#58d68d','--text-bright':'#abebc6','--text-dim':'#515a5a','--text-completed':'#2ecc71' },
-      solar:   { '--bg-body':'#3d2b1f','--bg-tile':'#5e412f','--bg-well':'#2b1e15','--bg-completed':'#f39c12','--bg-completed-well':'#af710b','--border-main':'#7d5a44','--border-completed':'#f1c40f','--accent':'#ffcc33','--text-main':'#ffcc33','--text-bright':'#fff5cc','--text-dim':'#a68e7e','--text-completed':'#f1c40f' },
-      vaporwave:{ '--bg-body':'#120458','--bg-tile':'#240b36','--bg-well':'#0b0233','--bg-completed':'#ff71ce','--bg-completed-well':'#b967ff','--border-main':'#05ffa1','--border-completed':'#01cdfe','--accent':'#01cdfe','--text-main':'#b967ff','--text-bright':'#ffffff','--text-dim':'#7a5c91','--text-completed':'#01cdfe' },
-      midnight:{ '--bg-body':'#000000','--bg-tile':'#121212','--bg-well':'#080808','--bg-completed':'#222222','--bg-completed-well':'#111111','--border-main':'#333333','--border-completed':'#ffffff','--accent':'#ffffff','--text-main':'#eeeeee','--text-bright':'#ffffff','--text-dim':'#555555','--text-completed':'#ffffff' },
-      tox:     { '--bg-body':'#1a001a','--bg-tile':'#2d002d','--bg-well':'#0f000f','--bg-completed':'#1a001a','--bg-completed-well':'#0f000f','--border-main':'#5e005e','--border-completed':'#39ff14','--accent':'#dfff11','--text-main':'#dfff11','--text-bright':'#ffffff','--text-dim':'#7a5c7a','--text-completed':'#39ff14' }
-    };
+  midnight: {
+    '--bg-body':          '#000000',
+    '--bg-tile':          '#0e0e0e',
+    '--bg-well':          '#060606',
+    '--bg-completed':     '#1a1a1a',
+    '--bg-completed-well':'#0d0d0d',
+    '--border-main':      '#2a2a2a',
+    '--border-completed': '#e0e0e0',
+    '--accent':           '#ffffff',
+    '--text-main':        '#d4d4d4',
+    '--text-bright':      '#ffffff',
+    '--text-dim':         '#4a4a4a',
+    '--text-completed':   '#e0e0e0'
+  },
+
+  parchment: {
+    '--bg-body':          '#2c2416',
+    '--bg-tile':          '#3d3322',
+    '--bg-well':          '#241e12',
+    '--bg-completed':     '#2a3a1e',
+    '--bg-completed-well':'#1e2c14',
+    '--border-main':      '#6b5b3e',
+    '--border-completed': '#8aba5a',
+    '--accent':           '#d4a843',
+    '--text-main':        '#d4a843',
+    '--text-bright':      '#f0dca0',
+    '--text-dim':         '#7a6b50',
+    '--text-completed':   '#8aba5a'
+  },
+
+  spring: {
+    '--bg-body':          '#1e2e1e',
+    '--bg-tile':          '#2a402a',
+    '--bg-well':          '#162416',
+    '--bg-completed':     '#3d2a4d',
+    '--bg-completed-well':'#2a1c36',
+    '--border-main':      '#5a8a5a',
+    '--border-completed': '#c77dff',
+    '--accent':           '#7dffb3',
+    '--text-main':        '#7dffb3',
+    '--text-bright':      '#d0ffe0',
+    '--text-dim':         '#6a8a6a',
+    '--text-completed':   '#c77dff'
+  },
+
+  summer: {
+    '--bg-body':          '#0f2a3a',
+    '--bg-tile':          '#1a4058',
+    '--bg-well':          '#0a1f2d',
+    '--bg-completed':     '#5a4010',
+    '--bg-completed-well':'#3d2b0a',
+    '--border-main':      '#3a7ea8',
+    '--border-completed': '#ffc833',
+    '--accent':           '#00e5ff',
+    '--text-main':        '#00e5ff',
+    '--text-bright':      '#b3f5ff',
+    '--text-dim':         '#4a7a8f',
+    '--text-completed':   '#ffc833'
+  },
+
+  autumn: {
+    '--bg-body':          '#261410',
+    '--bg-tile':          '#3d2218',
+    '--bg-well':          '#1a0e0a',
+    '--bg-completed':     '#1a3040',
+    '--bg-completed-well':'#0f1f2a',
+    '--border-main':      '#8a5040',
+    '--border-completed': '#4a9ac4',
+    '--accent':           '#ff8533',
+    '--text-main':        '#ff8533',
+    '--text-bright':      '#ffc599',
+    '--text-dim':         '#8a6a5a',
+    '--text-completed':   '#4a9ac4'
+  },
+
+  winter: {
+    '--bg-body':          '#141a22',
+    '--bg-tile':          '#222e3a',
+    '--bg-well':          '#0e1419',
+    '--bg-completed':     '#3a2228',
+    '--bg-completed-well':'#261418',
+    '--border-main':      '#4a6a82',
+    '--border-completed': '#ff7a7a',
+    '--accent':           '#8ad4ff',
+    '--text-main':        '#8ad4ff',
+    '--text-bright':      '#d6efff',
+    '--text-dim':         '#5a6e7e',
+    '--text-completed':   '#ff7a7a'
+  },
+
+    abyssal: {
+    '--bg-body':          '#030810',
+    '--bg-tile':          '#081428',
+    '--bg-well':          '#020508',
+    '--bg-completed':     '#003838',
+    '--bg-completed-well':'#001f1f',
+    '--border-main':      '#0e2040',
+    '--border-completed': '#50ffd0',
+    '--accent':           '#50ffd0',
+    '--text-main':        '#50ffd0',
+    '--text-bright':      '#b0d8e8',
+    '--text-dim':         '#3a5070',
+    '--text-completed':   '#50ffd0'
+  },
+
+  volcanic: {
+    '--bg-body':          '#100808',
+    '--bg-tile':          '#1e1010',
+    '--bg-well':          '#080404',
+    '--bg-completed':     '#401500',
+    '--bg-completed-well':'#280e00',
+    '--border-main':      '#4a2020',
+    '--border-completed': '#ff5500',
+    '--accent':           '#ff5500',
+    '--text-main':        '#ff6a20',
+    '--text-bright':      '#ffb380',
+    '--text-dim':         '#6a4040',
+    '--text-completed':   '#ff5500'
+  },
+
+  cyberpunk: {
+    '--bg-body':          '#0a0118',
+    '--bg-tile':          '#1a0a30',
+    '--bg-well':          '#06010e',
+    '--bg-completed':     '#80002a',
+    '--bg-completed-well':'#500018',
+    '--border-main':      '#4a1a6a',
+    '--border-completed': '#00e8c8',
+    '--accent':           '#ffe030',
+    '--text-main':        '#ff1a60',
+    '--text-bright':      '#ff80a0',
+    '--text-dim':         '#6a4070',
+    '--text-completed':   '#00e8c8'
+  },
+
+  bloodlust: {
+    '--bg-body':          '#140404',
+    '--bg-tile':          '#220808',
+    '--bg-well':          '#0e0202',
+    '--bg-completed':     '#400808',
+    '--bg-completed-well':'#280404',
+    '--border-main':      '#4a1414',
+    '--border-completed': '#ff4040',
+    '--accent':           '#ff4040',
+    '--text-main':        '#e02020',
+    '--text-bright':      '#ff8080',
+    '--text-dim':         '#5a3030',
+    '--text-completed':   '#ff4040'
+  },
+
+  royal: {
+    '--bg-body':          '#160a24',
+    '--bg-tile':          '#2e1650',
+    '--bg-well':          '#0e0618',
+    '--bg-completed':     '#4a3800',
+    '--bg-completed-well':'#302400',
+    '--border-main':      '#4a2870',
+    '--border-completed': '#ffd700',
+    '--accent':           '#ffc830',
+    '--text-main':        '#c8a030',
+    '--text-bright':      '#ffe899',
+    '--text-dim':         '#6a4890',
+    '--text-completed':   '#ffd700'
+  },
+
+  emerald: {
+    '--bg-body':          '#04160c',
+    '--bg-tile':          '#0a2e18',
+    '--bg-well':          '#020e08',
+    '--bg-completed':     '#104828',
+    '--bg-completed-well':'#0a3018',
+    '--border-main':      '#1a5030',
+    '--border-completed': '#30d868',
+    '--accent':           '#50e880',
+    '--text-main':        '#50e880',
+    '--text-bright':      '#a0ffc0',
+    '--text-dim':         '#2a5a3a',
+    '--text-completed':   '#30d868'
+  },
+
+  solar: {
+    '--bg-body':          '#2a1e14',
+    '--bg-tile':          '#44301e',
+    '--bg-well':          '#1e140e',
+    '--bg-completed':     '#6a4a08',
+    '--bg-completed-well':'#483208',
+    '--border-main':      '#6a4a30',
+    '--border-completed': '#f0c020',
+    '--accent':           '#ffcc33',
+    '--text-main':        '#e8b020',
+    '--text-bright':      '#fff0b0',
+    '--text-dim':         '#7a6040',
+    '--text-completed':   '#f0c020'
+  },
+
+  vaporwave: {
+    '--bg-body':          '#0a0240',
+    '--bg-tile':          '#1a0830',
+    '--bg-well':          '#06012a',
+    '--bg-completed':     '#a0408a',
+    '--bg-completed-well':'#6a2860',
+    '--border-main':      '#3020a0',
+    '--border-completed': '#00d8f0',
+    '--accent':           '#00d8f0',
+    '--text-main':        '#b070ff',
+    '--text-bright':      '#e0b0ff',
+    '--text-dim':         '#5a3880',
+    '--text-completed':   '#00d8f0'
+  },
+
+  tox: {
+    '--bg-body':          '#100010',
+    '--bg-tile':          '#200020',
+    '--bg-well':          '#0a000a',
+    '--bg-completed':     '#0a200a',
+    '--bg-completed-well':'#061406',
+    '--border-main':      '#400040',
+    '--border-completed': '#30ff18',
+    '--accent':           '#d0ff10',
+    '--text-main':        '#d0ff10',
+    '--text-bright':      '#e8ff88',
+    '--text-dim':         '#604060',
+    '--text-completed':   '#30ff18'
+  },
+
+    ocean: {
+    '--bg-body':          '#040e1a',
+    '--bg-tile':          '#0a1e30',
+    '--bg-well':          '#02080f',
+    '--bg-completed':     '#004048',
+    '--bg-completed-well':'#002830',
+    '--border-main':      '#10304a',
+    '--border-completed': '#00c8a0',
+    '--accent':           '#0090d0',
+    '--text-main':        '#40b8e8',
+    '--text-bright':      '#90e0ff',
+    '--text-dim':         '#2a5068',
+    '--text-completed':   '#00c8a0'
+  },
+
+  frost: {
+    '--bg-body':          '#0c1420',
+    '--bg-tile':          '#162030',
+    '--bg-well':          '#080e18',
+    '--bg-completed':     '#183048',
+    '--bg-completed-well':'#102038',
+    '--border-main':      '#304868',
+    '--border-completed': '#90d8ff',
+    '--accent':           '#b0e8ff',
+    '--text-main':        '#80c8f0',
+    '--text-bright':      '#d8f0ff',
+    '--text-dim':         '#406080',
+    '--text-completed':   '#90d8ff'
+  },
+
+  sandstorm: {
+    '--bg-body':          '#1e1810',
+    '--bg-tile':          '#302818',
+    '--bg-well':          '#14100a',
+    '--bg-completed':     '#484020',
+    '--bg-completed-well':'#302a14',
+    '--border-main':      '#5a4a2a',
+    '--border-completed': '#d8b840',
+    '--accent':           '#e8c848',
+    '--text-main':        '#d0a830',
+    '--text-bright':      '#f0dea0',
+    '--text-dim':         '#6a5a38',
+    '--text-completed':   '#d8b840'
+  },
+
+  nebula: {
+    '--bg-body':          '#0a0414',
+    '--bg-tile':          '#140a24',
+    '--bg-well':          '#06020e',
+    '--bg-completed':     '#1a1040',
+    '--bg-completed-well':'#100a28',
+    '--border-main':      '#281848',
+    '--border-completed': '#c080ff',
+    '--accent':           '#a060ff',
+    '--text-main':        '#9070e0',
+    '--text-bright':      '#d0b8ff',
+    '--text-dim':         '#443060',
+    '--text-completed':   '#c080ff'
+  },
+
+  forest: {
+    '--bg-body':          '#0a120a',
+    '--bg-tile':          '#142014',
+    '--bg-well':          '#060e06',
+    '--bg-completed':     '#183818',
+    '--bg-completed-well':'#102810',
+    '--border-main':      '#2a4a2a',
+    '--border-completed': '#68d068',
+    '--accent':           '#88e088',
+    '--text-main':        '#60c060',
+    '--text-bright':      '#b0f0b0',
+    '--text-dim':         '#3a5a3a',
+    '--text-completed':   '#68d068'
+  },
+
+    noir: {
+    '--bg-body':          '#0e0e0e',
+    '--bg-tile':          '#1a1a1a',
+    '--bg-well':          '#080808',
+    '--bg-completed':     '#2a2a1e',
+    '--bg-completed-well':'#1a1a14',
+    '--border-main':      '#333333',
+    '--border-completed': '#c8b870',
+    '--accent':           '#c8b870',
+    '--text-main':        '#a0a0a0',
+    '--text-bright':      '#d8d8d0',
+    '--text-dim':         '#505050',
+    '--text-completed':   '#c8b870'
+  },
+
+  sakura: {
+    '--bg-body':          '#1a0e14',
+    '--bg-tile':          '#2a1824',
+    '--bg-well':          '#12080e',
+    '--bg-completed':     '#3a1830',
+    '--bg-completed-well':'#281020',
+    '--border-main':      '#4a2840',
+    '--border-completed': '#ff88b8',
+    '--accent':           '#ff88b8',
+    '--text-main':        '#e870a0',
+    '--text-bright':      '#ffc0d8',
+    '--text-dim':         '#5a3850',
+    '--text-completed':   '#ff88b8'
+  },
+
+  copper: {
+    '--bg-body':          '#10120e',
+    '--bg-tile':          '#1e201a',
+    '--bg-well':          '#0a0c08',
+    '--bg-completed':     '#2a3028',
+    '--bg-completed-well':'#1e2418',
+    '--border-main':      '#3a4030',
+    '--border-completed': '#60b8a0',
+    '--accent':           '#d08850',
+    '--text-main':        '#c08048',
+    '--text-bright':      '#e8c0a0',
+    '--text-dim':         '#505840',
+    '--text-completed':   '#60b8a0'
+  },
+
+  arctic: {
+    '--bg-body':          '#060c14',
+    '--bg-tile':          '#0e1824',
+    '--bg-well':          '#04080e',
+    '--bg-completed':     '#0a2030',
+    '--bg-completed-well':'#061420',
+    '--border-main':      '#1a3048',
+    '--border-completed': '#30e8a0',
+    '--accent':           '#40d0a0',
+    '--text-main':        '#50b8d0',
+    '--text-bright':      '#a0e8f0',
+    '--text-dim':         '#2a4860',
+    '--text-completed':   '#30e8a0'
+  },
+
+  obsidian: {
+    '--bg-body':          '#080808',
+    '--bg-tile':          '#141410',
+    '--bg-well':          '#040404',
+    '--bg-completed':     '#282010',
+    '--bg-completed-well':'#1a1408',
+    '--border-main':      '#2a2820',
+    '--border-completed': '#d8a830',
+    '--accent':           '#d8a830',
+    '--text-main':        '#c09828',
+    '--text-bright':      '#f0d888',
+    '--text-dim':         '#484030',
+    '--text-completed':   '#d8a830'
+  }
+};
+
 
     let currentTeamKey = 'Warriors';
     let codewordSecret = '';
