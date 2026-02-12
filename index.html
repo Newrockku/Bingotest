@@ -19,7 +19,11 @@
                  script-src 'self' 'unsafe-inline';">
 
   <style>
-    /* --- Theme Variables --- */
+    /* =========================================================
+       THEME (CONDENSED)
+       - OSRS defaults live here in :root
+       - All other themes are applied via JS by setting CSS vars
+       ========================================================= */
     :root {
       --bg-body: #342e25;
       --bg-tile: #494034;
@@ -36,24 +40,7 @@
       --danger: #ff6d6d;
     }
 
-    /* --- Seasonal Themes --- */
-    [data-theme="spring"] { --bg-body: #2d3a2d; --bg-tile: #4a5d4a; --bg-well: #2d3a2d; --bg-completed: #5d4a5d; --bg-completed-well: #3a2d3a; --border-main: #88b088; --border-completed: #d896ff; --accent: #a2ffb3; --text-main: #a2ffb3; --text-bright: #ffffff; --text-dim: #b5c9b5; --text-completed: #d896ff; }
-    [data-theme="summer"] { --bg-body: #1a3a4a; --bg-tile: #2c5d72; --bg-well: #1a3a4a; --bg-completed: #725d2c; --bg-completed-well: #4a3a1a; --border-main: #5ea3cc; --border-completed: #ffcc33; --accent: #33f0ff; --text-main: #33f0ff; --text-bright: #ffffff; --text-dim: #92b7ca; --text-completed: #ffcc33; }
-    [data-theme="autumn"] { --bg-body: #3a1f1a; --bg-tile: #5d322c; --bg-well: #3a1f1a; --bg-completed: #2c4a5d; --bg-completed-well: #1a2d3a; --border-main: #a35d4d; --border-completed: #5ea3cc; --accent: #ff7e33; --text-main: #ff7e33; --text-bright: #ffd1b3; --text-dim: #ca9a92; --text-completed: #5ea3cc; }
-    [data-theme="winter"] { --bg-body: #1e252b; --bg-tile: #343e49; --bg-well: #1e252b; --bg-completed: #493434; --bg-completed-well: #2b1e1e; --border-main: #6d8ba0; --border-completed: #ff6d6d; --accent: #a0e9ff; --text-main: #a0e9ff; --text-bright: #ffffff; --text-dim: #7e8d9b; --text-completed: #ff6d6d; }
-
-    /* --- Custom Themes --- */
-    [data-theme="abyssal"] { --bg-body: #050a14; --bg-tile: #0a192f; --bg-well: #02050a; --bg-completed: #004d4d; --bg-completed-well: #002626; --border-main: #112240; --border-completed: #64ffda; --accent: #64ffda; --text-main: #64ffda; --text-bright: #ccd6f6; --text-dim: #8892b0; --text-completed: #64ffda; }
-    [data-theme="volcanic"] { --bg-body: #0f0c0c; --bg-tile: #1a1515; --bg-well: #050404; --bg-completed: #4d1a00; --bg-completed-well: #260d00; --border-main: #3d2b2b; --border-completed: #ff4d00; --accent: #ff4d00; --text-main: #ff4d00; --text-bright: #ffa600; --text-dim: #6d5e5e; --text-completed: #ff4d00; }
-    [data-theme="cyberpunk"] { --bg-body: #0d0221; --bg-tile: #261447; --bg-well: #0d0221; --bg-completed: #ff0055; --bg-completed-well: #80002a; --border-main: #fb3640; --border-completed: #00f5d4; --accent: #fee440; --text-main: #ff0055; --text-bright: #ffffff; --text-dim: #9d8189; --text-completed: #00f5d4; }
-    [data-theme="bloodlust"] { --bg-body: #1a0505; --bg-tile: #2b0a0a; --bg-well: #120303; --bg-completed: #4d0a0a; --bg-completed-well: #2b0505; --border-main: #4d1515; --border-completed: #ff3333; --accent: #ff3333; --text-main: #cc0000; --text-bright: #ff6666; --text-dim: #664444; --text-completed: #ff3333; }
-    [data-theme="royal"] { --bg-body: #1e0d2d; --bg-tile: #3c1b5a; --bg-well: #140820; --bg-completed: #d4af37; --bg-completed-well: #8a6d00; --border-main: #5a3285; --border-completed: #ffee00; --accent: #ffd700; --text-main: #d4af37; --text-bright: #ffffff; --text-dim: #a684c7; --text-completed: #ffee00; }
-    [data-theme="emerald"] { --bg-body: #061e12; --bg-tile: #0a3d24; --bg-well: #04120b; --bg-completed: #145a32; --bg-completed-well: #0a3d24; --border-main: #145a32; --border-completed: #2ecc71; --accent: #58d68d; --text-main: #58d68d; --text-bright: #abebc6; --text-dim: #515a5a; --text-completed: #2ecc71; }
-    [data-theme="solar"] { --bg-body: #3d2b1f; --bg-tile: #5e412f; --bg-well: #2b1e15; --bg-completed: #f39c12; --bg-completed-well: #af710b; --border-main: #7d5a44; --border-completed: #f1c40f; --accent: #ffcc33; --text-main: #ffcc33; --text-bright: #fff5cc; --text-dim: #a68e7e; --text-completed: #f1c40f; }
-    [data-theme="vaporwave"] { --bg-body: #120458; --bg-tile: #240b36; --bg-well: #0b0233; --bg-completed: #ff71ce; --bg-completed-well: #b967ff; --border-main: #05ffa1; --border-completed: #01cdfe; --accent: #01cdfe; --text-main: #b967ff; --text-bright: #ffffff; --text-dim: #7a5c91; --text-completed: #01cdfe; }
-    [data-theme="midnight"] { --bg-body: #000000; --bg-tile: #121212; --bg-well: #080808; --bg-completed: #222222; --bg-completed-well: #111111; --border-main: #333333; --border-completed: #ffffff; --accent: #ffffff; --text-main: #eeeeee; --text-bright: #ffffff; --text-dim: #555555; --text-completed: #ffffff; }
-    [data-theme="tox"] { --bg-body: #1a001a; --bg-tile: #2d002d; --bg-well: #0f000f; --bg-completed: #1a001a; --bg-completed-well: #0f000f; --border-main: #5e005e; --border-completed: #39ff14; --accent: #dfff11; --text-main: #dfff11; --text-bright: #ffffff; --text-dim: #7a5c7a; --text-completed: #39ff14; }
-
+    /* Global Reset */
     * { box-sizing: border-box; }
     html { scrollbar-gutter: stable; overflow-y: scroll; }
 
@@ -66,6 +53,7 @@
       white-space: nowrap;
     }
 
+    /* --- Custom Scrollbar --- */
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: var(--bg-well); }
     ::-webkit-scrollbar-thumb { background: var(--bg-tile); border: 2px solid var(--bg-well); }
@@ -79,6 +67,7 @@
       display: flex; flex-direction: column; align-items: center; min-height: 100vh;
     }
 
+    /* --- Dashboard --- */
     .dashboard {
       width: 100%; max-width: 1580px;
       background: var(--bg-tile); border: 2px solid var(--border-main);
@@ -108,6 +97,7 @@
     }
     .codeword-hidden { color: var(--bg-well); text-shadow: none; }
 
+    /* --- Settings Gear Button --- */
     .settings-btn {
       background: none; border: 2px solid var(--border-main); color: var(--text-dim);
       width: 38px; height: 38px; border-radius: 4px; cursor: pointer;
@@ -119,6 +109,7 @@
     .settings-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     .settings-btn svg { width: 20px; height: 20px; fill: currentColor; }
 
+    /* --- Mini-Map --- */
     .minimap-wrapper {
       background: var(--bg-well); padding: 4px; border: 2px solid var(--border-main);
       flex-shrink: 0; cursor: pointer; transition: transform 0.2s ease, border-color 0.2s ease;
@@ -129,11 +120,13 @@
     .mini-tile { width: 10px; height: 10px; background: var(--bg-body); display: flex; justify-content: center; align-items: center; font-size: 7px; color: rgba(255,255,255,0.2); border-radius: 1px; }
     .mini-tile.complete { background: var(--bg-completed); color: var(--text-completed); }
 
+    /* --- Grid --- */
     .grid-container {
       display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px;
       width: 100%; max-width: 1580px;
     }
 
+    /* --- Tile Styles --- */
     .tile {
       background-color: var(--bg-tile);
       border: 2px solid var(--border-main);
@@ -202,6 +195,7 @@
     .tile.no-data:hover { transform: none; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); z-index: auto; }
     .tile.no-data:focus-visible { outline: none; transform: none; }
 
+    /* --- Modal --- */
     #modal-overlay {
       position: fixed; top: 0; left: 0;
       width: 100%; height: 100%;
@@ -245,10 +239,9 @@
     .modal-checklist, .modal-description { background: var(--bg-well); border: 1px solid #000; padding: 8px; overflow-y: auto; color: var(--text-bright); }
     .modal-content.completed .modal-checklist, .modal-content.completed .modal-description { background: var(--bg-completed-well); color: var(--text-completed); }
 
-    .modal-top-bar {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 0; min-height: 30px;
-    }
+    /* --- Modal Top Bar --- */
+    .modal-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0; min-height: 30px; }
+
     .modal-map-btn {
       background: none; border: none; padding: 4px; cursor: pointer;
       color: var(--text-dim); display: flex; align-items: center; justify-content: center;
@@ -266,12 +259,14 @@
     .modal-close-btn:hover { color: var(--accent); background: var(--bg-well); }
     .modal-close-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
+    /* --- Large Map --- */
     .large-map-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; background: var(--bg-body); padding: 10px; border: 2px solid var(--border-main); width: 100%; aspect-ratio: 1/1; }
     .large-map-tile { background: var(--bg-well); display: flex; justify-content: center; align-items: center; font-size: 1.2rem; font-weight: bold; color: rgba(255,255,255,0.2); border: 1px solid var(--bg-tile); cursor: pointer; transition: 0.2s; }
     .large-map-tile:hover { background: var(--bg-tile); color: #fff; transform: scale(1.05); z-index: 2; border-color: var(--accent); }
     .large-map-tile.complete { background: var(--bg-completed); color: var(--text-completed); border-color: var(--border-completed); }
     .large-map-tile:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
+    /* --- Settings Modal --- */
     .settings-section { margin-bottom: 18px; }
     .settings-section-title {
       font-size: 0.75rem; text-transform: uppercase; font-weight: bold;
@@ -289,6 +284,7 @@
     .settings-select:focus { border-color: var(--accent); outline: none; }
     .settings-version { text-align: center; font-size: 0.7rem; color: var(--text-dim); margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-main); }
 
+    /* --- Page Footer --- */
     .page-footer {
       width: 100%; max-width: 1580px;
       padding: 15px 0 10px 0;
@@ -302,6 +298,7 @@
     @keyframes flash-sync { 0% { color: var(--accent); } 100% { color: var(--border-main); } }
     .sync-error { color: var(--danger); }
 
+    /* --- Responsive --- */
     @media (max-width: 1400px) {
       .grid-container { grid-template-columns: repeat(5, 1fr); }
       .minimap-wrapper.in-dashboard { display: none; }
@@ -342,6 +339,7 @@
       .stat-value { font-size: 1rem; }
     }
 
+    /* Reduced Motion */
     @media (prefers-reduced-motion: reduce) {
       * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
       .tile:hover { transform: none !important; }
@@ -411,7 +409,7 @@
           <button class="modal-map-btn" id="modal-map-back" aria-label="Back to overview map" tabindex="0">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z"/></svg>
           </button>
-          <button class="modal-close-btn" id="modal-close-1" aria-label="Close dialog" tabindex="0">&times;</button>
+          <button class="modal-close-btn" aria-label="Close dialog" tabindex="0">&times;</button>
         </div>
 
         <div id="modal-header" class="modal-header"></div>
@@ -438,7 +436,7 @@
       <div id="map-modal-view" style="display: none; flex-direction: column; align-items: center;">
         <div class="modal-top-bar" style="width: 100%;">
           <div></div>
-          <button class="modal-close-btn" id="modal-close-2" aria-label="Close dialog" tabindex="0">&times;</button>
+          <button class="modal-close-btn" aria-label="Close dialog" tabindex="0">&times;</button>
         </div>
         <div class="modal-header" style="margin-top: 0;">OVERVIEW</div>
         <div class="large-map-grid" id="large-map-grid"></div>
@@ -448,7 +446,7 @@
       <div id="settings-modal-view" style="display: none; flex-direction: column;">
         <div class="modal-top-bar">
           <div></div>
-          <button class="modal-close-btn" id="modal-close-3" aria-label="Close dialog" tabindex="0">&times;</button>
+          <button class="modal-close-btn" aria-label="Close dialog" tabindex="0">&times;</button>
         </div>
         <div class="modal-header" style="margin-top: 0;">SETTINGS</div>
 
@@ -508,649 +506,684 @@
     </div>
   </div>
 
-<script>
-(() => {
-  /* =========================
-     CONFIG / STATE
-     ========================= */
-  const APP_VERSION = '3.083';
-  const MAX_TILES = 49;
+  <script>
+  (() => {
+    /* =========================
+       CONFIG / STATE
+       ========================= */
+    const APP_VERSION = '3.083';
+    const MAX_TILES = 49;
 
-  const TEAM_MAP = {
-    Warriors: {
-      name: "The Spreadsheet Warriors",
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRFOGe_j8BL0X5Cwvy3LNmsrWG82IAXlWpump0Sw6PKWLz-1gxbisdbPuTmJ_CmjLA_q-Q6y9jTfFwq/pub?gid=1593254680&single=true&output=csv",
-      codeword: "BINGO_BLITZ",
-      points: 1250
-    }
-  };
-
-  const STORAGE_KEYS = {
-    theme: 'bingo-theme',
-    syncInterval: 'bingo-sync-interval',
-    codewordVisible: 'bingo-codeword-visible'
-  };
-
-  let currentTeamKey = 'Warriors';
-  let codewordSecret = '';
-  let lastSeenHash = null;
-
-  let completion = Array(MAX_TILES).fill(false);
-  let tiles = Array(MAX_TILES).fill(null);
-
-  let fetchController = null;
-  let syncIntervalId = null;
-  let syncMs = 30000;
-
-  let modalOpen = false;
-  let lastTriggerEl = null;
-  let ghostEl = null;
-
-  /* =========================
-     DOM HELPERS
-     ========================= */
-  const $ = (id) => document.getElementById(id);
-
-  const DOM = {
-    teamName: $('team-name'),
-    totalPoints: $('total-points'),
-    completedCount: $('completed-count'),
-    codeword: $('codeword-display'),
-    grid: $('grid'),
-    lastSync: $('last-sync-text'),
-    syncNow: $('sync-now'),
-    settingsTrigger: $('settings-trigger'),
-    miniDash: $('mini-map-trigger'),
-    miniFloat: $('mini-map-floating'),
-
-    overlay: $('modal-overlay'),
-    box: $('modal-box'),
-
-    viewStd: $('standard-modal-view'),
-    viewMap: $('map-modal-view'),
-    viewSettings: $('settings-modal-view'),
-
-    modalHeader: $('modal-header'),
-    modalImage: $('modal-image'),
-    modalProgressSection: $('modal-progress-section'),
-    modalBar: $('modal-bar'),
-    modalList: $('modal-list'),
-    modalDesc: $('modal-desc'),
-    modalPoints: $('modal-points'),
-
-    mapBack: $('modal-map-back'),
-    bigMap: $('large-map-grid'),
-
-    themeSel: $('settings-theme-dropdown'),
-    intervalSel: $('settings-sync-interval'),
-  };
-
-  // Minimaps: index 1..49 => [node,node]
-  const miniNodes = Array.from({ length: MAX_TILES + 1 }, () => []);
-
-  /* =========================
-     SMALL UTILS
-     ========================= */
-  const storageSave = (k, v) => { try { localStorage.setItem(k, String(v)); } catch {} };
-  const storageLoad = (k, fb) => { try { const v = localStorage.getItem(k); return v ?? fb; } catch { return fb; } };
-
-  const normalizeNL = (s) => String(s).replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-
-  const simpleHash = (str) => {
-    let h = 0;
-    for (let i = 0; i < str.length; i++) { h = ((h << 5) - h) + str.charCodeAt(i); h |= 0; }
-    return h;
-  };
-
-  const escapeHTML = (str) => {
-    const d = document.createElement('div');
-    d.appendChild(document.createTextNode(String(str ?? '')));
-    return d.innerHTML;
-  };
-
-  const parseCSVRow = (row) => {
-    const cols = [];
-    let cur = '', inQ = false;
-    for (let i = 0; i < row.length; i++) {
-      const ch = row[i];
-      if (inQ) {
-        if (ch === '"' && row[i + 1] === '"') { cur += '"'; i++; }
-        else if (ch === '"') inQ = false;
-        else cur += ch;
-      } else {
-        if (ch === '"') inQ = true;
-        else if (ch === ',') { cols.push(cur.trim()); cur = ''; }
-        else cur += ch;
+    const TEAM_MAP = {
+      Warriors: {
+        name: "The Spreadsheet Warriors",
+        url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRFOGe_j8BL0X5Cwvy3LNmsrWG82IAXlWpump0Sw6PKWLz-1gxbisdbPuTmJ_CmjLA_q-Q6y9jTfFwq/pub?gid=1593254680&single=true&output=csv",
+        codeword: "BINGO_BLITZ",
+        points: 1250
       }
-    }
-    cols.push(cur.trim());
-    return cols;
-  };
+    };
 
-  const getProgressColor = (pct) => {
-    if (pct >= 100) return 'var(--text-completed)';
-    const hue = (pct * 120) / 100;
-    return `hsl(${hue}, 70%, 45%)`;
-  };
+    const STORAGE_KEYS = {
+      theme: 'bingo-theme',
+      syncInterval: 'bingo-sync-interval',
+      codewordVisible: 'bingo-codeword-visible'
+    };
 
-  const handleImgError = (img) => {
-    img.style.visibility = 'hidden';
-    img.removeAttribute('src');
-  };
+    // Theme palettes moved from CSS into JS (condenses CSS a lot)
+    const THEME_VARS = [
+      '--bg-body','--bg-tile','--bg-well','--bg-completed','--bg-completed-well',
+      '--border-main','--border-completed','--accent',
+      '--text-main','--text-bright','--text-dim','--text-completed'
+    ];
 
-  // FIX: supports spaces/apostrophes by URL-encoding, blocks traversal
-  const safeImgSrc = (imgName) => {
-    const raw = String(imgName || '').trim();
-    if (!raw) return '';
-    if (/^https?:\/\//i.test(raw)) return raw;
+    const THEMES = {
+      osrs: null, // means: use :root defaults from CSS
+      spring: { '--bg-body':'#2d3a2d','--bg-tile':'#4a5d4a','--bg-well':'#2d3a2d','--bg-completed':'#5d4a5d','--bg-completed-well':'#3a2d3a','--border-main':'#88b088','--border-completed':'#d896ff','--accent':'#a2ffb3','--text-main':'#a2ffb3','--text-bright':'#ffffff','--text-dim':'#b5c9b5','--text-completed':'#d896ff' },
+      summer: { '--bg-body':'#1a3a4a','--bg-tile':'#2c5d72','--bg-well':'#1a3a4a','--bg-completed':'#725d2c','--bg-completed-well':'#4a3a1a','--border-main':'#5ea3cc','--border-completed':'#ffcc33','--accent':'#33f0ff','--text-main':'#33f0ff','--text-bright':'#ffffff','--text-dim':'#92b7ca','--text-completed':'#ffcc33' },
+      autumn: { '--bg-body':'#3a1f1a','--bg-tile':'#5d322c','--bg-well':'#3a1f1a','--bg-completed':'#2c4a5d','--bg-completed-well':'#1a2d3a','--border-main':'#a35d4d','--border-completed':'#5ea3cc','--accent':'#ff7e33','--text-main':'#ff7e33','--text-bright':'#ffd1b3','--text-dim':'#ca9a92','--text-completed':'#5ea3cc' },
+      winter: { '--bg-body':'#1e252b','--bg-tile':'#343e49','--bg-well':'#1e252b','--bg-completed':'#493434','--bg-completed-well':'#2b1e1e','--border-main':'#6d8ba0','--border-completed':'#ff6d6d','--accent':'#a0e9ff','--text-main':'#a0e9ff','--text-bright':'#ffffff','--text-dim':'#7e8d9b','--text-completed':'#ff6d6d' },
 
-    const parts = raw.replace(/\\/g, '/')
-      .split('/')
-      .filter(Boolean)
-      .filter(p => p !== '.' && p !== '..');
+      abyssal: { '--bg-body':'#050a14','--bg-tile':'#0a192f','--bg-well':'#02050a','--bg-completed':'#004d4d','--bg-completed-well':'#002626','--border-main':'#112240','--border-completed':'#64ffda','--accent':'#64ffda','--text-main':'#64ffda','--text-bright':'#ccd6f6','--text-dim':'#8892b0','--text-completed':'#64ffda' },
+      volcanic:{ '--bg-body':'#0f0c0c','--bg-tile':'#1a1515','--bg-well':'#050404','--bg-completed':'#4d1a00','--bg-completed-well':'#260d00','--border-main':'#3d2b2b','--border-completed':'#ff4d00','--accent':'#ff4d00','--text-main':'#ff4d00','--text-bright':'#ffa600','--text-dim':'#6d5e5e','--text-completed':'#ff4d00' },
+      cyberpunk:{ '--bg-body':'#0d0221','--bg-tile':'#261447','--bg-well':'#0d0221','--bg-completed':'#ff0055','--bg-completed-well':'#80002a','--border-main':'#fb3640','--border-completed':'#00f5d4','--accent':'#fee440','--text-main':'#ff0055','--text-bright':'#ffffff','--text-dim':'#9d8189','--text-completed':'#00f5d4' },
+      bloodlust:{ '--bg-body':'#1a0505','--bg-tile':'#2b0a0a','--bg-well':'#120303','--bg-completed':'#4d0a0a','--bg-completed-well':'#2b0505','--border-main':'#4d1515','--border-completed':'#ff3333','--accent':'#ff3333','--text-main':'#cc0000','--text-bright':'#ff6666','--text-dim':'#664444','--text-completed':'#ff3333' },
+      royal:   { '--bg-body':'#1e0d2d','--bg-tile':'#3c1b5a','--bg-well':'#140820','--bg-completed':'#d4af37','--bg-completed-well':'#8a6d00','--border-main':'#5a3285','--border-completed':'#ffee00','--accent':'#ffd700','--text-main':'#d4af37','--text-bright':'#ffffff','--text-dim':'#a684c7','--text-completed':'#ffee00' },
+      emerald: { '--bg-body':'#061e12','--bg-tile':'#0a3d24','--bg-well':'#04120b','--bg-completed':'#145a32','--bg-completed-well':'#0a3d24','--border-main':'#145a32','--border-completed':'#2ecc71','--accent':'#58d68d','--text-main':'#58d68d','--text-bright':'#abebc6','--text-dim':'#515a5a','--text-completed':'#2ecc71' },
+      solar:   { '--bg-body':'#3d2b1f','--bg-tile':'#5e412f','--bg-well':'#2b1e15','--bg-completed':'#f39c12','--bg-completed-well':'#af710b','--border-main':'#7d5a44','--border-completed':'#f1c40f','--accent':'#ffcc33','--text-main':'#ffcc33','--text-bright':'#fff5cc','--text-dim':'#a68e7e','--text-completed':'#f1c40f' },
+      vaporwave:{ '--bg-body':'#120458','--bg-tile':'#240b36','--bg-well':'#0b0233','--bg-completed':'#ff71ce','--bg-completed-well':'#b967ff','--border-main':'#05ffa1','--border-completed':'#01cdfe','--accent':'#01cdfe','--text-main':'#b967ff','--text-bright':'#ffffff','--text-dim':'#7a5c91','--text-completed':'#01cdfe' },
+      midnight:{ '--bg-body':'#000000','--bg-tile':'#121212','--bg-well':'#080808','--bg-completed':'#222222','--bg-completed-well':'#111111','--border-main':'#333333','--border-completed':'#ffffff','--accent':'#ffffff','--text-main':'#eeeeee','--text-bright':'#ffffff','--text-dim':'#555555','--text-completed':'#ffffff' },
+      tox:     { '--bg-body':'#1a001a','--bg-tile':'#2d002d','--bg-well':'#0f000f','--bg-completed':'#1a001a','--bg-completed-well':'#0f000f','--border-main':'#5e005e','--border-completed':'#39ff14','--accent':'#dfff11','--text-main':'#dfff11','--text-bright':'#ffffff','--text-dim':'#7a5c7a','--text-completed':'#39ff14' }
+    };
 
-    return `./images/${parts.map(encodeURIComponent).join('/')}`;
-  };
+    let currentTeamKey = 'Warriors';
+    let codewordSecret = '';
+    let lastSeenHash = null;
 
-  const applyTheme = (theme) => {
-    if (!theme || theme === 'osrs') document.documentElement.removeAttribute('data-theme');
-    else document.documentElement.setAttribute('data-theme', theme);
-  };
+    let completion = Array(MAX_TILES).fill(false);
+    let tiles = Array(MAX_TILES).fill(null);
 
-  const hideViews = () => {
-    DOM.viewStd.style.display = 'none';
-    DOM.viewMap.style.display = 'none';
-    DOM.viewSettings.style.display = 'none';
-  };
+    let fetchController = null;
+    let syncIntervalId = null;
+    let syncMs = 30000;
 
-  const setMinimapComplete = (id1, done) => {
-    for (const n of miniNodes[id1]) n.classList.toggle('complete', !!done);
-  };
+    let modalOpen = false;
+    let lastTriggerEl = null;
+    let ghostEl = null;
 
-  const resetMinimaps = () => {
-    for (let i = 1; i <= MAX_TILES; i++) setMinimapComplete(i, false);
-  };
+    /* =========================
+       DOM
+       ========================= */
+    const $ = (id) => document.getElementById(id);
 
-  const updateCompletedStat = () => {
-    const done = completion.reduce((a, v) => a + (v ? 1 : 0), 0);
-    DOM.completedCount.innerText = `${done}/${MAX_TILES}`;
-  };
+    const DOM = {
+      teamName: $('team-name'),
+      totalPoints: $('total-points'),
+      completedCount: $('completed-count'),
+      codeword: $('codeword-display'),
+      grid: $('grid'),
+      lastSync: $('last-sync-text'),
+      syncNow: $('sync-now'),
+      settingsTrigger: $('settings-trigger'),
+      miniDash: $('mini-map-trigger'),
+      miniFloat: $('mini-map-floating'),
 
-  const flashSync = () => {
-    DOM.lastSync.classList.remove('sync-error');
-    DOM.lastSync.innerText = `Last Sync: ${new Date().toLocaleTimeString()}`;
-    DOM.lastSync.classList.remove('sync-flash');
-    void DOM.lastSync.offsetWidth;
-    DOM.lastSync.classList.add('sync-flash');
-  };
+      overlay: $('modal-overlay'),
+      box: $('modal-box'),
 
-  const syncError = (msg) => {
-    DOM.lastSync.classList.add('sync-error');
-    DOM.lastSync.innerText = `Sync failed: ${msg}`;
-  };
+      viewStd: $('standard-modal-view'),
+      viewMap: $('map-modal-view'),
+      viewSettings: $('settings-modal-view'),
 
-  /* =========================
-     MINIMAP BUILD
-     ========================= */
-  const buildMinimap = (containerId) => {
-    const el = $(containerId);
-    if (!el) return;
-    el.innerHTML = '';
+      modalHeader: $('modal-header'),
+      modalImage: $('modal-image'),
+      modalProgressSection: $('modal-progress-section'),
+      modalBar: $('modal-bar'),
+      modalList: $('modal-list'),
+      modalDesc: $('modal-desc'),
+      modalPoints: $('modal-points'),
 
-    const frag = document.createDocumentFragment();
-    for (let i = 1; i <= MAX_TILES; i++) {
+      mapBack: $('modal-map-back'),
+      bigMap: $('large-map-grid'),
+
+      themeSel: $('settings-theme-dropdown'),
+      intervalSel: $('settings-sync-interval'),
+    };
+
+    const miniNodes = Array.from({ length: MAX_TILES + 1 }, () => []);
+
+    /* =========================
+       UTILS
+       ========================= */
+    const storageSave = (k, v) => { try { localStorage.setItem(k, String(v)); } catch {} };
+    const storageLoad = (k, fb) => { try { const v = localStorage.getItem(k); return v ?? fb; } catch { return fb; } };
+
+    const normalizeNL = (s) => String(s).replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+    const simpleHash = (str) => {
+      let h = 0;
+      for (let i = 0; i < str.length; i++) { h = ((h << 5) - h) + str.charCodeAt(i); h |= 0; }
+      return h;
+    };
+
+    const escapeHTML = (str) => {
       const d = document.createElement('div');
-      d.className = 'mini-tile';
-      d.dataset.index = String(i);
-      d.innerText = String(i);
-      frag.appendChild(d);
-      miniNodes[i].push(d);
-    }
-    el.appendChild(frag);
-  };
+      d.appendChild(document.createTextNode(String(str ?? '')));
+      return d.innerHTML;
+    };
 
-  /* =========================
-     RENDER
-     ========================= */
-  const renderGrid = () => {
-    DOM.grid.innerHTML = '';
-    const frag = document.createDocumentFragment();
-
-    for (let i = 0; i < MAX_TILES; i++) {
-      const t = tiles[i];
-      const done = !!t.isCompleted;
-
-      const tile = document.createElement('div');
-      tile.className = `tile${done ? ' completed' : ''}${t.noData ? ' no-data' : ''}`;
-      tile.dataset.tileIndex = String(i);
-      tile.setAttribute('role', 'button');
-      tile.tabIndex = t.noData ? -1 : 0;
-      tile.setAttribute('aria-label',
-        t.noData
-          ? `Tile ${t.id}: No data`
-          : `Tile ${t.id}: ${t.title} - ${done ? 'Complete' : Math.round(t.percent) + '% complete'}`
-      );
-
-      const safeTitle = escapeHTML(t.title);
-      const safePts = escapeHTML(t.points);
-
-      tile.innerHTML = `
-        <div class="header-box"><div class="header-content">${t.id} | ${safeTitle}</div></div>
-        <div class="img-container"><img alt="${safeTitle}"></div>
-        <div class="progress-container"><div class="progress-bg"><div class="progress-fill"></div></div></div>
-        <div class="checklist-box">${t.checklistHtml /* blank allowed */}</div>
-        <div class="point-badge">${safePts} PTS</div>
-      `;
-
-      const img = tile.querySelector('img');
-      if (t.img) {
-        img.style.visibility = 'visible';
-        img.addEventListener('error', () => handleImgError(img), { once: true });
-        img.src = t.img;
-      } else {
-        handleImgError(img);
-      }
-
-      const fill = tile.querySelector('.progress-fill');
-      fill.style.width = t.percent + '%';
-      fill.style.backgroundColor = t.barColor;
-
-      if (done) tile.querySelector('.progress-container')?.style && (tile.querySelector('.progress-container').style.display = 'none');
-
-      frag.appendChild(tile);
-    }
-
-    DOM.grid.appendChild(frag);
-  };
-
-  const buildBigMap = () => {
-    DOM.bigMap.innerHTML = '';
-    const frag = document.createDocumentFragment();
-
-    for (let i = 1; i <= MAX_TILES; i++) {
-      const cell = document.createElement('div');
-      cell.className = `large-map-tile${completion[i - 1] ? ' complete' : ''}`;
-      cell.dataset.index = String(i);
-      cell.innerText = String(i);
-      cell.tabIndex = 0;
-      cell.setAttribute('role', 'button');
-      frag.appendChild(cell);
-    }
-    DOM.bigMap.appendChild(frag);
-  };
-
-  /* =========================
-     MODAL
-     ========================= */
-  const showModal = (triggerEl, animate = true) => {
-    if (ghostEl?.isConnected) ghostEl.classList.remove('ghost');
-    lastTriggerEl = triggerEl || lastTriggerEl;
-    ghostEl = triggerEl;
-
-    if (ghostEl?.classList?.contains('tile') || ghostEl?.id === 'mini-map-trigger' || ghostEl?.id === 'mini-map-floating') {
-      ghostEl.classList.add('ghost');
-    }
-
-    const rect = (animate && triggerEl?.getBoundingClientRect)
-      ? triggerEl.getBoundingClientRect()
-      : { top: innerHeight / 2, left: innerWidth / 2, height: 0, width: 0 };
-
-    DOM.box.style.top = (rect.top + rect.height / 2) + 'px';
-    DOM.box.style.left = (rect.left + rect.width / 2) + 'px';
-
-    DOM.overlay.style.display = 'flex';
-    setTimeout(() => {
-      DOM.overlay.classList.add('active');
-      DOM.box.classList.add('active');
-      modalOpen = true;
-      DOM.box.querySelector('.modal-close-btn')?.focus();
-    }, 10);
-
-    document.body.style.overflow = 'hidden';
-  };
-
-  const closeModal = () => {
-    DOM.overlay.classList.remove('active');
-    DOM.box.classList.remove('active');
-    modalOpen = false;
-
-    if (ghostEl?.isConnected) ghostEl.classList.remove('ghost');
-
-    setTimeout(() => {
-      DOM.overlay.style.display = 'none';
-      document.body.style.overflow = 'auto';
-      lastTriggerEl?.focus?.();
-    }, 500);
-  };
-
-  const openTileModalByIndex = (tileIndex, triggerEl) => {
-    const t = tiles[tileIndex];
-    if (!t || t.noData) return;
-
-    DOM.box.classList.toggle('completed', !!t.isCompleted);
-
-    hideViews();
-    DOM.viewStd.style.display = 'block';
-
-    DOM.modalHeader.innerText = `${t.id} | ${t.title}`;
-    DOM.modalPoints.innerText = `${t.points} PTS`;
-
-    DOM.modalProgressSection.style.display = t.isCompleted ? 'none' : 'block';
-    DOM.modalBar.style.width = t.percent + '%';
-    DOM.modalBar.style.backgroundColor = t.barColor;
-
-    DOM.modalList.innerHTML = t.checklistHtml; // blank allowed
-    DOM.modalDesc.innerText = t.description || '';
-
-    DOM.modalImage.src = '';
-    DOM.modalImage.onerror = null;
-    DOM.modalImage.style.visibility = 'visible';
-    DOM.modalImage.alt = t.title;
-
-    if (t.img) {
-      DOM.modalImage.onerror = () => handleImgError(DOM.modalImage);
-      DOM.modalImage.src = t.img;
-    } else {
-      handleImgError(DOM.modalImage);
-    }
-
-    showModal(triggerEl, true);
-  };
-
-  const openMapModal = (triggerEl) => {
-    DOM.box.classList.remove('completed');
-    hideViews();
-    DOM.viewMap.style.display = 'flex';
-    buildBigMap();
-    showModal(triggerEl, true);
-  };
-
-  const openSettingsModal = (triggerEl) => {
-    DOM.box.classList.remove('completed');
-    hideViews();
-    DOM.viewSettings.style.display = 'flex';
-
-    const theme = document.documentElement.getAttribute('data-theme') || 'osrs';
-    DOM.themeSel.value = theme;
-    DOM.intervalSel.value = String(syncMs);
-
-    showModal(triggerEl, true);
-  };
-
-  /* =========================
-     CODEWORD
-     ========================= */
-  const setCodewordVisible = (visible) => {
-    DOM.codeword.classList.toggle('codeword-hidden', !visible);
-    DOM.codeword.innerText = visible ? (codewordSecret || '') : '?????';
-    DOM.codeword.setAttribute('aria-label',
-      visible ? `Codeword: ${codewordSecret}. Click to hide.` : 'Codeword hidden. Click to reveal.'
-    );
-    storageSave(STORAGE_KEYS.codewordVisible, visible ? '1' : '0');
-  };
-
-  const toggleCodeword = () => {
-    setCodewordVisible(DOM.codeword.classList.contains('codeword-hidden'));
-  };
-
-  /* =========================
-     FETCH / PARSE
-     ========================= */
-  const fetchGlobal = () => {
-    const t = TEAM_MAP[currentTeamKey];
-    DOM.teamName.innerText = t.name;
-    DOM.totalPoints.innerText = Number(t.points || 0).toLocaleString();
-    codewordSecret = t.codeword || '';
-  };
-
-  async function fetchData(manual = false) {
-    if (fetchController) fetchController.abort();
-    fetchController = new AbortController();
-
-    try {
-      const team = TEAM_MAP[currentTeamKey];
-      const res = await fetch(`${team.url}&t=${Date.now()}`, {
-        headers: { 'pragma': 'no-cache', 'cache-control': 'no-cache' },
-        signal: fetchController.signal
-      });
-
-      const raw = normalizeNL(await res.text());
-      const h = simpleHash(raw);
-      if (!manual && lastSeenHash === h) return;
-      lastSeenHash = h;
-
-      flashSync();
-
-      completion = Array(MAX_TILES).fill(false);
-      tiles = Array(MAX_TILES).fill(null);
-      resetMinimaps();
-
-      const rows = raw.split('\n').slice(1);
-      let count = 0;
-
-      for (const line of rows) {
-        if (count >= MAX_TILES) break;
-        if (!line || !line.trim()) continue;
-
-        const cols = parseCSVRow(line.trim());
-        if (cols.length < 4) continue;
-
-        const id = count + 1;
-        const title = cols[0] || `Tile ${id}`;
-        const img = safeImgSrc(cols[1] || '');
-        const current = Math.max(0, parseInt(cols[2], 10) || 0);
-        const goal = Math.max(1, parseInt(cols[3], 10) || 1);
-        const items = cols[4] ? cols[4].split(',').map(s => s.trim()).filter(Boolean) : [];
-        const description = cols[5] || '';
-        const points = cols[6] || '0';
-
-        const percent = Math.min((current / goal) * 100, 100);
-        const isCompleted = percent === 100;
-
-        completion[count] = isCompleted;
-        setMinimapComplete(id, isCompleted);
-
-        // CHANGE: if no items, checklistHtml stays '' (blank)
-        const checklistHtml = items.map(it =>
-          `<div class="check-item"><span class="check-mark"></span> ${escapeHTML(it)}</div>`
-        ).join('');
-
-        tiles[count] = {
-          id, title, img,
-          percent, barColor: getProgressColor(percent),
-          checklistHtml, description,
-          isCompleted, points,
-          noData: false
-        };
-
-        count++;
-      }
-
-      for (let i = 0; i < MAX_TILES; i++) {
-        if (!tiles[i]) {
-          tiles[i] = {
-            id: i + 1,
-            title: 'No Data',
-            img: '',
-            percent: 0,
-            barColor: getProgressColor(0),
-            checklistHtml: '',
-            description: '',
-            isCompleted: false,
-            points: '0',
-            noData: true
-          };
+    const parseCSVRow = (row) => {
+      const cols = [];
+      let cur = '', inQ = false;
+      for (let i = 0; i < row.length; i++) {
+        const ch = row[i];
+        if (inQ) {
+          if (ch === '"' && row[i + 1] === '"') { cur += '"'; i++; }
+          else if (ch === '"') inQ = false;
+          else cur += ch;
+        } else {
+          if (ch === '"') inQ = true;
+          else if (ch === ',') { cols.push(cur.trim()); cur = ''; }
+          else cur += ch;
         }
       }
-
-      renderGrid();
-      updateCompletedStat();
-    } catch (e) {
-      if (e.name !== 'AbortError') {
-        console.error(e);
-        syncError('Network error');
-      }
-    } finally {
-      fetchController = null;
-    }
-  }
-
-  /* =========================
-     EVENTS (condensed)
-     ========================= */
-  function trapFocus(e) {
-    if (!modalOpen || e.key !== 'Tab') return;
-    const focusable = [...DOM.box.querySelectorAll('button,select,[tabindex]:not([tabindex="-1"])')]
-      .filter(el => !el.disabled && el.offsetParent !== null);
-    if (!focusable.length) return;
-    const first = focusable[0], last = focusable[focusable.length - 1];
-
-    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-  }
-
-  function restartInterval() {
-    if (syncIntervalId) clearInterval(syncIntervalId);
-    syncIntervalId = setInterval(() => fetchData(false), syncMs);
-  }
-
-  function init() {
-    // theme
-    const savedTheme = storageLoad(STORAGE_KEYS.theme, 'osrs');
-    applyTheme(savedTheme);
-    DOM.themeSel.value = savedTheme;
-
-    // interval
-    syncMs = parseInt(storageLoad(STORAGE_KEYS.syncInterval, '30000'), 10) || 30000;
-    DOM.intervalSel.value = String(syncMs);
-
-    // minimaps
-    miniNodes.forEach(arr => arr.length = 0);
-    buildMinimap('minimap');
-    buildMinimap('minimap-floating');
-
-    fetchGlobal();
-
-    // codeword visibility restore
-    setCodewordVisible(storageLoad(STORAGE_KEYS.codewordVisible, '0') === '1');
-
-    // Delegated events
-    DOM.grid.addEventListener('click', (e) => {
-      const tileEl = e.target.closest('.tile');
-      if (!tileEl || tileEl.classList.contains('no-data')) return;
-      openTileModalByIndex(parseInt(tileEl.dataset.tileIndex, 10), tileEl);
-    });
-
-    DOM.grid.addEventListener('keydown', (e) => {
-      const tileEl = e.target.closest('.tile');
-      if (!tileEl) return;
-
-      // Enter/Space open
-      if ((e.key === 'Enter' || e.key === ' ') && !tileEl.classList.contains('no-data')) {
-        e.preventDefault();
-        openTileModalByIndex(parseInt(tileEl.dataset.tileIndex, 10), tileEl);
-        return;
-      }
-
-      // Arrow navigation (7x7)
-      const idx = parseInt(tileEl.dataset.tileIndex, 10);
-      if (Number.isNaN(idx)) return;
-
-      const move = (d) => {
-        const next = idx + d;
-        if (next < 0 || next >= MAX_TILES) return;
-        DOM.grid.querySelector(`.tile[data-tile-index="${next}"]`)?.focus();
-      };
-
-      if (e.key === 'ArrowRight') { e.preventDefault(); move(+1); }
-      if (e.key === 'ArrowLeft')  { e.preventDefault(); move(-1); }
-      if (e.key === 'ArrowDown')  { e.preventDefault(); move(+7); }
-      if (e.key === 'ArrowUp')    { e.preventDefault(); move(-7); }
-    });
-
-    DOM.codeword.addEventListener('click', toggleCodeword);
-    DOM.codeword.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCodeword(); }
-    });
-
-    // minimap opens overview
-    const wireMapOpen = (el) => {
-      el.addEventListener('click', () => openMapModal(el));
-      el.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openMapModal(el); }
-      });
+      cols.push(cur.trim());
+      return cols;
     };
-    wireMapOpen(DOM.miniDash);
-    wireMapOpen(DOM.miniFloat);
 
-    // map tile click open tile
-    DOM.bigMap.addEventListener('click', (e) => {
-      const cell = e.target.closest('.large-map-tile');
-      if (!cell) return;
-      const id = parseInt(cell.dataset.index, 10);
-      if (!id) return;
-      openTileModalByIndex(id - 1, cell);
-    });
-    DOM.bigMap.addEventListener('keydown', (e) => {
-      if (e.key !== 'Enter' && e.key !== ' ') return;
-      const cell = e.target.closest('.large-map-tile');
-      if (!cell) return;
-      e.preventDefault();
-      const id = parseInt(cell.dataset.index, 10);
-      if (!id) return;
-      openTileModalByIndex(id - 1, cell);
-    });
+    const getProgressColor = (pct) => {
+      if (pct >= 100) return 'var(--text-completed)';
+      const hue = (pct * 120) / 100;
+      return `hsl(${hue}, 70%, 45%)`;
+    };
 
-    // settings
-    DOM.settingsTrigger.addEventListener('click', () => openSettingsModal(DOM.settingsTrigger));
-    DOM.themeSel.addEventListener('change', () => {
-      const v = DOM.themeSel.value;
-      applyTheme(v);
-      storageSave(STORAGE_KEYS.theme, v);
-    });
-    DOM.intervalSel.addEventListener('change', () => {
-      syncMs = parseInt(DOM.intervalSel.value, 10) || 30000;
-      storageSave(STORAGE_KEYS.syncInterval, syncMs);
-      restartInterval();
-    });
+    const handleImgError = (img) => {
+      img.style.visibility = 'hidden';
+      img.removeAttribute('src');
+    };
 
-    // modal close
-    DOM.overlay.addEventListener('click', (e) => { if (e.target === DOM.overlay) closeModal(); });
-    document.querySelectorAll('.modal-close-btn').forEach(btn => btn.addEventListener('click', closeModal));
-    DOM.mapBack.addEventListener('click', () => {
-      if (ghostEl?.isConnected) ghostEl.classList.remove('ghost');
-      ghostEl = null;
-      hideViews(); DOM.viewMap.style.display = 'flex';
-      buildBigMap();
-    });
+    // Local image filenames support spaces/apostrophes via URL-encoding; blocks traversal.
+    const safeImgSrc = (imgName) => {
+      const raw = String(imgName || '').trim();
+      if (!raw) return '';
+      if (/^https?:\/\//i.test(raw)) return raw;
 
-    // sync now
-    DOM.syncNow.addEventListener('click', () => fetchData(true));
-    DOM.syncNow.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fetchData(true); }
-    });
+      const parts = raw.replace(/\\/g, '/')
+        .split('/')
+        .filter(Boolean)
+        .filter(p => p !== '.' && p !== '..');
 
-    // modal key handling
-    document.addEventListener('keydown', (e) => {
-      if (modalOpen && e.key === 'Escape') closeModal();
-      trapFocus(e);
-    });
+      return `./images/${parts.map(encodeURIComponent).join('/')}`;
+    };
 
-    // pause syncing when hidden
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        if (syncIntervalId) clearInterval(syncIntervalId);
-        syncIntervalId = null;
-      } else {
-        restartInterval();
-        fetchData(false);
+    const setMinimapComplete = (id1, done) => {
+      for (const n of miniNodes[id1]) n.classList.toggle('complete', !!done);
+    };
+    const resetMinimaps = () => { for (let i = 1; i <= MAX_TILES; i++) setMinimapComplete(i, false); };
+
+    const updateCompletedStat = () => {
+      const done = completion.reduce((a, v) => a + (v ? 1 : 0), 0);
+      DOM.completedCount.innerText = `${done}/${MAX_TILES}`;
+    };
+
+    const flashSync = () => {
+      DOM.lastSync.classList.remove('sync-error');
+      DOM.lastSync.innerText = `Last Sync: ${new Date().toLocaleTimeString()}`;
+      DOM.lastSync.classList.remove('sync-flash');
+      void DOM.lastSync.offsetWidth;
+      DOM.lastSync.classList.add('sync-flash');
+    };
+    const syncError = (msg) => {
+      DOM.lastSync.classList.add('sync-error');
+      DOM.lastSync.innerText = `Sync failed: ${msg}`;
+    };
+
+    /* =========================
+       THEME APPLY (JS)
+       ========================= */
+    const applyTheme = (name) => {
+      const root = document.documentElement;
+      // clear known vars so switching between themes doesn't leave leftovers
+      for (const k of THEME_VARS) root.style.setProperty(k, '');
+
+      const t = THEMES[name];
+      if (t) for (const [k, v] of Object.entries(t)) root.style.setProperty(k, v);
+
+      storageSave(STORAGE_KEYS.theme, name);
+      if (DOM.themeSel) DOM.themeSel.value = name;
+    };
+
+    /* =========================
+       MINIMAPS BUILD
+       ========================= */
+    const buildMinimap = (containerId) => {
+      const el = $(containerId);
+      if (!el) return;
+      el.innerHTML = '';
+
+      const frag = document.createDocumentFragment();
+      for (let i = 1; i <= MAX_TILES; i++) {
+        const d = document.createElement('div');
+        d.className = 'mini-tile';
+        d.dataset.index = String(i);
+        d.innerText = String(i);
+        frag.appendChild(d);
+        miniNodes[i].push(d);
       }
-    });
+      el.appendChild(frag);
+    };
 
-    fetchData(false);
-    restartInterval();
-  }
+    /* =========================
+       RENDER
+       ========================= */
+    const renderGrid = () => {
+      DOM.grid.innerHTML = '';
+      const frag = document.createDocumentFragment();
 
-  init();
-})();
-</script>
+      for (let i = 0; i < MAX_TILES; i++) {
+        const t = tiles[i];
+        const done = !!t.isCompleted;
+
+        const tile = document.createElement('div');
+        tile.className = `tile${done ? ' completed' : ''}${t.noData ? ' no-data' : ''}`;
+        tile.dataset.tileIndex = String(i);
+        tile.setAttribute('role', 'button');
+        tile.tabIndex = t.noData ? -1 : 0;
+
+        tile.setAttribute('aria-label',
+          t.noData
+            ? `Tile ${t.id}: No data`
+            : `Tile ${t.id}: ${t.title} - ${done ? 'Complete' : Math.round(t.percent) + '% complete'}`
+        );
+
+        const safeTitle = escapeHTML(t.title);
+        const safePts = escapeHTML(t.points);
+
+        tile.innerHTML = `
+          <div class="header-box"><div class="header-content">${t.id} | ${safeTitle}</div></div>
+          <div class="img-container"><img alt="${safeTitle}"></div>
+          <div class="progress-container"><div class="progress-bg"><div class="progress-fill"></div></div></div>
+          <div class="checklist-box">${t.checklistHtml /* blank allowed */}</div>
+          <div class="point-badge">${safePts} PTS</div>
+        `;
+
+        const img = tile.querySelector('img');
+        if (t.img) {
+          img.style.visibility = 'visible';
+          img.addEventListener('error', () => handleImgError(img), { once: true });
+          img.src = t.img;
+        } else {
+          handleImgError(img);
+        }
+
+        const fill = tile.querySelector('.progress-fill');
+        fill.style.width = t.percent + '%';
+        fill.style.backgroundColor = t.barColor;
+
+        if (done) tile.querySelector('.progress-container').style.display = 'none';
+
+        frag.appendChild(tile);
+      }
+
+      DOM.grid.appendChild(frag);
+    };
+
+    const buildBigMap = () => {
+      DOM.bigMap.innerHTML = '';
+      const frag = document.createDocumentFragment();
+
+      for (let i = 1; i <= MAX_TILES; i++) {
+        const cell = document.createElement('div');
+        cell.className = `large-map-tile${completion[i - 1] ? ' complete' : ''}`;
+        cell.dataset.index = String(i);
+        cell.innerText = String(i);
+        cell.tabIndex = 0;
+        cell.setAttribute('role', 'button');
+        frag.appendChild(cell);
+      }
+      DOM.bigMap.appendChild(frag);
+    };
+
+    /* =========================
+       MODAL
+       ========================= */
+    const hideViews = () => {
+      DOM.viewStd.style.display = 'none';
+      DOM.viewMap.style.display = 'none';
+      DOM.viewSettings.style.display = 'none';
+    };
+
+    const showModal = (triggerEl, animate = true) => {
+      if (ghostEl?.isConnected) ghostEl.classList.remove('ghost');
+      lastTriggerEl = triggerEl || lastTriggerEl;
+      ghostEl = triggerEl;
+
+      if (ghostEl?.classList?.contains('tile') || ghostEl?.id === 'mini-map-trigger' || ghostEl?.id === 'mini-map-floating') {
+        ghostEl.classList.add('ghost');
+      }
+
+      const rect = (animate && triggerEl?.getBoundingClientRect)
+        ? triggerEl.getBoundingClientRect()
+        : { top: innerHeight / 2, left: innerWidth / 2, height: 0, width: 0 };
+
+      DOM.box.style.top = (rect.top + rect.height / 2) + 'px';
+      DOM.box.style.left = (rect.left + rect.width / 2) + 'px';
+
+      DOM.overlay.style.display = 'flex';
+      setTimeout(() => {
+        DOM.overlay.classList.add('active');
+        DOM.box.classList.add('active');
+        modalOpen = true;
+        DOM.box.querySelector('.modal-close-btn')?.focus();
+      }, 10);
+
+      document.body.style.overflow = 'hidden';
+    };
+
+    const closeModal = () => {
+      DOM.overlay.classList.remove('active');
+      DOM.box.classList.remove('active');
+      modalOpen = false;
+
+      if (ghostEl?.isConnected) ghostEl.classList.remove('ghost');
+
+      setTimeout(() => {
+        DOM.overlay.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        lastTriggerEl?.focus?.();
+      }, 500);
+    };
+
+    const openTileModalByIndex = (tileIndex, triggerEl) => {
+      const t = tiles[tileIndex];
+      if (!t || t.noData) return;
+
+      DOM.box.classList.toggle('completed', !!t.isCompleted);
+
+      hideViews();
+      DOM.viewStd.style.display = 'block';
+
+      DOM.modalHeader.innerText = `${t.id} | ${t.title}`;
+      DOM.modalPoints.innerText = `${t.points} PTS`;
+
+      DOM.modalProgressSection.style.display = t.isCompleted ? 'none' : 'block';
+      DOM.modalBar.style.width = t.percent + '%';
+      DOM.modalBar.style.backgroundColor = t.barColor;
+
+      // blank if no items (requested)
+      DOM.modalList.innerHTML = t.checklistHtml;
+      DOM.modalDesc.innerText = t.description || '';
+
+      DOM.modalImage.src = '';
+      DOM.modalImage.onerror = null;
+      DOM.modalImage.style.visibility = 'visible';
+      DOM.modalImage.alt = t.title;
+
+      if (t.img) {
+        DOM.modalImage.onerror = () => handleImgError(DOM.modalImage);
+        DOM.modalImage.src = t.img;
+      } else {
+        handleImgError(DOM.modalImage);
+      }
+
+      showModal(triggerEl, true);
+    };
+
+    const openMapModal = (triggerEl) => {
+      DOM.box.classList.remove('completed');
+      hideViews();
+      DOM.viewMap.style.display = 'flex';
+      buildBigMap();
+      showModal(triggerEl, true);
+    };
+
+    const openSettingsModal = (triggerEl) => {
+      DOM.box.classList.remove('completed');
+      hideViews();
+      DOM.viewSettings.style.display = 'flex';
+      DOM.themeSel.value = storageLoad(STORAGE_KEYS.theme, 'osrs');
+      DOM.intervalSel.value = String(syncMs);
+      showModal(triggerEl, true);
+    };
+
+    /* =========================
+       CODEWORD
+       ========================= */
+    const setCodewordVisible = (visible) => {
+      DOM.codeword.classList.toggle('codeword-hidden', !visible);
+      DOM.codeword.innerText = visible ? (codewordSecret || '') : '?????';
+      DOM.codeword.setAttribute('aria-label',
+        visible ? `Codeword: ${codewordSecret}. Click to hide.` : 'Codeword hidden. Click to reveal.'
+      );
+      storageSave(STORAGE_KEYS.codewordVisible, visible ? '1' : '0');
+    };
+
+    const toggleCodeword = () => setCodewordVisible(DOM.codeword.classList.contains('codeword-hidden'));
+
+    /* =========================
+       FETCH
+       ========================= */
+    const fetchGlobal = () => {
+      const t = TEAM_MAP[currentTeamKey];
+      DOM.teamName.innerText = t.name;
+      DOM.totalPoints.innerText = Number(t.points || 0).toLocaleString();
+      codewordSecret = t.codeword || '';
+    };
+
+    async function fetchData(manual = false) {
+      if (fetchController) fetchController.abort();
+      fetchController = new AbortController();
+
+      try {
+        const team = TEAM_MAP[currentTeamKey];
+        const res = await fetch(`${team.url}&t=${Date.now()}`, {
+          headers: { 'pragma': 'no-cache', 'cache-control': 'no-cache' },
+          signal: fetchController.signal
+        });
+
+        const raw = normalizeNL(await res.text());
+        const h = simpleHash(raw);
+        if (!manual && lastSeenHash === h) return;
+        lastSeenHash = h;
+
+        flashSync();
+
+        completion = Array(MAX_TILES).fill(false);
+        tiles = Array(MAX_TILES).fill(null);
+        resetMinimaps();
+
+        const rows = raw.split('\n').slice(1);
+        let count = 0;
+
+        for (const line of rows) {
+          if (count >= MAX_TILES) break;
+          if (!line || !line.trim()) continue;
+
+          const cols = parseCSVRow(line.trim());
+          if (cols.length < 4) continue;
+
+          const id = count + 1;
+          const title = cols[0] || `Tile ${id}`;
+          const img = safeImgSrc(cols[1] || '');
+          const current = Math.max(0, parseInt(cols[2], 10) || 0);
+          const goal = Math.max(1, parseInt(cols[3], 10) || 1);
+
+          const items = cols[4] ? cols[4].split(',').map(s => s.trim()).filter(Boolean) : [];
+          const description = cols[5] || '';
+          const points = cols[6] || '0';
+
+          const percent = Math.min((current / goal) * 100, 100);
+          const isCompleted = percent === 100;
+
+          completion[count] = isCompleted;
+          setMinimapComplete(id, isCompleted);
+
+          // Blank if no items (requested)
+          const checklistHtml = items.map(it =>
+            `<div class="check-item"><span class="check-mark"></span> ${escapeHTML(it)}</div>`
+          ).join('');
+
+          tiles[count] = {
+            id, title, img,
+            percent, barColor: getProgressColor(percent),
+            checklistHtml, description,
+            isCompleted, points,
+            noData: false
+          };
+
+          count++;
+        }
+
+        for (let i = 0; i < MAX_TILES; i++) {
+          if (!tiles[i]) {
+            tiles[i] = {
+              id: i + 1,
+              title: 'No Data',
+              img: '',
+              percent: 0,
+              barColor: getProgressColor(0),
+              checklistHtml: '',
+              description: '',
+              isCompleted: false,
+              points: '0',
+              noData: true
+            };
+          }
+        }
+
+        renderGrid();
+        updateCompletedStat();
+      } catch (e) {
+        if (e.name !== 'AbortError') {
+          console.error(e);
+          syncError('Network error');
+        }
+      } finally {
+        fetchController = null;
+      }
+    }
+
+    /* =========================
+       EVENTS
+       ========================= */
+    function trapFocus(e) {
+      if (!modalOpen || e.key !== 'Tab') return;
+      const focusable = [...DOM.box.querySelectorAll('button,select,[tabindex]:not([tabindex="-1"])')]
+        .filter(el => !el.disabled && el.offsetParent !== null);
+      if (!focusable.length) return;
+      const first = focusable[0], last = focusable[focusable.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+
+    function restartInterval() {
+      if (syncIntervalId) clearInterval(syncIntervalId);
+      syncIntervalId = setInterval(() => fetchData(false), syncMs);
+    }
+
+    function init() {
+      // Apply saved theme via JS
+      const savedTheme = storageLoad(STORAGE_KEYS.theme, 'osrs');
+      applyTheme(savedTheme);
+
+      // interval
+      syncMs = parseInt(storageLoad(STORAGE_KEYS.syncInterval, '30000'), 10) || 30000;
+      DOM.intervalSel.value = String(syncMs);
+
+      // minimaps
+      miniNodes.forEach(arr => arr.length = 0);
+      buildMinimap('minimap');
+      buildMinimap('minimap-floating');
+
+      fetchGlobal();
+
+      // codeword visibility restore
+      setCodewordVisible(storageLoad(STORAGE_KEYS.codewordVisible, '0') === '1');
+
+      // Grid delegation
+      DOM.grid.addEventListener('click', (e) => {
+        const tileEl = e.target.closest('.tile');
+        if (!tileEl || tileEl.classList.contains('no-data')) return;
+        openTileModalByIndex(parseInt(tileEl.dataset.tileIndex, 10), tileEl);
+      });
+
+      DOM.grid.addEventListener('keydown', (e) => {
+        const tileEl = e.target.closest('.tile');
+        if (!tileEl) return;
+
+        if ((e.key === 'Enter' || e.key === ' ') && !tileEl.classList.contains('no-data')) {
+          e.preventDefault();
+          openTileModalByIndex(parseInt(tileEl.dataset.tileIndex, 10), tileEl);
+          return;
+        }
+
+        const idx = parseInt(tileEl.dataset.tileIndex, 10);
+        if (Number.isNaN(idx)) return;
+
+        const move = (d) => {
+          const next = idx + d;
+          if (next < 0 || next >= MAX_TILES) return;
+          DOM.grid.querySelector(`.tile[data-tile-index="${next}"]`)?.focus();
+        };
+
+        if (e.key === 'ArrowRight') { e.preventDefault(); move(+1); }
+        if (e.key === 'ArrowLeft')  { e.preventDefault(); move(-1); }
+        if (e.key === 'ArrowDown')  { e.preventDefault(); move(+7); }
+        if (e.key === 'ArrowUp')    { e.preventDefault(); move(-7); }
+      });
+
+      // Codeword
+      DOM.codeword.addEventListener('click', toggleCodeword);
+      DOM.codeword.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCodeword(); }
+      });
+
+      // Minimap opens overview
+      const wireMapOpen = (el) => {
+        el.addEventListener('click', () => openMapModal(el));
+        el.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openMapModal(el); }
+        });
+      };
+      wireMapOpen(DOM.miniDash);
+      wireMapOpen(DOM.miniFloat);
+
+      // Map cells open tiles
+      DOM.bigMap.addEventListener('click', (e) => {
+        const cell = e.target.closest('.large-map-tile');
+        if (!cell) return;
+        const id = parseInt(cell.dataset.index, 10);
+        if (!id) return;
+        openTileModalByIndex(id - 1, cell);
+      });
+      DOM.bigMap.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        const cell = e.target.closest('.large-map-tile');
+        if (!cell) return;
+        e.preventDefault();
+        const id = parseInt(cell.dataset.index, 10);
+        if (!id) return;
+        openTileModalByIndex(id - 1, cell);
+      });
+
+      // Settings open
+      DOM.settingsTrigger.addEventListener('click', () => openSettingsModal(DOM.settingsTrigger));
+
+      // Settings change: theme (applies vars directly)
+      DOM.themeSel.addEventListener('change', () => {
+        const name = DOM.themeSel.value;
+        applyTheme(name);
+      });
+
+      // Settings change: sync interval
+      DOM.intervalSel.addEventListener('change', () => {
+        syncMs = parseInt(DOM.intervalSel.value, 10) || 30000;
+        storageSave(STORAGE_KEYS.syncInterval, syncMs);
+        restartInterval();
+      });
+
+      // Modal close
+      DOM.overlay.addEventListener('click', (e) => { if (e.target === DOM.overlay) closeModal(); });
+      document.querySelectorAll('.modal-close-btn').forEach(btn => btn.addEventListener('click', closeModal));
+
+      // Back-to-map from tile modal
+      DOM.mapBack.addEventListener('click', () => {
+        if (ghostEl?.isConnected) ghostEl.classList.remove('ghost');
+        ghostEl = null;
+        hideViews();
+        DOM.viewMap.style.display = 'flex';
+        buildBigMap();
+      });
+
+      // Sync now
+      DOM.syncNow.addEventListener('click', () => fetchData(true));
+      DOM.syncNow.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fetchData(true); }
+      });
+
+      // Modal key handling
+      document.addEventListener('keydown', (e) => {
+        if (modalOpen && e.key === 'Escape') closeModal();
+        trapFocus(e);
+      });
+
+      // Pause syncing when hidden
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          if (syncIntervalId) clearInterval(syncIntervalId);
+          syncIntervalId = null;
+        } else {
+          restartInterval();
+          fetchData(false);
+        }
+      });
+
+      fetchData(false);
+      restartInterval();
+    }
+
+    init();
+  })();
+  </script>
+</body>
+</html>
