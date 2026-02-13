@@ -39,7 +39,8 @@
     ::-webkit-scrollbar-track { background: var(--bg-well); }
     ::-webkit-scrollbar-thumb { background: var(--bg-tile); border: 2px solid var(--bg-well); }
     ::-webkit-scrollbar-thumb:hover { background: var(--border-main); }
-        body {
+
+    body {
       background-color: var(--bg-body);
       color: var(--text-main);
       font-family: 'Cabin Condensed', sans-serif;
@@ -130,7 +131,8 @@
     .tile:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; transform: scale(1.02); z-index: 60; }
     .tile.completed:focus-visible { outline-color: var(--border-completed); }
     .tile.ghost { opacity: 0; pointer-events: none; }
-        .header-box {
+
+    .header-box {
       padding: 2% 0; margin-bottom: 2%; min-height: 18%;
       display: flex; justify-content: center; align-items: center;
       flex-shrink: 0; overflow: hidden; text-align: center;
@@ -525,6 +527,7 @@
          role="button" tabindex="0" aria-label="Open overview map">
     <div class="minimap-container" id="minimap-floating" aria-hidden="true"></div>
   </aside>
+
   <!-- Event Description -->
   <div class="event-desc-bar" id="event-desc-bar" style="display:none;">
     <div class="event-desc-bar-content">
@@ -671,33 +674,6 @@
             </div>
           </div>
 
-          <!-- Event Configuration -->
-          <div class="settings-section">
-            <div class="settings-section-title">Event Configuration</div>
-            <div class="settings-row" style="flex-direction:column; align-items:flex-start;">
-              <label style="color:var(--text-bright); margin-bottom:4px;">Event Name</label>
-              <input type="text" id="settings-event-name" class="settings-select" style="width:100%; margin-bottom:12px;" placeholder="Bingo 2026">
-            </div>
-            <div class="settings-row" style="flex-direction:column; align-items:flex-start;">
-              <label style="color:var(--text-bright); margin-bottom:4px;">Codeword</label>
-              <input type="text" id="settings-event-codeword" class="settings-select" style="width:100%; margin-bottom:12px;" placeholder="Enter codeword">
-            </div>
-            <div class="settings-row" style="flex-direction:column; align-items:flex-start;">
-              <label style="color:var(--text-bright); margin-bottom:4px;">Description (optional)</label>
-              <textarea id="settings-event-description" style="width:100%; min-height:60px; padding:8px; margin-bottom:12px; background:var(--bg-well); border:1px solid var(--border-main); color:var(--text-bright); font-family:'Cabin Condensed'; border-radius:3px;" placeholder="Brief event description..."></textarea>
-            </div>
-            <div class="settings-row" style="flex-direction:column; align-items:flex-start;">
-              <label style="color:var(--text-bright); margin-bottom:4px;">CSV URL</label>
-              <textarea id="settings-csv-url" style="width:100%; min-height:60px; padding:8px; background:var(--bg-well); border:1px solid var(--border-main); color:var(--text-bright); font-family:monospace; font-size:0.8rem; border-radius:3px;" placeholder="Paste CSV URL here..."></textarea>
-            </div>
-          </div>
-
-          <!-- Teams Section -->
-          <div class="settings-section">
-            <div class="settings-section-title">Teams Configuration</div>
-            <div id="teams-config-container"></div>
-          </div>
-
           <!-- Data Section -->
           <div class="settings-section">
             <div class="settings-section-title">Data</div>
@@ -721,7 +697,8 @@
       </div>
     </div>
   </div>
-    <script>
+
+  <script>
 (() => {
   const APP_VERSION = '3.090';
   const MAX_TILES = 49;
@@ -1050,7 +1027,8 @@
   };
 
   const miniNodes = Array.from({ length: MAX_TILES + 1 }, () => []);
-    /* ========================= UTILS ========================= */
+
+  /* ========================= UTILS ========================= */
   const storageSave = (k, v) => { try { localStorage.setItem(k, String(v)); } catch {} };
   const storageLoad = (k, fb) => { try { const v = localStorage.getItem(k); return v ?? fb; } catch { return fb; } };
   const normalizeNL = (s) => String(s).replace(/\r\n/g, '\n').replace(/\r/g, '\n');
@@ -1315,20 +1293,6 @@
     DOM.themeSel.value = storageLoad(STORAGE_KEYS.theme, 'osrs');
     DOM.intervalSel.value = String(syncMs);
     
-    // Load event config
-    const eventNameInput = $('settings-event-name');
-    const eventCodewordInput = $('settings-event-codeword');
-    const eventDescriptionInput = $('settings-event-description');
-    const csvUrlInput = $('settings-csv-url');
-    
-    if (eventNameInput) eventNameInput.value = eventConfig.name || '';
-    if (eventCodewordInput) eventCodewordInput.value = eventConfig.codeword || '';
-    if (eventDescriptionInput) eventDescriptionInput.value = eventConfig.description || '';
-    if (csvUrlInput && TEAM_MAP['Team1']) csvUrlInput.value = TEAM_MAP['Team1'].url || '';
-    
-    // Refresh team panel
-    TeamManager.buildTeamsPanel();
-    
     ThemeEditor.refreshCustomDropdown();
     ThemeEditor.refreshCustomList();
     ThemeEditor.updateEditButton();
@@ -1475,68 +1439,6 @@
       if (e.name !== 'AbortError') { console.error(e); syncError('Network error'); }
     } finally { fetchController = null; }
   }
-
-  /* ========================= TEAM MANAGER ========================= */
-  const TeamManager = (() => {
-    const buildTeamsPanel = () => {
-      const container = document.getElementById('teams-config-container');
-      if (!container) return;
-      container.innerHTML = '';
-      
-      const frag = document.createDocumentFragment();
-      for (let i = 1; i <= 8; i++) {
-        const teamKey = `Team${i}`;
-        const team = TEAM_MAP[teamKey] || {};
-        
-        const row = document.createElement('div');
-        row.className = 'settings-row';
-        row.style.flexDirection = 'column';
-        row.style.alignItems = 'flex-start';
-        row.style.borderBottom = '1px solid var(--border-main)';
-        row.style.paddingBottom = '12px';
-        row.style.marginBottom = '12px';
-        
-        row.innerHTML = `
-          <label style="display:block; margin-bottom:6px; font-weight:bold; color:var(--text-bright);">Team ${i}</label>
-          <input type="text" class="team-name-input" data-team="${teamKey}" value="${escapeHTML(team.name || `Team ${i}`)}"
-                 placeholder="Team Name" style="width:100%; padding:6px 8px; margin-bottom:6px; background:var(--bg-well); border:1px solid var(--border-main); color:var(--text-bright); font-family:'Cabin Condensed'; border-radius:3px;">
-          <input type="number" class="team-points-input" data-team="${teamKey}" value="${team.points || 0}"
-                 placeholder="Points" style="width:100%; padding:6px 8px; background:var(--bg-well); border:1px solid var(--border-main); color:var(--text-bright); font-family:'Cabin Condensed'; border-radius:3px;">
-          <div style="font-size:0.65rem; color:var(--text-dim); margin-top:4px;">Data will be pulled from columns for Team ${i} in the CSV</div>
-        `;
-        
-        frag.appendChild(row);
-      }
-      container.appendChild(frag);
-    };
-
-    const saveTeamConfig = () => {
-      for (let i = 1; i <= 8; i++) {
-        const teamKey = `Team${i}`;
-        const nameInput = document.querySelector(`.team-name-input[data-team="${teamKey}"]`);
-        const pointsInput = document.querySelector(`.team-points-input[data-team="${teamKey}"]`);
-        
-        if (nameInput) {
-          TEAM_MAP[teamKey].name = nameInput.value.trim() || `Team ${i}`;
-          TEAM_MAP[teamKey].points = parseInt(pointsInput.value, 10) || 0;
-        }
-      }
-      storageSave(STORAGE_KEYS.teams, JSON.stringify(TEAM_MAP));
-    };
-
-    const init = () => {
-      buildTeamsPanel();
-      
-      // Save team config when inputs change
-      const container = document.getElementById('teams-config-container');
-      if (container) {
-        container.addEventListener('change', saveTeamConfig);
-        container.addEventListener('blur', saveTeamConfig, true);
-      }
-    };
-
-    return { buildTeamsPanel, init };
-  })();
 
   /* ========================= THEME EDITOR ========================= */
   const ThemeEditor = (() => {
@@ -1880,7 +1782,8 @@
 
     return { init, refreshCustomDropdown, refreshCustomList, updateEditButton, closeEditor };
   })();
-    /* ========================= EVENTS & INIT ========================= */
+
+  /* ========================= EVENTS & INIT ========================= */
   function trapFocus(e) {
     if (!modalOpen || e.key !== 'Tab') return;
     const focusable = [...DOM.box.querySelectorAll('button,select,input,textarea,[tabindex]:not([tabindex="-1"])')]
@@ -1969,46 +1872,6 @@
       ThemeEditor.updateEditButton();
       ThemeEditor.closeEditor(false);
     });
-
-    // Event config inputs
-    const eventNameInput = $('settings-event-name');
-    const eventCodewordInput = $('settings-event-codeword');
-    const eventDescriptionInput = $('settings-event-description');
-    const csvUrlInput = $('settings-csv-url');
-
-    if (eventNameInput) {
-      eventNameInput.addEventListener('blur', () => {
-        eventConfig.name = eventNameInput.value.trim() || 'Bingo 2026';
-        storageSave(STORAGE_KEYS.eventConfig, JSON.stringify(eventConfig));
-        fetchGlobal();
-      });
-    }
-
-    if (eventCodewordInput) {
-      eventCodewordInput.addEventListener('blur', () => {
-        eventConfig.codeword = eventCodewordInput.value.trim();
-        storageSave(STORAGE_KEYS.eventConfig, JSON.stringify(eventConfig));
-        codewordSecret = eventConfig.codeword;
-      });
-    }
-
-    if (eventDescriptionInput) {
-      eventDescriptionInput.addEventListener('blur', () => {
-        eventConfig.description = eventDescriptionInput.value.trim();
-        storageSave(STORAGE_KEYS.eventConfig, JSON.stringify(eventConfig));
-        renderEventDescription();
-      });
-    }
-
-    if (csvUrlInput) {
-      csvUrlInput.addEventListener('blur', () => {
-        const url = csvUrlInput.value.trim();
-        for (let i = 1; i <= 8; i++) {
-          TEAM_MAP[`Team${i}`].url = url;
-        }
-        storageSave(STORAGE_KEYS.teams, JSON.stringify(TEAM_MAP));
-      });
-    }
 
     // Sync interval change
     DOM.intervalSel.addEventListener('change', () => {
