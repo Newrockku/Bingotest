@@ -530,9 +530,12 @@
     } catch {
       TEAM_MAP = { ...DEFAULT_TEAMS };
     }
+
   let descDismissed = false;
 
   function renderEventDescription() {
+    if (!DOM.descBanner || !DOM.descText) return;
+
     const desc = (eventConfig.description || '').trim();
     if (!desc || descDismissed) {
       DOM.descBanner.style.display = 'none';
