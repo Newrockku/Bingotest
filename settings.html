@@ -337,7 +337,11 @@
   const storageSave = (k, v) => {
     try {
       localStorage.setItem(k, JSON.stringify(v));
-    } catch {}
+      console.log('Saved to localStorage:', k);  // Debug log
+    } catch (e) {
+      console.error('Failed to save:', k, e);
+      showToast('❌ Failed to save! Storage may be full.');
+    }
   };
 
   const showToast = (msg, duration = 3000) => {
@@ -361,11 +365,14 @@
     
     // Apply CSV URL to all teams
     Object.keys(teamsConfig).forEach(key => {
-      teamsConfig[key].url = csvUrl;
+      if (teamsConfig[key]) {
+        teamsConfig[key].url = csvUrl;
+      }
     });
 
-    storageSave(STORAGE_KEYS.eventConfig, eventConfig);
-    storageSave(STORAGE_KEYS.teams, teamsConfig);
+    // IMPORTANT: Save in correct order
+    storageSave(STORAGE_KEYS.eventConfig, eventConfig);  // Save event config first
+    storageSave(STORAGE_KEYS.teams, teamsConfig);         // Then save teams with CSV URL
 
     showToast('✓ Event configuration saved!');
   };
