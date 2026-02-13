@@ -252,7 +252,7 @@
     .modal-content.completed .modal-description {
       background: var(--bg-completed-well); color: var(--text-completed);
     }
-        .modal-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0; min-height: 30px; }
+    .modal-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0; min-height: 30px; }
 
     .modal-map-btn {
       background: none; border: none; padding: 4px; cursor: pointer;
@@ -413,6 +413,36 @@
     }
     .theme-export-area:focus { border-color: var(--accent); outline: none; }
 
+    /* --- Event Description Bar --- */
+    .event-desc-bar {
+      width: 100%; max-width: 1580px;
+      background: var(--bg-tile); border: 2px solid var(--border-main);
+      padding: 10px 18px; margin-bottom: 14px;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 12px; border-left: 4px solid var(--accent);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .event-desc-bar-content {
+      display: flex; align-items: flex-start; gap: 10px;
+      flex: 1; min-width: 0;
+    }
+    .event-desc-bar-icon {
+      font-size: 1.1rem; flex-shrink: 0; line-height: 1.5;
+    }
+    .event-desc-bar-text {
+      font-size: 0.85rem; color: var(--text-bright);
+      line-height: 1.5; white-space: pre-line;
+      overflow: hidden;
+    }
+    .event-desc-bar-close {
+      background: none; border: none; color: var(--text-dim);
+      font-size: 1.3rem; cursor: pointer; padding: 0 4px;
+      line-height: 1; flex-shrink: 0;
+      transition: color 0.2s ease;
+    }
+    .event-desc-bar-close:hover { color: var(--accent); }
+    .event-desc-bar-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
     /* --- Responsive --- */
     @media (max-width: 1400px) {
       .grid-container { grid-template-columns: repeat(5, 1fr); }
@@ -437,6 +467,8 @@
       .stat-value { font-size: 1.1rem; }
       #codeword-display { min-width: 70px; padding: 2px 8px; }
       .settings-btn { order: 2; }
+      .event-desc-bar { padding: 8px 12px; }
+      .event-desc-bar-text { font-size: 0.8rem; }
     }
     @media (max-width: 600px) {
       .grid-container { grid-template-columns: repeat(3, 1fr); }
@@ -493,6 +525,14 @@
          role="button" tabindex="0" aria-label="Open overview map">
     <div class="minimap-container" id="minimap-floating" aria-hidden="true"></div>
   </aside>
+  <!-- Event Description -->
+  <div class="event-desc-bar" id="event-desc-bar" style="display:none;">
+    <div class="event-desc-bar-content">
+      <span class="event-desc-bar-icon">📜</span>
+      <span class="event-desc-bar-text" id="event-desc-bar-text"></span>
+    </div>
+    <button class="event-desc-bar-close" id="event-desc-bar-close" aria-label="Dismiss">&times;</button>
+  </div>
 
   <main class="grid-container" id="grid" role="grid" aria-label="Bingo board"></main>
 
@@ -710,7 +750,23 @@
       currentTeamKey = '';
     }
   }
+  const DESC_DISMISS_KEY = 'bingo-desc-dismissed';
 
+  function renderEventDescription() {
+    const desc = (eventConfig.description || '').trim();
+
+    // Check if user dismissed this session
+    const dismissed = sessionStorage.getItem(DESC_DISMISS_KEY);
+
+    if (!desc || dismissed === '1') {
+      DOM.descBar.style.display = 'none';
+      return;
+    }
+
+    DOM.descBarText.textContent = desc;
+    DOM.descBar.style.display = 'flex';
+  }
+  S
   const THEME_VARS = [
     '--bg-body','--bg-tile','--bg-well','--bg-completed','--bg-completed-well',
     '--border-main','--border-completed','--accent',
@@ -949,6 +1005,9 @@
     customThemeName: $('custom-theme-name'),
     customThemeList: $('custom-themes-list'),
     customOptgroup: $('custom-theme-optgroup'),
+    descBar: $('event-desc-bar'),
+    descBarText: $('event-desc-bar-text'),
+    descBarClose: $('event-desc-bar-close'),
   };
 
   const miniNodes = Array.from({ length: MAX_TILES + 1 }, () => []);
@@ -1661,7 +1720,13 @@
 
     fetchGlobal();
     setCodewordVisible(storageLoad(STORAGE_KEYS.codewordVisible, '0') === '1');
+    renderEventDescription();
 
+    DOM.descBarClose.addEventListener('click', () => {
+      DOM.descBar.style.display = 'none';
+      sessionStorage.setItem(DESC_DISMISS_KEY, '1');
+    });
+    
     // Grid delegation
     DOM.grid.addEventListener('click', (e) => {
       const tileEl = e.target.closest('.tile');

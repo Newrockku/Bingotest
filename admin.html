@@ -53,6 +53,32 @@
       display: flex; flex-direction: column; align-items: center;
       min-height: 100vh;
     }
+
+        /* --- Event Description Banner --- */
+    .event-description-banner {
+      width: 100%; max-width: 1400px;
+      background: var(--bg-card); border: 2px solid var(--border-main);
+      padding: 14px 20px; margin-bottom: 16px;
+      display: flex; align-items: flex-start; gap: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      border-left: 4px solid var(--accent);
+    }
+    .event-desc-icon {
+      font-size: 1.4rem; flex-shrink: 0; line-height: 1.4;
+    }
+    .event-desc-text {
+      flex: 1; font-size: 0.9rem; color: var(--text-bright);
+      line-height: 1.5; white-space: pre-line;
+    }
+    .event-desc-dismiss {
+      background: none; border: none; color: var(--text-dim);
+      font-size: 1.4rem; cursor: pointer; padding: 0 4px;
+      line-height: 1; flex-shrink: 0;
+      transition: color 0.2s ease;
+    }
+    .event-desc-dismiss:hover { color: var(--accent); }
+    .event-desc-dismiss:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
         /* --- Admin Header --- */
     .admin-header {
       width: 100%; max-width: 1400px;
@@ -358,6 +384,12 @@
 
   <!-- Global Stats -->
   <div class="global-stats" id="global-stats">
+      <!-- Event Description Banner -->
+  <div class="event-description-banner" id="event-description-banner" style="display:none;">
+    <div class="event-desc-icon">📜</div>
+    <div class="event-desc-text" id="event-desc-text"></div>
+    <button class="event-desc-dismiss" id="event-desc-dismiss" aria-label="Dismiss">&times;</button>
+  </div>
     <div class="global-stat-card">
       <div class="global-stat-label">Total Teams</div>
       <div class="global-stat-value accent" id="stat-total-teams">0</div>
@@ -485,6 +517,9 @@
     lastSync: $('admin-last-sync'),
     syncNow: $('admin-sync-now'),
     refreshAll: $('refresh-all-btn'),
+    descBanner: $('event-description-banner'),
+    descText: $('event-desc-text'),
+    descDismiss: $('event-desc-dismiss'),
   };
 
   /* --- Load shared config from localStorage --- */
@@ -495,6 +530,17 @@
     } catch {
       TEAM_MAP = { ...DEFAULT_TEAMS };
     }
+  let descDismissed = false;
+
+  function renderDescription() {
+    const desc = (eventConfig.description || '').trim();
+    if (!desc || descDismissed) {
+      DOM.descBanner.style.display = 'none';
+      return;
+    }
+    DOM.descText.textContent = desc;
+    DOM.descBanner.style.display = 'flex';
+  }
 
     try {
       const savedEvent = localStorage.getItem(STORAGE_KEYS.eventConfig);
@@ -840,6 +886,7 @@
 
   function renderAll() {
     const sorted = getSortedTeams();
+    renderDescription();
     renderGlobalStats(sorted);
     renderLeaderboard(sorted);
     renderTeamCards(sorted);
@@ -848,6 +895,13 @@
     /* ========================= INIT ========================= */
   function init() {
     loadSharedConfig();
+    
+renderDescription();
+
+    DOM.descDismiss.addEventListener('click', () => {
+      descDismissed = true;
+      DOM.descBanner.style.display = 'none';
+    });
 
     DOM.syncNow.addEventListener('click', () => fetchAllTeams());
     DOM.syncNow.addEventListener('keydown', (e) => {
