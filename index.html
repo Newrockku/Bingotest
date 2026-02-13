@@ -699,7 +699,7 @@
   const APP_VERSION = '3.083';
   const MAX_TILES = 49;
 
-    const STORAGE_KEYS = {
+  const STORAGE_KEYS = {
     theme: 'bingo-theme',
     syncInterval: 'bingo-sync-interval',
     codewordVisible: 'bingo-codeword-visible',
@@ -1310,13 +1310,13 @@
         const cols = parseCSVRow(line.trim());
         if (cols.length < 4) continue;
         const id = count + 1;
-        const title = cols[0] || `Tile ${id}`;
-        const img = safeImgSrc(cols[1] || '');
-        const current = Math.max(0, parseInt(cols[2], 10) || 0);
-        const goal = Math.max(1, parseInt(cols[3], 10) || 1);
-        const items = cols[4] ? cols[4].split(',').map(s => s.trim()).filter(Boolean) : [];
-        const description = cols[5] || '';
-        const points = cols[6] || '0';
+        const img = safeImgSrc(cols[0] || '');
+        const title = cols[1] || `Tile ${id}`;
+        const current = Math.max(0, parseInt(cols[4], 10) || 0);
+        const goal = Math.max(1, parseInt(cols[5], 10) || 1);
+        const items = cols[6] ? cols[6].split(',').map(s => s.trim()).filter(Boolean) : [];
+        const description = cols[2] || '';
+        const points = cols[3] || '0';
         const percent = Math.min((current / goal) * 100, 100);
         const isCompleted = percent === 100;
         completion[count] = isCompleted;
@@ -1728,34 +1728,6 @@
       });
     }
 
-    // Grid delegation
-    DOM.grid.addEventListener('click', (e) => {
-      const tileEl = e.target.closest('.tile');
-      if (!tileEl || tileEl.classList.contains('no-data')) return;
-      openTileModalByIndex(parseInt(tileEl.dataset.tileIndex, 10), tileEl);
-    });
-
-    DOM.grid.addEventListener('keydown', (e) => {
-      const tileEl = e.target.closest('.tile');
-      if (!tileEl) return;
-      if ((e.key === 'Enter' || e.key === ' ') && !tileEl.classList.contains('no-data')) {
-        e.preventDefault();
-        openTileModalByIndex(parseInt(tileEl.dataset.tileIndex, 10), tileEl);
-        return;
-      }
-      const idx = parseInt(tileEl.dataset.tileIndex, 10);
-      if (Number.isNaN(idx)) return;
-      const move = (d) => {
-        const next = idx + d;
-        if (next < 0 || next >= MAX_TILES) return;
-        DOM.grid.querySelector(`.tile[data-tile-index="${next}"]`)?.focus();
-      };
-      if (e.key === 'ArrowRight') { e.preventDefault(); move(+1); }
-      if (e.key === 'ArrowLeft') { e.preventDefault(); move(-1); }
-      if (e.key === 'ArrowDown') { e.preventDefault(); move(+7); }
-      if (e.key === 'ArrowUp') { e.preventDefault(); move(-7); }
-    });
-
     // Codeword
     DOM.codeword.addEventListener('click', toggleCodeword);
     DOM.codeword.addEventListener('keydown', (e) => {
@@ -1780,6 +1752,7 @@
       if (!id) return;
       openTileModalByIndex(id - 1, cell);
     });
+
     DOM.bigMap.addEventListener('keydown', (e) => {
       if (e.key !== 'Enter' && e.key !== ' ') return;
       const cell = e.target.closest('.large-map-tile');
