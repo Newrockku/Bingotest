@@ -1095,7 +1095,7 @@
   };
 
   const safeImgSrc = (imgName) => {
-    const raw = String(imgname || '').trim();
+    const raw = String(imgName || '').trim();
     if (!raw) return '';
     if (/^https?:\/\//i.test(raw)) return raw;
     const parts = raw.replace(/\\/g, '/').split('/').filter(Boolean).filter(p => p !== '.' && p !== '..');
