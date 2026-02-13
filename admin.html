@@ -11,21 +11,18 @@
   <style>
     :root {
       --bg-body: #342e25;
-      --bg-card: #494034;
+      --bg-tile: #494034;
       --bg-well: #342e25;
       --bg-completed: #1e3a1e;
       --bg-completed-well: #162a16;
       --border-main: #6d604e;
       --border-completed: #4caf50;
       --accent: #ffac00;
-      --accent-secondary: #c89b3c;
       --text-main: #ffac00;
       --text-bright: #ffee00;
       --text-dim: #858476;
       --text-completed: #4caf50;
       --danger: #ff6d6d;
-      --success: #4caf50;
-      --warning: #ffcc33;
     }
 
     * { box-sizing: border-box; }
@@ -33,7 +30,7 @@
 
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: var(--bg-well); }
-    ::-webkit-scrollbar-thumb { background: var(--bg-card); border: 2px solid var(--bg-well); }
+    ::-webkit-scrollbar-thumb { background: var(--bg-tile); border: 2px solid var(--bg-well); }
     ::-webkit-scrollbar-thumb:hover { background: var(--border-main); }
 
     body {
@@ -41,424 +38,454 @@
       color: var(--text-main);
       font-family: 'Cabin Condensed', sans-serif;
       margin: 0; padding: 20px;
-      display: flex; flex-direction: column; align-items: center;
       min-height: 100vh;
     }
 
     .admin-header {
-      width: 100%; max-width: 1200px;
-      background: var(--bg-card); border: 2px solid var(--border-main);
-      padding: 20px 30px; margin-bottom: 24px;
+      background: var(--bg-tile); border: 2px solid var(--border-main);
+      padding: 20px; margin-bottom: 30px;
       display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 16px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      flex-wrap: wrap; gap: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     }
 
-    .admin-header-left {
-      display: flex; flex-direction: column; gap: 4px;
+    .admin-header-left h1 {
+      margin: 0; font-size: 2rem; text-transform: uppercase;
+      letter-spacing: 1px; text-shadow: 2px 2px 4px black;
     }
 
-    .admin-title {
-      font-size: 2rem; margin: 0; font-weight: bold;
-      color: var(--text-bright); text-transform: uppercase;
-      letter-spacing: 2px; text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+    .admin-header-subtitle {
+      font-size: 0.9rem; color: var(--text-dim);
+      margin: 4px 0 0 0;
     }
 
-    .admin-subtitle {
-      font-size: 0.85rem; color: var(--text-dim); margin: 0;
+    .admin-header-right {
+      display: flex; gap: 12px; flex-wrap: wrap;
     }
 
-    .admin-header-actions {
-      display: flex; gap: 10px; flex-wrap: wrap;
-    }
-
-    .admin-btn {
+    .nav-btn {
       background: var(--bg-well); border: 2px solid var(--border-main);
-      color: var(--text-main); padding: 10px 20px;
-      font-family: 'Cabin Condensed', sans-serif; font-size: 0.9rem;
-      cursor: pointer; border-radius: 4px; transition: all 0.2s ease;
-      text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
-      font-weight: bold;
+      color: var(--text-dim); padding: 8px 16px;
+      font-family: 'Cabin Condensed'; font-size: 0.95rem;
+      cursor: pointer; border-radius: 4px;
+      transition: all 0.2s ease; text-decoration: none;
+      display: inline-block;
     }
 
-    .admin-btn:hover {
-      border-color: var(--accent); color: var(--accent); background: var(--bg-card);
+    .nav-btn:hover {
+      border-color: var(--accent); color: var(--accent);
+      background: var(--bg-tile);
     }
 
-    .admin-btn:focus-visible {
+    .nav-btn:focus-visible {
       outline: 2px solid var(--accent); outline-offset: 2px;
     }
 
-    .admin-btn.primary {
-      background: var(--accent); border-color: var(--accent);
-      color: var(--bg-body); font-weight: bold;
-    }
-
-    .admin-btn.primary:hover {
-      background: #e09800; border-color: #e09800;
-    }
-
-    .admin-btn svg {
-      width: 18px; height: 18px; fill: currentColor;
-    }
-
     .dashboard-container {
-      width: 100%; max-width: 1200px;
-      display: grid; grid-template-columns: 2fr 1fr; gap: 24px;
-      padding-bottom: 40px;
+      max-width: 1400px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
     }
 
-    .dashboard-section {
-      background: var(--bg-card); border: 2px solid var(--border-main);
-      padding: 24px; border-radius: 4px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    .card {
+      background: var(--bg-tile); border: 2px solid var(--border-main);
+      padding: 20px; border-radius: 6px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
 
-    .section-title {
-      font-size: 1.2rem; font-weight: bold; color: var(--text-bright);
-      margin: 0 0 16px 0; text-transform: uppercase; letter-spacing: 1px;
+    .card-title {
+      font-size: 1.3rem; font-weight: bold;
+      color: var(--text-bright); margin: 0 0 16px 0;
+      text-transform: uppercase; letter-spacing: 1px;
+      padding-bottom: 8px; border-bottom: 2px solid var(--border-main);
     }
 
-    .stats-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 12px; margin-bottom: 20px;
+    .stat-item {
+      display: flex; justify-content: space-between;
+      align-items: center; padding: 10px 0;
+      border-bottom: 1px solid var(--border-main);
     }
 
-    .stat-card {
-      background: var(--bg-well); border: 1px solid var(--border-main);
-      padding: 16px; border-radius: 4px; text-align: center;
-    }
+    .stat-item:last-child { border-bottom: none; }
+
+    .stat-label { font-size: 0.9rem; color: var(--text-dim); }
 
     .stat-value {
-      font-size: 2rem; font-weight: bold; color: var(--accent);
-      margin-bottom: 4px;
-    }
-
-    .stat-label {
-      font-size: 0.75rem; text-transform: uppercase; color: var(--text-dim);
-      letter-spacing: 0.5px;
+      font-size: 1.3rem; font-weight: bold;
+      color: var(--text-main);
     }
 
     .team-list {
       display: flex; flex-direction: column; gap: 12px;
     }
 
-    .team-card {
-      background: var(--bg-well); border: 1px solid var(--border-main);
-      padding: 16px; border-radius: 4px;
-      display: flex; justify-content: space-between; align-items: center;
-      gap: 12px; transition: all 0.2s ease;
-    }
-
-    .team-card:hover {
-      border-color: var(--accent); box-shadow: 0 0 10px rgba(255,172,0,0.2);
-    }
-
-    .team-info {
-      display: flex; align-items: center; gap: 12px; flex: 1;
-    }
-
-    .team-color-badge {
-      width: 24px; height: 24px; border-radius: 50%;
-      border: 2px solid var(--border-main); flex-shrink: 0;
-    }
-
-    .team-details {
-      display: flex; flex-direction: column; gap: 2px;
-    }
-
-    .team-name {
-      font-weight: bold; color: var(--text-bright); font-size: 0.95rem;
-    }
-
-    .team-meta {
-      font-size: 0.75rem; color: var(--text-dim);
-    }
-
-    .team-score {
-      font-size: 1.5rem; font-weight: bold; color: var(--accent);
-      text-align: right;
-    }
-
-    .team-points {
-      font-size: 0.7rem; color: var(--text-dim); margin-top: 4px;
-    }
-
-    .leaderboard {
-      display: flex; flex-direction: column; gap: 12px;
-    }
-
-    .leaderboard-entry {
-      background: var(--bg-well); border: 1px solid var(--border-main);
+    .team-item {
+      background: var(--bg-well); border-left: 4px solid var(--accent);
       padding: 12px; border-radius: 4px;
-      display: grid; grid-template-columns: 30px 1fr auto; gap: 12px; align-items: center;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
     }
+
+    .team-item-name {
+      font-size: 1rem; font-weight: bold;
+      color: var(--text-bright);
+    }
+
+    .team-item-points {
+      background: var(--bg-tile); padding: 4px 8px;
+      border-radius: 3px; color: var(--text-main);
+      font-weight: bold;
+    }
+
+    .team-item-link {
+      font-size: 0.75rem; color: var(--text-dim);
+      word-break: break-all; flex: 1 100%;
+    }
+
+    .team-item-link a {
+      color: var(--accent); text-decoration: none;
+      cursor: pointer;
+    }
+
+    .team-item-link a:hover {
+      text-decoration: underline;
+    }
+
+    .progress-bar {
+      width: 100%; height: 20px; background: var(--bg-well);
+      border: 1px solid var(--border-main); border-radius: 3px;
+      overflow: hidden; margin: 8px 0;
+    }
+
+    .progress-fill {
+      height: 100%; background: var(--accent);
+      transition: width 0.3s ease; display: flex;
+      align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: bold;
+      color: #000;
+    }
+
+    .leaderboard-row {
+      display: flex; justify-content: space-between;
+      align-items: center; padding: 10px 0;
+      border-bottom: 1px solid var(--border-main);
+    }
+
+    .leaderboard-row:last-child { border-bottom: none; }
 
     .leaderboard-rank {
-      font-size: 1.3rem; font-weight: bold; color: var(--accent);
-      text-align: center;
-    }
-
-    .leaderboard-info {
-      display: flex; flex-direction: column; gap: 2px;
+      width: 30px; font-weight: bold;
+      color: var(--accent); text-align: center;
     }
 
     .leaderboard-name {
-      color: var(--text-bright); font-weight: bold;
+      flex: 1; color: var(--text-bright);
     }
 
-    .leaderboard-detail {
-      font-size: 0.75rem; color: var(--text-dim);
-    }
-
-    .leaderboard-score {
-      font-size: 1.2rem; font-weight: bold; color: var(--success);
-    }
-
-    .activity-feed {
-      display: flex; flex-direction: column; gap: 10px;
-      max-height: 400px; overflow-y: auto;
-    }
-
-    .activity-item {
-      background: var(--bg-well); border-left: 3px solid var(--accent);
-      padding: 12px; border-radius: 2px;
-      font-size: 0.85rem; color: var(--text-bright);
-    }
-
-    .activity-timestamp {
-      font-size: 0.7rem; color: var(--text-dim); margin-top: 4px;
+    .leaderboard-points {
+      font-weight: bold; color: var(--text-main);
+      min-width: 60px; text-align: right;
     }
 
     .page-footer {
-      width: 100%; max-width: 1200px;
-      padding: 20px 0 10px 0; font-size: 0.7rem;
-      color: var(--border-main);
-      text-align: center; border-top: 1px solid var(--border-main);
+      text-align: center; margin-top: 40px;
+      font-size: 0.7rem; color: var(--border-main);
+      padding-top: 20px; border-top: 1px solid var(--border-main);
     }
 
-    @media (max-width: 900px) {
-      .dashboard-container {
-        grid-template-columns: 1fr;
-      }
-
-      .admin-header {
-        flex-direction: column; align-items: flex-start;
-      }
-
-      .admin-title {
-        font-size: 1.5rem;
-      }
-
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    .version-badge {
+      background: var(--bg-well); border: 1px solid var(--border-main);
+      padding: 4px 8px; border-radius: 3px;
+      font-size: 0.75rem; color: var(--text-dim);
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      * { transition: none !important; animation: none !important; }
+    @media (max-width: 768px) {
+      body { padding: 12px; }
+      .admin-header { padding: 12px; }
+      .admin-header-left h1 { font-size: 1.4rem; }
+      .dashboard-container { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <header class="admin-header">
+  <header class="admin-header" role="banner">
     <div class="admin-header-left">
-      <h1 class="admin-title">📊 Admin Dashboard</h1>
-      <p class="admin-subtitle">Real-time overview of the entire bingo event</p>
+      <h1 id="admin-event-title">Bingo Admin</h1>
+      <p class="admin-header-subtitle">Event Management & Team Monitoring</p>
     </div>
-    <div class="admin-header-actions">
-      <a href="settings.html" class="admin-btn primary">
-        <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1115.6 12 3.611 3.611 0 0112 15.6z"/></svg>
-        Configure Game
-      </a>
-      <button class="admin-btn" id="refresh-btn">
-        <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-8 3.58-8 8s3.58 8 8 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78l-2.58 2.58h6v-6l-2.57 2.57z"/></svg>
-        Refresh
-      </button>
+    <div class="admin-header-right">
+      <span class="version-badge">v3.090</span>
+      <a href="settings.html" class="nav-btn">⚙️ Settings</a>
+      <a href="index.html?admin=true" class="nav-btn">👁️ Preview</a>
     </div>
   </header>
 
   <div class="dashboard-container">
-    <!-- LEFT COLUMN: EVENT OVERVIEW & TEAMS -->
-    <div>
-      <!-- Event Stats -->
-      <div class="dashboard-section">
-        <h2 class="section-title">📈 Event Overview</h2>
-        <div class="stats-grid" id="event-stats-grid">
-          <div class="stat-card">
-            <div class="stat-value" id="total-teams">0</div>
-            <div class="stat-label">Teams</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="avg-completion">0%</div>
-            <div class="stat-label">Avg Completion</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="total-points">0</div>
-            <div class="stat-label">Total Points</div>
-          </div>
-        </div>
+    <!-- Event Overview Card -->
+    <div class="card" style="grid-column: 1 / -1;">
+      <h2 class="card-title">📊 Event Overview</h2>
+      <div class="stat-item">
+        <span class="stat-label">Event Name</span>
+        <span class="stat-value" id="event-name-display">Bingo 2026</span>
       </div>
-
-      <!-- Teams List -->
-      <div class="dashboard-section">
-        <h2 class="section-title">👥 Team Standings</h2>
-        <div class="team-list" id="team-list-container">
-          <div style="color:var(--text-dim); font-size:0.85rem; padding:16px; text-align:center;">
-            No teams configured. Go to Configure to set up teams.
-          </div>
-        </div>
+      <div class="stat-item">
+        <span class="stat-label">Codeword</span>
+        <span class="stat-value" id="event-codeword-display">••••••</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">CSV URL</span>
+        <span style="font-size:0.75rem; color:var(--text-dim); word-break:break-all;" id="csv-url-display">Not configured</span>
+      </div>
+      <div class="stat-item" style="margin-top: 12px;">
+        <span class="stat-label">Description</span>
+        <span style="font-size:0.85rem; color:var(--text-bright); flex:1;" id="event-desc-display">(No description)</span>
       </div>
     </div>
 
-    <!-- RIGHT COLUMN: LEADERBOARD & ACTIVITY -->
-    <div>
-      <!-- Leaderboard -->
-      <div class="dashboard-section">
-        <h2 class="section-title">🏆 Leaderboard</h2>
-        <div class="leaderboard" id="leaderboard-container">
-          <div style="color:var(--text-dim); font-size:0.85rem; padding:16px; text-align:center;">
-            Waiting for data...
-          </div>
-        </div>
+    <!-- Team Standings Card -->
+    <div class="card">
+      <h2 class="card-title">🏆 Team Standings</h2>
+      <div id="team-standings" class="team-list">
+        <div style="color:var(--text-dim); text-align:center;">Loading teams...</div>
       </div>
+    </div>
 
-      <!-- Activity Feed -->
-      <div class="dashboard-section">
-        <h2 class="section-title">📝 Recent Activity</h2>
-        <div class="activity-feed" id="activity-feed-container">
-          <div style="color:var(--text-dim); font-size:0.85rem; padding:16px; text-align:center;">
-            No activity yet
-          </div>
-        </div>
+    <!-- Leaderboard Card -->
+    <div class="card">
+      <h2 class="card-title">📈 Points Leaderboard</h2>
+      <div id="leaderboard-list" style="display:flex; flex-direction:column;">
+        <div style="color:var(--text-dim); text-align:center;">Loading leaderboard...</div>
+      </div>
+    </div>
+
+    <!-- Team Access Links Card -->
+    <div class="card" style="grid-column: 1 / -1;">
+      <h2 class="card-title">🔗 Team Access Links</h2>
+      <div id="team-links-container" class="team-list">
+        <div style="color:var(--text-dim); text-align:center;">Loading links...</div>
       </div>
     </div>
   </div>
 
   <footer class="page-footer">
-    <p>Bingo Admin Dashboard v1.0 &middot; Real-time Event Monitor</p>
+    <div>Bingo Board Admin • v3.090</div>
   </footer>
 
   <script>
 (() => {
+  const APP_VERSION = '3.090';
+
   const STORAGE_KEYS = {
     eventConfig: 'bingo-event-config',
     teams: 'bingo-teams-config',
-    csvUrl: 'bingo-csv-url',
-    completion: 'bingo-completion'
+    tiles: 'bingo-tiles-config',
+    completion: 'bingo-completion',
+    theme: 'bingo-theme',
+    customThemes: 'bingo-custom-themes',
+    syncInterval: 'bingo-sync-interval',
+    codewordVisible: 'bingo-codeword-visible'
   };
 
-  let eventConfig = {};
+  const DEFAULT_TEAMS = {
+    'Team1': { name: "Team 1", url: "", points: 0, teamNumber: 1 },
+    'Team2': { name: "Team 2", url: "", points: 0, teamNumber: 2 },
+    'Team3': { name: "Team 3", url: "", points: 0, teamNumber: 3 },
+    'Team4': { name: "Team 4", url: "", points: 0, teamNumber: 4 },
+    'Team5': { name: "Team 5", url: "", points: 0, teamNumber: 5 },
+    'Team6': { name: "Team 6", url: "", points: 0, teamNumber: 6 },
+    'Team7': { name: "Team 7", url: "", points: 0, teamNumber: 7 },
+    'Team8': { name: "Team 8", url: "", points: 0, teamNumber: 8 }
+  };
+
+  let eventConfig = {
+    name: 'Bingo 2026',
+    codeword: '',
+    description: '',
+    syncInterval: 30000
+  };
   let teamsConfig = {};
-  let csvUrl = '';
-  let completion = {};
 
   const $ = id => document.getElementById(id);
 
-  const save = (key, val) => { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} };
-  const load = (key) => { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : null; } catch { return null; } };
+  const storageLoad = (k, fb) => {
+    try {
+      const v = localStorage.getItem(k);
+      return v ? JSON.parse(v) : fb;
+    } catch {
+      return fb;
+    }
+  };
 
-  function loadConfig() {
-    eventConfig = load(STORAGE_KEYS.eventConfig) || {};
-    teamsConfig = load(STORAGE_KEYS.teams) || {};
-    csvUrl = load(STORAGE_KEYS.csvUrl) || '';
-    completion = load(STORAGE_KEYS.completion) || {};
-  }
+  const storageSave = (k, v) => {
+    try {
+      localStorage.setItem(k, JSON.stringify(v));
+    } catch {}
+  };
 
-  function escapeHTML(str) {
-    const d = document.createElement('div');
-    d.appendChild(document.createTextNode(String(str ?? '')));
-    return d.innerHTML;
-  }
+  const loadConfig = () => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.eventConfig);
+      if (saved) eventConfig = JSON.parse(saved);
+    } catch {}
 
-  function renderEventStats() {
-    const teamCount = Object.keys(teamsConfig).length;
-    const totalTeamPoints = Object.values(teamsConfig).reduce((sum, t) => sum + (parseInt(t.points, 10) || 0), 0);
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.teams);
+      teamsConfig = saved ? JSON.parse(saved) : { ...DEFAULT_TEAMS };
+    } catch {
+      teamsConfig = { ...DEFAULT_TEAMS };
+    }
+  };
 
-    const statsHtml = `
-      <div class="stat-card">
-        <div class="stat-value">${escapeHTML(eventConfig.name || 'Untitled')}</div>
-        <div class="stat-label">Event</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">${teamCount}</div>
-        <div class="stat-label">Teams</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">${totalTeamPoints.toLocaleString()}</div>
-        <div class="stat-label">Total Points</div>
-      </div>
-    `;
+  const renderEventOverview = () => {
+    const nameEl = $('event-name-display');
+    const codewordEl = $('event-codeword-display');
+    const csvEl = $('csv-url-display');
+    const descEl = $('event-desc-display');
 
-    const gridHtml = $('event-stats-grid');
-    if (gridHtml) gridHtml.innerHTML = statsHtml;
-  }
+    if (nameEl) nameEl.textContent = eventConfig.name || 'Bingo 2026';
+    if (codewordEl) codewordEl.textContent = eventConfig.codeword ? '••••••' : '(Not set)';
+    if (csvEl) csvEl.textContent = teamsConfig.Team1?.url
+      ? teamsConfig.Team1.url
+      : 'Not configured';
+    if (descEl) descEl.textContent = eventConfig.description || '(No description)';
 
-  function renderTeamStandings() {
-    const keys = Object.keys(teamsConfig);
-    const teamHtml = keys.map(key => {
-      const team = teamsConfig[key];
-      return `
-        <div class="team-card">
-          <div class="team-info">
-            <div class="team-color-badge" style="background:${escapeHTML(team.color || '#888')};"></div>
-            <div class="team-details">
-              <div class="team-name">${escapeHTML(team.name || key)}</div>
-              <div class="team-meta">${escapeHTML(key)}</div>
-            </div>
-          </div>
-          <div class="team-score">
-            <div class="team-points">${team.points || 0} pts</div>
-          </div>
-        </div>
-      `;
-    }).join('');
+    const titleEl = $('admin-event-title');
+    if (titleEl) titleEl.textContent = `${eventConfig.name || 'Bingo 2026'} Admin`;
+  };
 
+  const renderTeamStandings = () => {
     const container = $('team-standings');
-    if (container) container.innerHTML = teamHtml || '<p style="color:var(--text-dim);">No teams configured. <a href="settings.html">Configure teams</a></p>';
-  }
+    if (!container) return;
 
-  function renderLeaderboard() {
-    const entries = Object.entries(teamsConfig)
-      .map(([key, team]) => ({ key, ...team }))
-      .sort((a, b) => (b.points || 0) - (a.points || 0));
+    const teams = Object.entries(teamsConfig).map(([key, team]) => ({
+      key,
+      ...team
+    }));
 
-    const leaderboardHtml = entries.map((team, idx) => `
-      <div class="leaderboard-entry">
-        <div class="leaderboard-rank" style="background:${team.color || '#888'};">${idx + 1}</div>
-        <div class="leaderboard-info">
-          <div class="leaderboard-name">${escapeHTML(team.name || team.key)}</div>
-          <div class="leaderboard-detail">${team.key}</div>
+    teams.sort((a, b) => (b.points || 0) - (a.points || 0));
+
+    if (teams.length === 0) {
+      container.innerHTML = '<div style="color:var(--text-dim); text-align:center;">No teams configured</div>';
+      return;
+    }
+
+    const frag = document.createDocumentFragment();
+    teams.forEach(team => {
+      const teamDiv = document.createElement('div');
+      teamDiv.className = 'team-item';
+
+      const baseUrl = window.location.origin + window.location.pathname.replace('admin.html', 'index.html');
+      const teamUrl = `${baseUrl}?team=${team.key}`;
+
+      teamDiv.innerHTML = `
+        <div>
+          <div class="team-item-name">${team.name || team.key}</div>
+          <div class="team-item-link">
+            <a href="${teamUrl}" target="_blank" rel="noopener noreferrer">${teamUrl}</a>
+          </div>
         </div>
-        <div class="leaderboard-score">${team.points || 0}</div>
-      </div>
-    `).join('');
+        <div class="team-item-points">${team.points || 0} PTS</div>
+      `;
 
+      frag.appendChild(teamDiv);
+    });
+
+    container.innerHTML = '';
+    container.appendChild(frag);
+  };
+
+  const renderLeaderboard = () => {
     const container = $('leaderboard-list');
-    if (container) container.innerHTML = leaderboardHtml || '<p style="color:var(--text-dim);">No teams yet.</p>';
-  }
+    if (!container) return;
 
-  function updateDashboard() {
+    const teams = Object.entries(teamsConfig).map(([key, team]) => ({
+      key,
+      name: team.name || key,
+      points: team.points || 0
+    }));
+
+    teams.sort((a, b) => b.points - a.points);
+
+    if (teams.length === 0) {
+      container.innerHTML = '<div style="color:var(--text-dim); text-align:center;">No teams configured</div>';
+      return;
+    }
+
+    const frag = document.createDocumentFragment();
+    teams.forEach((team, idx) => {
+      const row = document.createElement('div');
+      row.className = 'leaderboard-row';
+
+      let medal = '';
+      if (idx === 0) medal = '🥇';
+      else if (idx === 1) medal = '🥈';
+      else if (idx === 2) medal = '🥉';
+
+      row.innerHTML = `
+        <div class="leaderboard-rank">${medal || idx + 1}</div>
+        <div class="leaderboard-name">${team.name}</div>
+        <div class="leaderboard-points">${team.points}</div>
+      `;
+
+      frag.appendChild(row);
+    });
+
+    container.innerHTML = '';
+    container.appendChild(frag);
+  };
+
+  const renderTeamLinks = () => {
+    const container = $('team-links-container');
+    if (!container) return;
+
+    const teams = Object.entries(teamsConfig);
+
+    if (teams.length === 0) {
+      container.innerHTML = '<div style="color:var(--text-dim); text-align:center;">No teams configured</div>';
+      return;
+    }
+
+    const frag = document.createDocumentFragment();
+    teams.forEach(([key, team]) => {
+      const baseUrl = window.location.origin + window.location.pathname.replace('admin.html', 'index.html');
+      const teamUrl = `${baseUrl}?team=${key}`;
+
+      const linkDiv = document.createElement('div');
+      linkDiv.className = 'team-item';
+      linkDiv.style.display = 'flex';
+      linkDiv.style.flexDirection = 'column';
+      linkDiv.style.gap = '8px';
+
+      linkDiv.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+          <div style="font-weight:bold; color:var(--text-bright);">${team.name || key}</div>
+          <button class="nav-btn" style="padding:4px 12px; font-size:0.8rem;" onclick="navigator.clipboard.writeText('${teamUrl}'); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy Link', 2000);">Copy Link</button>
+        </div>
+        <input type="text" readonly value="${teamUrl}" style="width:100%; padding:8px; background:var(--bg-well); border:1px solid var(--border-main); color:var(--text-dim); font-family:monospace; font-size:0.75rem; border-radius:3px;">
+      `;
+
+      frag.appendChild(linkDiv);
+    });
+
+    container.innerHTML = '';
+    container.appendChild(frag);
+  };
+
+  const refresh = () => {
     loadConfig();
-    renderEventStats();
+    renderEventOverview();
     renderTeamStandings();
     renderLeaderboard();
-  }
+    renderTeamLinks();
+  };
 
-  function startAutoRefresh() {
-    updateDashboard();
-    let syncInterval = (eventConfig.syncInterval || 30000);
-    setInterval(updateDashboard, syncInterval);
-  }
+  const init = () => {
+    refresh();
 
-  function init() {
-    updateDashboard();
-    startAutoRefresh();
-
-    const settingsBtn = $('settings-btn');
-    if (settingsBtn) settingsBtn.addEventListener('click', () => window.location.href = 'settings.html');
-  }
+    // Auto-refresh every 5 seconds
+    setInterval(refresh, 5000);
+  };
 
   init();
 })();

@@ -10,17 +10,19 @@
 
   <style>
     :root {
-      --bg-main: #1a1a1a;
-      --bg-card: #242424;
-      --bg-well: #2d2d2d;
-      --text-bright: #ffffff;
-      --text-main: #e0e0e0;
-      --text-dim: #999999;
-      --border-main: #444444;
-      --accent-primary: #ff6b35;
-      --accent-success: #4caf50;
-      --accent-warning: #ffa726;
-      --accent-danger: #f44336;
+      --bg-body: #342e25;
+      --bg-tile: #494034;
+      --bg-well: #342e25;
+      --bg-completed: #1e3a1e;
+      --bg-completed-well: #162a16;
+      --border-main: #6d604e;
+      --border-completed: #4caf50;
+      --accent: #ffac00;
+      --text-main: #ffac00;
+      --text-bright: #ffee00;
+      --text-dim: #858476;
+      --text-completed: #4caf50;
+      --danger: #ff6d6d;
     }
 
     * { box-sizing: border-box; }
@@ -28,1162 +30,417 @@
 
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: var(--bg-well); }
-    ::-webkit-scrollbar-thumb { background: var(--border-main); border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+    ::-webkit-scrollbar-thumb { background: var(--bg-tile); border: 2px solid var(--bg-well); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--border-main); }
 
     body {
-      margin: 0;
-      padding: 0;
-      background: var(--bg-main);
+      background-color: var(--bg-body);
       color: var(--text-main);
       font-family: 'Cabin Condensed', sans-serif;
-      font-size: 14px;
-      line-height: 1.5;
+      margin: 0; padding: 20px;
+      min-height: 100vh;
     }
 
     .settings-header {
-      background: var(--bg-card);
-      padding: 20px;
-      border-bottom: 1px solid var(--border-main);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      background: var(--bg-tile); border: 2px solid var(--border-main);
+      padding: 20px; margin-bottom: 30px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     }
 
-    .settings-title {
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--text-bright);
-      margin: 0;
+    .settings-header h1 {
+      margin: 0; font-size: 2rem; text-transform: uppercase;
+      letter-spacing: 1px; text-shadow: 2px 2px 4px black;
     }
 
-    .settings-nav {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: center;
+    .settings-header-right {
+      display: flex; gap: 12px;
     }
 
-    .nav-link {
-      padding: 8px 16px;
-      background: var(--bg-well);
-      border: 1px solid var(--border-main);
-      color: var(--text-main);
-      cursor: pointer;
-      border-radius: 4px;
-      text-decoration: none;
-      transition: all 0.2s;
-      font-size: 13px;
+    .nav-btn {
+      background: var(--bg-well); border: 2px solid var(--border-main);
+      color: var(--text-dim); padding: 8px 16px;
+      font-family: 'Cabin Condensed'; font-size: 0.95rem;
+      cursor: pointer; border-radius: 4px;
+      transition: all 0.2s ease; text-decoration: none;
+      display: inline-block;
     }
 
-    .nav-link:hover {
-      background: var(--accent-primary);
-      color: var(--text-bright);
-      border-color: var(--accent-primary);
+    .nav-btn:hover {
+      border-color: var(--accent); color: var(--accent);
+      background: var(--bg-tile);
     }
 
     .settings-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 24px;
+      max-width: 900px; margin: 0 auto;
     }
 
-    .settings-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-main);
-      border-radius: 8px;
-      margin-bottom: 20px;
-      overflow: hidden;
+    .settings-section {
+      background: var(--bg-tile); border: 2px solid var(--border-main);
+      padding: 20px; margin-bottom: 20px; border-radius: 6px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
 
-    .card-header {
-      background: var(--bg-well);
-      padding: 16px;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      user-select: none;
-      border-bottom: 1px solid var(--border-main);
-      transition: background 0.2s;
-    }
-
-    .card-header:hover {
-      background: var(--bg-main);
-    }
-
-    .card-header-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex: 1;
-    }
-
-    .card-header svg {
-      width: 20px;
-      height: 20px;
-      fill: var(--accent-primary);
-    }
-
-    .card-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text-bright);
-      margin: 0;
-    }
-
-    .card-toggle {
-      color: var(--text-dim);
-      transition: transform 0.2s;
-    }
-
-    .card-toggle.open {
-      transform: rotate(180deg);
-    }
-
-    .card-body {
-      padding: 0;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease;
-    }
-
-    .card-body.open {
-      max-height: 2000px;
-      padding: 20px;
+    .settings-section-title {
+      font-size: 1.2rem; font-weight: bold;
+      color: var(--text-bright); margin: 0 0 16px 0;
+      text-transform: uppercase; letter-spacing: 1px;
+      padding-bottom: 8px; border-bottom: 2px solid var(--border-main);
     }
 
     .form-group {
+      display: flex; flex-direction: column;
       margin-bottom: 16px;
     }
 
     .form-label {
-      display: block;
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: var(--text-bright);
-      font-size: 13px;
-    }
-
-    .form-required {
-      color: var(--accent-danger);
+      font-size: 0.95rem; font-weight: bold;
+      color: var(--text-bright); margin-bottom: 6px;
+      text-transform: uppercase; letter-spacing: 0.5px;
     }
 
     .form-hint {
-      font-size: 12px;
-      color: var(--text-dim);
-      margin-bottom: 8px;
-      line-height: 1.4;
+      font-size: 0.75rem; color: var(--text-dim);
+      margin-bottom: 4px;
     }
 
-    .form-input,
-    .form-select,
-    .form-textarea {
-      width: 100%;
-      padding: 10px;
-      background: var(--bg-main);
-      border: 1px solid var(--border-main);
-      color: var(--text-main);
+    .form-input, .form-textarea, .form-select {
+      background: var(--bg-well); border: 1px solid var(--border-main);
+      color: var(--text-bright); padding: 10px;
+      font-family: 'Cabin Condensed'; font-size: 0.95rem;
       border-radius: 4px;
-      font-family: inherit;
-      font-size: 13px;
-      transition: border-color 0.2s;
     }
 
-    .form-input:focus,
-    .form-select:focus,
-    .form-textarea:focus {
-      outline: none;
-      border-color: var(--accent-primary);
-      box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
-    }
-
-    .form-input.invalid {
-      border-color: var(--accent-danger);
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      border-color: var(--accent); outline: none;
+      box-shadow: 0 0 8px rgba(255, 172, 0, 0.3);
     }
 
     .form-textarea {
-      min-height: 120px;
-      resize: vertical;
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
+      min-height: 80px; resize: vertical;
+    }
+
+    .form-hint-text {
+      font-size: 0.75rem; color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    .team-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px; margin-bottom: 16px;
+    }
+
+    .team-card {
+      background: var(--bg-well); border: 2px solid var(--border-main);
+      padding: 12px; border-radius: 4px; border-left: 4px solid var(--accent);
+    }
+
+    .team-card-title {
+      font-weight: bold; color: var(--text-bright);
+      margin: 0 0 8px 0; font-size: 0.95rem;
     }
 
     .form-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px;
+      display: flex; gap: 12px; margin-bottom: 8px;
     }
 
-    .form-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 16px;
-      flex-wrap: wrap;
+    .form-row .form-group {
+      flex: 1; margin-bottom: 0;
     }
 
     .btn {
-      padding: 10px 16px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-family: inherit;
-      font-weight: 700;
-      font-size: 13px;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      background: var(--bg-well); border: 2px solid var(--border-main);
+      color: var(--text-dim); padding: 10px 20px;
+      font-family: 'Cabin Condensed'; font-size: 0.95rem;
+      cursor: pointer; border-radius: 4px;
+      transition: all 0.2s ease;
     }
 
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+    .btn:hover {
+      border-color: var(--accent); color: var(--accent);
+      background: var(--bg-tile);
     }
 
     .btn:focus-visible {
-      outline: 2px solid var(--accent-primary);
-      outline-offset: 2px;
-    }
-
-    .btn-primary {
-      background: var(--accent-primary);
-      color: #000;
-    }
-
-    .btn-primary:hover:not(:disabled) {
-      background: #ff8449;
-    }
-
-    .btn-secondary {
-      background: var(--bg-well);
-      color: var(--text-main);
-      border: 1px solid var(--border-main);
-    }
-
-    .btn-secondary:hover:not(:disabled) {
-      background: var(--bg-main);
-      color: var(--text-bright);
+      outline: 2px solid var(--accent); outline-offset: 2px;
     }
 
     .btn-danger {
-      background: var(--accent-danger);
-      color: #fff;
+      border-color: var(--danger); color: var(--danger);
     }
 
-    .btn-danger:hover:not(:disabled) {
-      background: #e53935;
-    }
-
-    .btn-sm {
-      padding: 6px 12px;
-      font-size: 12px;
-    }
-
-    .team-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .team-item {
-      border: 1px solid var(--border-main);
-      border-radius: 4px;
-      overflow: hidden;
-      background: var(--bg-main);
-    }
-
-    .team-item-header {
-      padding: 12px;
-      background: var(--bg-well);
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      user-select: none;
-      transition: background 0.2s;
-    }
-
-    .team-item-header:hover {
-      background: var(--bg-card);
-    }
-
-    .team-item-name {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 700;
-    }
-
-    .team-dot {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      border: 2px solid var(--border-main);
-    }
-
-    .team-item-meta {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      color: var(--text-dim);
-      font-size: 12px;
-    }
-
-    .team-item-body {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s;
-      padding: 0;
-    }
-
-    .team-item-body.open {
-      max-height: 500px;
-      padding: 16px;
-      border-top: 1px solid var(--border-main);
-    }
-
-    .team-item-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid var(--border-main);
-    }
-
-    .color-swatch {
-      width: 50px;
-      height: 40px;
-      border: 1px solid var(--border-main);
-      border-radius: 4px;
-      cursor: pointer;
-      padding: 2px;
-    }
-
-    .form-inline {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .short {
-      max-width: 100px;
-    }
-
-    .medium {
-      max-width: 250px;
-    }
-
-    .var-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-      margin-top: 12px;
-    }
-
-    .var-table th {
-      background: var(--bg-well);
-      padding: 8px;
-      text-align: left;
-      border-bottom: 1px solid var(--border-main);
-      font-weight: 700;
-      color: var(--text-bright);
-    }
-
-    .var-table td {
-      padding: 8px;
-      border-bottom: 1px solid var(--border-main);
-    }
-
-    .var-key {
-      font-family: 'Courier New', monospace;
-      background: var(--bg-well);
-      padding: 2px 6px;
-      border-radius: 3px;
-      color: var(--accent-primary);
-    }
-
-    .var-type {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 3px;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .var-type.string {
-      background: rgba(76, 175, 80, 0.2);
-      color: #4caf50;
-    }
-
-    .var-type.number {
-      background: rgba(255, 152, 0, 0.2);
-      color: #ff9800;
-    }
-
-    .var-type.url {
-      background: rgba(33, 150, 243, 0.2);
-      color: #2196f3;
-    }
-
-    .var-desc {
-      color: var(--text-dim);
+    .btn-danger:hover {
+      background: var(--danger); color: #000;
     }
 
     .toast {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      padding: 12px 16px;
-      background: var(--accent-success);
-      color: #fff;
-      border-radius: 4px;
-      font-weight: 700;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.3s;
+      position: fixed; bottom: 20px; right: 20px;
+      background: var(--accent); color: #000;
+      padding: 12px 20px; border-radius: 4px;
+      font-weight: bold; z-index: 1000;
+      opacity: 0; transition: opacity 0.3s ease;
       pointer-events: none;
-      z-index: 1000;
-      max-width: 300px;
-      word-wrap: break-word;
     }
 
     .toast.show {
       opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
     }
 
-    .toast.error {
-      background: var(--accent-danger);
+    .form-actions {
+      display: flex; gap: 12px; margin-top: 20px;
+      padding-top: 20px; border-top: 1px solid var(--border-main);
     }
 
-    .toast.warning {
-      background: var(--accent-warning);
-      color: #000;
+    .page-footer {
+      text-align: center; margin-top: 40px;
+      font-size: 0.7rem; color: var(--border-main);
+      padding-top: 20px; border-top: 1px solid var(--border-main);
     }
 
-    .danger-zone {
-      border: 2px solid var(--accent-danger);
-      border-radius: 8px;
-      padding: 16px;
-      margin-top: 20px;
-    }
-
-    .team-count-badge {
-      background: var(--accent-primary);
-      color: #000;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 700;
-      margin-left: auto;
+    .version-badge {
+      background: var(--bg-well); border: 1px solid var(--border-main);
+      padding: 4px 8px; border-radius: 3px;
+      font-size: 0.75rem; color: var(--text-dim);
     }
 
     @media (max-width: 768px) {
-      .settings-container {
-        padding: 12px;
-      }
-
-      .form-row {
-        grid-template-columns: 1fr;
-      }
-
-      .settings-header {
-        flex-direction: column;
-        gap: 12px;
-        align-items: flex-start;
-      }
-
-      .settings-nav {
-        width: 100%;
-      }
+      body { padding: 12px; }
+      .settings-header { padding: 12px; }
+      .settings-header h1 { font-size: 1.4rem; }
+      .team-grid { grid-template-columns: 1fr; }
+      .form-row { flex-direction: column; }
     }
   </style>
 </head>
 <body>
 
-  <header class="settings-header">
-    <h1 class="settings-title">⚙️ Settings</h1>
-    <nav class="settings-nav">
-      <a href="admin.html" class="nav-link">← Back to Admin</a>
-      <a href="index.html" class="nav-link">View Board</a>
-    </nav>
+  <header class="settings-header" role="banner">
+    <h1>⚙️ Settings</h1>
+    <div class="settings-header-right">
+      <span class="version-badge">v3.090</span>
+      <a href="admin.html" class="nav-btn">← Back to Admin</a>
+    </div>
   </header>
 
   <div class="settings-container">
+    <!-- Event Configuration Section -->
+    <div class="settings-section">
+      <h2 class="settings-section-title">📋 Event Configuration</h2>
 
-    <!-- EVENT CONFIG -->
-    <div class="settings-card">
-      <div class="card-header" tabindex="0" data-section="event" role="button" aria-expanded="true">
-        <div class="card-header-left">
-          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5-7h4v2h-4zm0 4h4v2h-4zm0-8h4v2h-4zM8 12h4v2H8zm0 4h4v2H8zm0-8h4v2H8z"/></svg>
-          <h2 class="card-title">Event Configuration</h2>
-        </div>
-        <span class="card-toggle open">▼</span>
+      <div class="form-group">
+        <label class="form-label">Event Name</label>
+        <input type="text" id="event-name" class="form-input" placeholder="Bingo 2026">
+        <div class="form-hint-text">The title displayed at the top of the board</div>
       </div>
-      <div class="card-body open" id="section-event">
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label" for="cfg-event-name">Event Name <span class="form-required">*</span></label>
-            <input type="text" id="cfg-event-name" class="form-input" placeholder="Bingo 2026" maxlength="40">
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="cfg-board-size">Board Size</label>
-            <select id="cfg-board-size" class="form-select">
-              <option value="3">3×3 (9 tiles)</option>
-              <option value="5" selected>5×5 (25 tiles)</option>
-              <option value="7">7×7 (49 tiles)</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label" for="cfg-start-date">Start Date</label>
-            <input type="date" id="cfg-start-date" class="form-input">
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="cfg-end-date">End Date</label>
-            <input type="date" id="cfg-end-date" class="form-input">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="cfg-description">Event Description</label>
-          <textarea id="cfg-description" class="form-textarea" placeholder="Describe your bingo event..." maxlength="500"></textarea>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label" for="cfg-sync-interval">Sync Interval (ms)</label>
-            <div class="form-hint">How often to fetch CSV data (30000 = 30 seconds)</div>
-            <input type="number" id="cfg-sync-interval" class="form-input" value="30000" min="5000" step="5000">
-          </div>
-        </div>
-        <div class="form-group" style="display:flex; gap:20px; flex-wrap:wrap;">
-          <label style="display:flex; align-items:center; gap:8px; margin:0;">
-            <input type="checkbox" id="cfg-show-codewords" checked>
-            <span style="font-size:13px;">Show Codewords</span>
-          </label>
-          <label style="display:flex; align-items:center; gap:8px; margin:0;">
-            <input type="checkbox" id="cfg-show-points" checked>
-            <span style="font-size:13px;">Show Point Values</span>
-          </label>
-          <label style="display:flex; align-items:center; gap:8px; margin:0;">
-            <input type="checkbox" id="cfg-allow-themes" checked>
-            <span style="font-size:13px;">Allow Theme Switching</span>
-          </label>
-        </div>
-        <div class="form-actions">
-          <button class="btn btn-primary" id="save-event-btn">Save Event Settings</button>
-          <button class="btn btn-secondary" id="reset-event-btn">Reset to Defaults</button>
+
+      <div class="form-group">
+        <label class="form-label">Codeword</label>
+        <input type="text" id="event-codeword" class="form-input" placeholder="e.g., SECRET123">
+        <div class="form-hint-text">Shared codeword for all teams (shown when players click the codeword display)</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Event Description (optional)</label>
+        <textarea id="event-description" class="form-textarea" placeholder="Brief description shown to all teams..."></textarea>
+        <div class="form-hint-text">Players can dismiss this banner</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">CSV Data URL</label>
+        <textarea id="csv-url" class="form-textarea" placeholder="https://docs.google.com/spreadsheets/export?..."></textarea>
+        <div class="form-hint-text">Google Sheets or spreadsheet export URL (same for all teams)</div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn" id="save-event-btn">💾 Save Event Configuration</button>
+      </div>
+    </div>
+
+    <!-- CSV Format Help -->
+    <div class="settings-section">
+      <h2 class="settings-section-title">📊 CSV Format Reference</h2>
+      <div style="background:var(--bg-well); padding:12px; border-radius:4px; font-family:monospace; font-size:0.8rem; color:var(--text-dim); overflow-x:auto;">
+        <div style="color:var(--text-bright);">Image | Title | Description | Points | Team1Items | Team1Current | Team1Goal | Team2Items | Team2Current | Team2Goal | Team3Items | ...</div>
+        <div style="margin-top:8px; color:var(--text-dim);">
+          Column Pattern:<br/>
+          Team N: Items(4+((N-1)*3)) | Current(5+((N-1)*3)) | Goal(6+((N-1)*3))
         </div>
       </div>
     </div>
 
-    <!-- CSV Configuration -->
-    <div class="settings-card">
-      <div class="card-header" tabindex="0" data-section="csv" role="button" aria-expanded="false">
-        <div class="card-header-left">
-          <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-          <h2 class="card-title">CSV Configuration</h2>
-        </div>
-        <span class="card-toggle">▼</span>
-      </div>
-      <div class="card-body" id="section-csv">
-        <div class="form-group">
-          <label class="form-label" for="cfg-csv-url">Unified CSV URL <span class="form-required">*</span></label>
-          <div class="form-hint">Google Sheet published as CSV with columns: TileImage, TileTitle, TileDescription, TilePointValue, Team1Items, Team1Current, Team1Goal, Team2Items... etc</div>
-          <input type="url" id="cfg-csv-url" class="form-input" placeholder="https://docs.google.com/spreadsheets/d/e/...&output=csv">
-        </div>
-        <div class="form-actions">
-          <button class="btn btn-secondary" id="test-csv-btn">Test CSV Connection</button>
-          <button class="btn btn-primary" id="save-csv-btn">Save CSV URL</button>
-        </div>
-        <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border-main);">
-          <div class="form-label">Expected CSV Structure:</div>
-          <table class="var-table">
-            <thead>
-              <tr>
-                <th>Columns 1-4 (Shared)</th>
-                <th>Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><span class="var-key">TileImage</span></td>
-                <td><span class="var-type url">url</span></td>
-                <td>Image filename or URL</td>
-              </tr>
-              <tr>
-                <td><span class="var-key">TileTitle</span></td>
-                <td><span class="var-type string">string</span></td>
-                <td>Tile display name</td>
-              </tr>
-              <tr>
-                <td><span class="var-key">TileDescription</span></td>
-                <td><span class="var-type string">string</span></td>
-                <td>Modal description</td>
-              </tr>
-              <tr>
-                <td><span class="var-key">TilePointValue</span></td>
-                <td><span class="var-type number">number</span></td>
-                <td>Points for completion</td>
-              </tr>
-            </tbody>
-          </table>
-          <table class="var-table" style="margin-top:12px;">
-            <thead>
-              <tr>
-                <th>Team Columns (repeated for Teams 1-8)</th>
-                <th>Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><span class="var-key">Team{N}Items</span></td>
-                <td><span class="var-type string">string</span></td>
-                <td>Comma-separated checklist items</td>
-              </tr>
-              <tr>
-                <td><span class="var-key">Team{N}Current</span></td>
-                <td><span class="var-type number">number</span></td>
-                <td>Current progress</td>
-              </tr>
-              <tr>
-                <td><span class="var-key">Team{N}Goal</span></td>
-                <td><span class="var-type number">number</span></td>
-                <td>Goal target</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+    <!-- Teams Configuration Section -->
+    <div class="settings-section">
+      <h2 class="settings-section-title">👥 Teams Configuration</h2>
+
+      <div class="team-grid" id="teams-grid"></div>
+
+      <div class="form-actions">
+        <button class="btn" id="save-teams-btn">💾 Save Teams</button>
       </div>
     </div>
-
-    <!-- TEAM MANAGEMENT -->
-    <div class="settings-card">
-      <div class="card-header" tabindex="0" data-section="teams" role="button" aria-expanded="false">
-        <div class="card-header-left">
-          <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-          <h2 class="card-title">Team Configuration</h2>
-          <span class="team-count-badge" id="team-count-badge">0 Teams</span>
-        </div>
-        <span class="card-toggle">▼</span>
-      </div>
-      <div class="card-body" id="section-teams">
-        <div class="form-hint" style="margin-bottom:14px;">
-          Configure up to 8 teams. Each team maps to columns in the CSV (Team1Items, Team1Current, Team1Goal, etc).
-        </div>
-        <div class="team-list" id="team-list"></div>
-        <div class="form-actions" style="margin-top:16px;">
-          <button class="btn btn-secondary" id="add-team-btn">+ Add New Team</button>
-          <button class="btn btn-primary" id="save-teams-btn">Save All Teams</button>
-        </div>
-        <div style="margin-top:20px; padding-top:20px; border-top:1px solid var(--border-main);">
-          <div class="form-label">Shareable Team Links</div>
-          <div class="form-hint">Share these links with teams. Each link locks them to their own board.</div>
-          <div id="team-links-container" style="display:flex; flex-direction:column; gap:12px; margin-top:12px;"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- IMPORT/EXPORT -->
-    <div class="settings-card">
-      <div class="card-header" tabindex="0" data-section="io" role="button" aria-expanded="false">
-        <div class="card-header-left">
-          <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-          <h2 class="card-title">Import / Export</h2>
-        </div>
-        <span class="card-toggle">▼</span>
-      </div>
-      <div class="card-body" id="section-io">
-        <div class="form-hint">Backup and restore your entire configuration as JSON.</div>
-        <div class="form-actions" style="margin:12px 0;">
-          <button class="btn btn-secondary" id="export-config-btn">📥 Export Configuration</button>
-          <button class="btn btn-secondary" id="import-config-btn">📤 Import Configuration</button>
-        </div>
-        <textarea id="io-area" class="form-textarea" style="display:none;"></textarea>
-      </div>
-    </div>
-
-    <!-- DANGER ZONE -->
-    <div class="settings-card">
-      <div class="card-header" tabindex="0" data-section="danger" role="button" aria-expanded="false">
-        <div class="card-header-left">
-          <svg viewBox="0 0 24 24" style="fill:#f44336;"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-          <h2 class="card-title">Danger Zone</h2>
-        </div>
-        <span class="card-toggle">▼</span>
-      </div>
-      <div class="card-body" id="section-danger">
-        <div class="danger-zone">
-          <div style="margin-bottom:12px;">
-            <p style="margin:0 0 8px 0; font-weight:700; color:var(--accent-danger);">⚠️ Warning: These actions cannot be undone.</p>
-            <div class="form-actions">
-              <button class="btn btn-danger" id="clear-teams-btn">Clear All Teams</button>
-              <button class="btn btn-danger" id="clear-all-data-btn">Wipe All Data</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
+
+  <footer class="page-footer">
+    <div>Bingo Board Settings • v3.090</div>
+  </footer>
 
   <div id="toast" class="toast"></div>
 
   <script>
 (() => {
+  const APP_VERSION = '3.090';
+
   const STORAGE_KEYS = {
     eventConfig: 'bingo-event-config',
     teams: 'bingo-teams-config',
-    csvUrl: 'bingo-csv-url'
+    tiles: 'bingo-tiles-config',
+    completion: 'bingo-completion',
+    theme: 'bingo-theme',
+    customThemes: 'bingo-custom-themes',
+    syncInterval: 'bingo-sync-interval',
+    codewordVisible: 'bingo-codeword-visible'
+  };
+
+  const DEFAULT_TEAMS = {
+    'Team1': { name: "Team 1", url: "", points: 0, teamNumber: 1 },
+    'Team2': { name: "Team 2", url: "", points: 0, teamNumber: 2 },
+    'Team3': { name: "Team 3", url: "", points: 0, teamNumber: 3 },
+    'Team4': { name: "Team 4", url: "", points: 0, teamNumber: 4 },
+    'Team5': { name: "Team 5", url: "", points: 0, teamNumber: 5 },
+    'Team6': { name: "Team 6", url: "", points: 0, teamNumber: 6 },
+    'Team7': { name: "Team 7", url: "", points: 0, teamNumber: 7 },
+    'Team8': { name: "Team 8", url: "", points: 0, teamNumber: 8 }
   };
 
   const DEFAULT_EVENT = {
     name: 'Bingo 2026',
-    boardSize: 5,
-    startDate: '',
-    endDate: '',
+    codeword: '',
     description: '',
-    syncInterval: 30000,
-    showCodewords: true,
-    showPoints: true,
-    allowThemes: true
-  };
-
-  const DEFAULT_TEAMS = {
-    Warriors: { name: 'Team Warriors', color: '#e94560', points: 0 },
-    Legends: { name: 'Team Legends', color: '#4db8ff', points: 0 },
-    Nexus: { name: 'Team Nexus', color: '#66bb6a', points: 0 },
-    Phoenix: { name: 'Team Phoenix', color: '#ffa726', points: 0 },
-    Titans: { name: 'Team Titans', color: '#ab47bc', points: 0 },
-    Vanguard: { name: 'Team Vanguard', color: '#ec407a', points: 0 },
-    Zenith: { name: 'Team Zenith', color: '#29b6f6', points: 0 },
-    Apex: { name: 'Team Apex', color: '#ffee58', points: 0 }
+    syncInterval: 30000
   };
 
   let eventConfig = { ...DEFAULT_EVENT };
   let teamsConfig = {};
-  let csvUrl = '';
 
   const $ = id => document.getElementById(id);
-  const DOM = {
-    eventName: $('cfg-event-name'),
-    boardSize: $('cfg-board-size'),
-    startDate: $('cfg-start-date'),
-    endDate: $('cfg-end-date'),
-    description: $('cfg-description'),
-    syncInterval: $('cfg-sync-interval'),
-    showCodewords: $('cfg-show-codewords'),
-    showPoints: $('cfg-show-points'),
-    allowThemes: $('cfg-allow-themes'),
-    saveEventBtn: $('save-event-btn'),
-    resetEventBtn: $('reset-event-btn'),
-    csvUrl: $('cfg-csv-url'),
-    testCsvBtn: $('test-csv-btn'),
-    saveCsvBtn: $('save-csv-btn'),
-    teamList: $('team-list'),
-    teamCountBadge: $('team-count-badge'),
-    addTeamBtn: $('add-team-btn'),
-    saveTeamsBtn: $('save-teams-btn'),
-    exportBtn: $('export-config-btn'),
-    importBtn: $('import-config-btn'),
-    ioArea: $('io-area'),
-    clearTeamsBtn: $('clear-teams-btn'),
-    clearAllBtn: $('clear-all-data-btn'),
-    toast: $('toast')
-  };
 
-  const save = (key, val) => { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} };
-  const load = (key) => { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : null; } catch { return null; } };
-
-  let toastTimer = null;
-  const toast = (msg, type = 'success', duration = 2500) => {
-    DOM.toast.textContent = msg;
-    DOM.toast.className = 'toast show ' + (type !== 'success' ? type : '');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => DOM.toast.classList.remove('show'), duration);
-  };
-
-  const escapeHTML = (str) => {
-    const d = document.createElement('div');
-    d.appendChild(document.createTextNode(String(str ?? '')));
-    return d.innerHTML;
-  };
-
-  function initCards() {
-    document.querySelectorAll('.card-header').forEach(header => {
-      header.addEventListener('click', () => toggleCard(header));
-      header.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCard(header); }
-      });
-    });
-  }
-
-  function toggleCard(header) {
-    const sectionId = 'section-' + header.dataset.section;
-    const body = $(sectionId);
-    const toggle = header.querySelector('.card-toggle');
-    if (!body) return;
-    const isOpen = body.classList.contains('open');
-    body.classList.toggle('open');
-    toggle.classList.toggle('open');
-    header.setAttribute('aria-expanded', String(!isOpen));
-  }
-
-  function loadEventConfig() {
-    const saved = load(STORAGE_KEYS.eventConfig);
-    if (saved) eventConfig = { ...DEFAULT_EVENT, ...saved };
-    populateEventForm();
-  }
-
-  function populateEventForm() {
-    DOM.eventName.value = eventConfig.name;
-    DOM.boardSize.value = eventConfig.boardSize || 5;
-    DOM.startDate.value = eventConfig.startDate || '';
-    DOM.endDate.value = eventConfig.endDate || '';
-    DOM.description.value = eventConfig.description || '';
-    DOM.syncInterval.value = String(eventConfig.syncInterval || 30000);
-    DOM.showCodewords.checked = eventConfig.showCodewords !== false;
-    DOM.showPoints.checked = eventConfig.showPoints !== false;
-    DOM.allowThemes.checked = eventConfig.allowThemes !== false;
-  }
-
-  function saveEventConfig() {
-    const name = DOM.eventName.value.trim();
-    if (!name) {
-      DOM.eventName.classList.add('invalid');
-      toast('Event name is required', 'error');
-      DOM.eventName.focus();
-      return;
-    }
-    DOM.eventName.classList.remove('invalid');
-
-    eventConfig = {
-      name: name,
-      boardSize: parseInt(DOM.boardSize.value, 10) || 5,
-      startDate: DOM.startDate.value,
-      endDate: DOM.endDate.value,
-      description: DOM.description.value.trim(),
-      syncInterval: parseInt(DOM.syncInterval.value, 10) || 30000,
-      showCodewords: DOM.showCodewords.checked,
-      showPoints: DOM.showPoints.checked,
-      allowThemes: DOM.allowThemes.checked
-    };
-
-    save(STORAGE_KEYS.eventConfig, eventConfig);
-    toast('Event settings saved!');
-  }
-
-  function loadCsvUrl() {
-    csvUrl = load(STORAGE_KEYS.csvUrl) || '';
-    DOM.csvUrl.value = csvUrl;
-  }
-
-  function saveCsvUrl() {
-    const url = DOM.csvUrl.value.trim();
-    if (!url) {
-      DOM.csvUrl.classList.add('invalid');
-      toast('CSV URL is required', 'error');
-      DOM.csvUrl.focus();
-      return;
-    }
-    if (!url.includes('output=csv')) {
-      toast('URL must include &output=csv', 'warning');
-      return;
-    }
-    DOM.csvUrl.classList.remove('invalid');
-    csvUrl = url;
-    save(STORAGE_KEYS.csvUrl, csvUrl);
-    toast('CSV URL saved!');
-  }
-
-  async function testCsvUrl() {
-    const url = DOM.csvUrl.value.trim();
-    if (!url) { toast('Enter a URL first', 'error'); return; }
+  const storageLoad = (k, fb) => {
     try {
-      DOM.testCsvBtn.textContent = 'Testing...';
-      DOM.testCsvBtn.disabled = true;
-      const res = await fetch(`${url}&t=${Date.now()}`, {
-        headers: { 'pragma': 'no-cache', 'cache-control': 'no-cache' }
-      });
-      const text = await res.text();
-      const lines = text.split('\n').filter(l => l.trim());
-      toast(`✓ Connection OK! ${lines.length - 1} rows found.`);
-    } catch (e) {
-      toast(`✗ Connection failed: ${e.message}`, 'error');
-    } finally {
-      DOM.testCsvBtn.textContent = 'Test CSV Connection';
-      DOM.testCsvBtn.disabled = false;
+      const v = localStorage.getItem(k);
+      return v ? JSON.parse(v) : fb;
+    } catch {
+      return fb;
     }
-  }
+  };
 
-  function loadTeams() {
-    const saved = load(STORAGE_KEYS.teams);
-    teamsConfig = saved || { ...DEFAULT_TEAMS };
-    renderTeamList();
-  }
+  const storageSave = (k, v) => {
+    try {
+      localStorage.setItem(k, JSON.stringify(v));
+    } catch {}
+  };
 
-  function renderTeamList() {
-    const keys = Object.keys(teamsConfig);
-    DOM.teamCountBadge.textContent = `${keys.length} Team${keys.length !== 1 ? 's' : ''}`;
-    DOM.teamList.innerHTML = '';
+  const showToast = (msg, duration = 3000) => {
+    const toast = $('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), duration);
+  };
 
-    if (keys.length === 0) {
-      DOM.teamList.innerHTML = '<div style="color:var(--text-dim); font-size:0.85rem; padding:8px 0;">No teams configured.</div>';
-      return;
-    }
+  const loadConfig = () => {
+    eventConfig = storageLoad(STORAGE_KEYS.eventConfig, { ...DEFAULT_EVENT });
+    teamsConfig = storageLoad(STORAGE_KEYS.teams, { ...DEFAULT_TEAMS });
+  };
+
+  const saveEventConfig = () => {
+    eventConfig.name = ($('event-name').value.trim() || 'Bingo 2026').substring(0, 50);
+    eventConfig.codeword = $('event-codeword').value.trim();
+    eventConfig.description = $('event-description').value.trim();
+
+    const csvUrl = $('csv-url').value.trim();
+    
+    // Apply CSV URL to all teams
+    Object.keys(teamsConfig).forEach(key => {
+      teamsConfig[key].url = csvUrl;
+    });
+
+    storageSave(STORAGE_KEYS.eventConfig, eventConfig);
+    storageSave(STORAGE_KEYS.teams, teamsConfig);
+
+    showToast('✓ Event configuration saved!');
+  };
+
+  const saveTeamsConfig = () => {
+    // Update team names and points from form inputs
+    Object.keys(teamsConfig).forEach(key => {
+      const nameInp = document.querySelector(`[data-team-name="${key}"]`);
+      const pointsInp = document.querySelector(`[data-team-points="${key}"]`);
+
+      if (nameInp && nameInp.value.trim()) {
+        teamsConfig[key].name = nameInp.value.trim().substring(0, 30);
+      }
+
+      if (pointsInp) {
+        teamsConfig[key].points = Math.max(0, parseInt(pointsInp.value, 10) || 0);
+      }
+    });
+
+    storageSave(STORAGE_KEYS.teams, teamsConfig);
+    showToast('✓ Teams configuration saved!');
+  };
+
+  const renderEventForm = () => {
+    $('event-name').value = eventConfig.name || '';
+    $('event-codeword').value = eventConfig.codeword || '';
+    $('event-description').value = eventConfig.description || '';
+    
+    // CSV URL is same for all teams
+    const csvUrl = teamsConfig.Team1?.url || '';
+    $('csv-url').value = csvUrl;
+  };
+
+  const renderTeamsGrid = () => {
+    const grid = $('teams-grid');
+    if (!grid) return;
 
     const frag = document.createDocumentFragment();
-    keys.forEach(key => {
-      const team = teamsConfig[key];
-      const item = document.createElement('div');
-      item.className = 'team-item';
-      item.dataset.key = key;
 
-      item.innerHTML = `
-        <div class="team-item-header" tabindex="0" role="button">
-          <div class="team-item-name">
-            <div class="team-dot" style="background:${escapeHTML(team.color || '#888')};"></div>
-            <span>${escapeHTML(team.name || key)}</span>
-          </div>
-          <div class="team-item-meta">
-            <span>${escapeHTML(key)}</span>
-            <span>▼</span>
-          </div>
+    Object.entries(teamsConfig).forEach(([key, team]) => {
+      const card = document.createElement('div');
+      card.className = 'team-card';
+
+      card.innerHTML = `
+        <h3 class="team-card-title">Team ${team.teamNumber}</h3>
+        <div class="form-group">
+          <label class="form-label">Team Name</label>
+          <input type="text" data-team-name="${key}" class="form-input" value="${team.name || ''}" placeholder="Team Name">
+          <div class="form-hint-text">How this team is displayed</div>
         </div>
-        <div class="team-item-body">
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">Team Key</label>
-              <input type="text" class="form-input medium team-key" value="${escapeHTML(key)}" maxlength="20">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Display Name</label>
-              <input type="text" class="form-input team-name" value="${escapeHTML(team.name || '')}">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">Team Color</label>
-              <div class="form-inline">
-                <input type="color" class="color-swatch team-color-picker" value="${team.color || '#e94560'}">
-                <input type="text" class="form-input short team-color-hex" value="${escapeHTML(team.color || '#e94560')}" maxlength="7">
-              </div>
-            </div>
-          </div>
-          <div class="team-item-actions">
-            <button class="btn btn-danger btn-sm delete-team-btn">Delete Team</button>
-          </div>
+        <div class="form-group">
+          <label class="form-label">Current Points</label>
+          <input type="number" data-team-points="${key}" class="form-input" value="${team.points || 0}" min="0">
+          <div class="form-hint-text">Admin-set points (can be updated by players if enabled)</div>
         </div>
       `;
 
-      const header = item.querySelector('.team-item-header');
-      const body = item.querySelector('.team-item-body');
-      header.addEventListener('click', () => {
-        const open = body.classList.contains('open');
-        body.classList.toggle('open');
-      });
-
-      const picker = item.querySelector('.team-color-picker');
-      const hex = item.querySelector('.team-color-hex');
-      picker.addEventListener('input', () => { hex.value = picker.value; });
-      hex.addEventListener('input', () => {
-        if (/^#[0-9a-f]{6}$/i.test(hex.value)) picker.value = hex.value;
-      });
-
-      item.querySelector('.delete-team-btn').addEventListener('click', () => {
-        if (confirm(`Delete team "${team.name || key}"?`)) {
-          item.remove();
-          DOM.teamCountBadge.textContent = `${DOM.teamList.querySelectorAll('.team-item').length} Team(s)`;
-        }
-      });
-
-      frag.appendChild(item);
+      frag.appendChild(card);
     });
 
-    DOM.teamList.appendChild(frag);
-  }
+    grid.innerHTML = '';
+    grid.appendChild(frag);
+  };
 
-  function generateTeamLinks() {
-    const container = document.getElementById('team-links-container');
-    if (!container) return;
-    
-    const keys = Object.keys(teamsConfig);
-    const frag = document.createDocumentFragment();
-    
-    keys.forEach(key => {
-      const team = teamsConfig[key];
-      const baseUrl = window.location.origin + window.location.pathname.replace('settings.html', 'index.html');
-      const teamUrl = `${baseUrl}?team=${key}`;
-      
-      const linkDiv = document.createElement('div');
-      linkDiv.style.cssText = 'background:var(--bg-main); border:1px solid var(--border-main); padding:12px; border-radius:4px; display:flex; gap:8px; align-items:center;';
-      
-      linkDiv.innerHTML = `
-        <div style="flex:1; overflow:hidden;">
-          <div style="font-size:12px; color:var(--text-dim); margin-bottom:4px;">${escapeHTML(team.name || key)}</div>
-          <input type="text" readonly value="${teamUrl}" class="team-link-input" style="width:100%; padding:6px; background:var(--bg-well); border:1px solid var(--border-main); color:var(--text-main); border-radius:3px; font-family:monospace; font-size:11px;">
-        </div>
-        <button class="btn btn-sm btn-secondary" onclick="navigator.clipboard.writeText('${teamUrl}'); alert('Copied!');">Copy</button>
-      `;
-      
-      frag.appendChild(linkDiv);
-    });
-    
-    container.innerHTML = '';
-    container.appendChild(frag);
-  }
+  const init = () => {
+    loadConfig();
+    renderEventForm();
+    renderTeamsGrid();
 
-  function collectTeamsFromDOM() {
-    const newTeams = {};
-    const items = DOM.teamList.querySelectorAll('.team-item');
-    const errors = [];
-
-    items.forEach((item, idx) => {
-      const key = item.querySelector('.team-key').value.trim().replace(/\s+/g, '_');
-      const name = item.querySelector('.team-name').value.trim();
-      const color = item.querySelector('.team-color-hex').value.trim() || '#888888';
-
-      if (!key) errors.push(`Team ${idx + 1}: Key is required`);
-      if (!name) errors.push(`Team ${idx + 1}: Name is required`);
-      if (newTeams[key]) errors.push(`Duplicate team key: "${key}"`);
-
-      if (key) newTeams[key] = { name, color, points: 0 };
-    });
-
-    return { teams: newTeams, errors };
-  }
-
-  function saveTeams() {
-    const { teams, errors } = collectTeamsFromDOM();
-    if (errors.length > 0) {
-      toast(errors[0], 'error');
-      return;
-    }
-    teamsConfig = teams;
-    save(STORAGE_KEYS.teams, teamsConfig);
-    renderTeamList();
-    generateTeamLinks();
-    toast(`${Object.keys(teams).length} team(s) saved!`);
-  }
-
-  function addNewTeam() {
-    const count = DOM.teamList.querySelectorAll('.team-item').length;
-    if (count >= 8) {
-      toast('Maximum 8 teams allowed', 'warning');
-      return;
-    }
-    const newKey = `Team${count + 1}`;
-    teamsConfig[newKey] = {
-      name: `New Team ${count + 1}`,
-      color: '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0')
-    };
-    renderTeamList();
-    generateTeamLinks();
-    toast('New team added');
-  }
-
-  function exportConfig() {
-    const data = {
-      version: '1.0',
-      exportedAt: new Date().toISOString(),
-      event: eventConfig,
-      teams: teamsConfig,
-      csvUrl: csvUrl
-    };
-    DOM.ioArea.value = JSON.stringify(data, null, 2);
-    DOM.ioArea.style.display = 'block';
-    DOM.ioArea.focus();
-    DOM.ioArea.select();
-    toast('Configuration exported');
-  }
-
-  function importConfig() {
-    if (DOM.ioArea.style.display === 'none') {
-      DOM.ioArea.style.display = 'block';
-      DOM.ioArea.value = '';
-      DOM.ioArea.focus();
-      toast('Paste JSON then click Import again', 'warning');
-      return;
-    }
-
-    const raw = DOM.ioArea.value.trim();
-    if (!raw) { toast('Paste JSON first', 'error'); return; }
-
-    try {
-      const data = JSON.parse(raw);
-      if (data.event) { eventConfig = { ...DEFAULT_EVENT, ...data.event }; save(STORAGE_KEYS.eventConfig, eventConfig); populateEventForm(); }
-      if (data.teams) { teamsConfig = data.teams; save(STORAGE_KEYS.teams, teamsConfig); renderTeamList(); }
-      if (data.csvUrl) { csvUrl = data.csvUrl; save(STORAGE_KEYS.csvUrl, csvUrl); DOM.csvUrl.value = csvUrl; }
-      DOM.ioArea.style.display = 'none';
-      toast('Configuration imported!');
-    } catch (e) {
-      toast('Invalid JSON: ' + e.message, 'error');
-    }
-  }
-
-  function clearAllTeams() {
-    if (!confirm('Delete ALL teams?')) return;
-    teamsConfig = {};
-    save(STORAGE_KEYS.teams, teamsConfig);
-    renderTeamList();
-    toast('All teams deleted', 'warning');
-  }
-
-  function clearAllData() {
-    if (!confirm('Wipe entire configuration?')) return;
-    if (!confirm('FINAL WARNING — Cannot undo. Proceed?')) return;
-
-    localStorage.removeItem(STORAGE_KEYS.eventConfig);
-    localStorage.removeItem(STORAGE_KEYS.teams);
-    localStorage.removeItem(STORAGE_KEYS.csvUrl);
-
-    eventConfig = { ...DEFAULT_EVENT };
-    teamsConfig = {};
-    csvUrl = '';
-
-    populateEventForm();
-    renderTeamList();
-    loadCsvUrl();
-
-    toast('All data wiped', 'warning');
-  }
-
-  function resetEventDefaults() {
-    if (!confirm('Reset to defaults?')) return;
-    eventConfig = { ...DEFAULT_EVENT };
-    save(STORAGE_KEYS.eventConfig, eventConfig);
-    populateEventForm();
-    toast('Reset to defaults');
-  }
-
-  function init() {
-    initCards();
-    loadEventConfig();
-    loadCsvUrl();
-    loadTeams();
-
-    DOM.saveEventBtn.addEventListener('click', saveEventConfig);
-    DOM.resetEventBtn.addEventListener('click', resetEventDefaults);
-    DOM.testCsvBtn.addEventListener('click', testCsvUrl);
-    DOM.saveCsvBtn.addEventListener('click', saveCsvUrl);
-    DOM.addTeamBtn.addEventListener('click', addNewTeam);
-    DOM.saveTeamsBtn.addEventListener('click', saveTeams);
-    DOM.exportBtn.addEventListener('click', exportConfig);
-    DOM.importBtn.addEventListener('click', importConfig);
-    DOM.clearTeamsBtn.addEventListener('click', clearAllTeams);
-    DOM.clearAllBtn.addEventListener('click', clearAllData);
-  }
+    $('save-event-btn').addEventListener('click', saveEventConfig);
+    $('save-teams-btn').addEventListener('click', saveTeamsConfig);
+  };
 
   init();
 })();
   </script>
-
 </body>
 </html>
