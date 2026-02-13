@@ -1101,24 +1101,57 @@
 
     for (let i = 0; i < tiles.length; i++) {
       const tile = tiles[i];
+      
       const cell = document.createElement('div');
-      cell.className = 'grid-item' + (tile.isCompleted ? ' completed' : '');
+      cell.className = 'tile' + (tile.isCompleted ? ' completed' : '') + (tile.noData ? ' no-data' : '');
       cell.id = 'tile-' + tile.id;
+      cell.dataset.tileIndex = String(i);
       cell.setAttribute('role', 'button');
       cell.setAttribute('tabindex', '0');
 
-      cell.innerHTML = `
-        <div class="grid-item-inner">
-          <img lazy src="${escapeHTML(tile.img)}" alt="${escapeHTML(tile.title)}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22%3E%3C/svg%3E';">
-          <div class="grid-item-overlay">
-            <div class="grid-item-title">${escapeHTML(tile.title)}</div>
-            <div class="grid-item-progress" style="width:${tile.percent}%;"></div>
-          </div>
+      const headerBox = document.createElement('div');
+      headerBox.className = 'header-box';
+      headerBox.innerHTML = `<div class="header-content">${escapeHTML(tile.title)}</div>`;
+
+      const imgContainer = document.createElement('div');
+      imgContainer.className = 'img-container';
+      if (tile.img) {
+        const img = document.createElement('img');
+        img.src = tile.img;
+        img.alt = escapeHTML(tile.title);
+        img.onerror = () => handleImgError(img);
+        imgContainer.appendChild(img);
+      }
+
+      const progressContainer = document.createElement('div');
+      progressContainer.className = 'progress-container';
+      progressContainer.innerHTML = `
+        <div class="progress-bg">
+          <div class="progress-fill" style="width:${tile.percent}%; background-color:${tile.barColor};"></div>
         </div>
       `;
 
-      cell.addEventListener('click', () => openModal(tile));
-      cell.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(tile); } });
+      const checklistBox = document.createElement('div');
+      checklistBox.className = 'checklist-box';
+      checklistBox.innerHTML = tile.checklistHtml || '<div style="color:var(--text-dim);">No items</div>';
+
+      const pointBadge = document.createElement('div');
+      pointBadge.className = 'point-badge';
+      pointBadge.textContent = `${tile.points} PTS`;
+
+      cell.appendChild(headerBox);
+      cell.appendChild(imgContainer);
+      cell.appendChild(progressContainer);
+      cell.appendChild(checklistBox);
+      cell.appendChild(pointBadge);
+
+      cell.addEventListener('click', () => openTileModalByIndex(i, cell));
+      cell.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openTileModalByIndex(i, cell);
+        }
+      });
 
       container.appendChild(cell);
     }
@@ -1189,24 +1222,31 @@
   const openTileModalByIndex = (tileIndex, triggerEl) => {
     const t = tiles[tileIndex];
     if (!t || t.noData) return;
+    
     DOM.box.classList.toggle('completed', !!t.isCompleted);
     hideViews();
     DOM.viewStd.style.display = 'block';
+    
     DOM.modalHeader.innerText = `${t.id} | ${t.title}`;
     DOM.modalPoints.innerText = `${t.points} PTS`;
     DOM.modalProgressSection.style.display = t.isCompleted ? 'none' : 'block';
     DOM.modalBar.style.width = t.percent + '%';
     DOM.modalBar.style.backgroundColor = t.barColor;
-    DOM.modalList.innerHTML = t.checklistHtml;
-    DOM.modalDesc.innerText = t.description || '';
+    DOM.modalList.innerHTML = t.checklistHtml || '<div style="color:var(--text-dim);">No items</div>';
+    DOM.modalDesc.innerText = t.description || '(No description)';
+    
     DOM.modalImage.src = '';
     DOM.modalImage.onerror = null;
     DOM.modalImage.style.visibility = 'visible';
     DOM.modalImage.alt = t.title;
+    
     if (t.img) {
       DOM.modalImage.onerror = () => handleImgError(DOM.modalImage);
       DOM.modalImage.src = t.img;
-    } else { handleImgError(DOM.modalImage); }
+    } else {
+      handleImgError(DOM.modalImage);
+    }
+    
     showModal(triggerEl, true);
   };
 
@@ -1855,23 +1895,6 @@
         restartInterval();
         fetchData(false);
       }
-    });
-
-    // Grid clicks
-    DOM.grid.addEventListener('click', (e) => {
-      const tile = e.target.closest('.tile');
-      if (!tile || tile.classList.contains('no-data')) return;
-      const idx = parseInt(tile.dataset.tileIndex, 10);
-      openTileModalByIndex(idx, tile);
-    });
-
-    DOM.grid.addEventListener('keydown', (e) => {
-      if (e.key !== 'Enter' && e.key !== ' ') return;
-      const tile = e.target.closest('.tile');
-      if (!tile || tile.classList.contains('no-data')) return;
-      e.preventDefault();
-      const idx = parseInt(tile.dataset.tileIndex, 10);
-      openTileModalByIndex(idx, tile);
     });
 
     fetchData(false);
