@@ -99,8 +99,8 @@
     .minimap-wrapper:hover { transform: scale(1.05); border-color: var(--accent); }
     .minimap-wrapper:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     .minimap-container {
-      display: grid; grid-template-columns: repeat(7, 10px);
-      grid-template-rows: repeat(7, 10px); gap: 2px; pointer-events: none;
+      display: grid; grid-template-columns: repeat(var(--grid-cols, 7), 10px);
+      grid-template-rows: repeat(var(--grid-rows, 7), 10px); gap: 2px; pointer-events: none;
     }
     .mini-tile {
       width: 10px; height: 10px; background: var(--bg-body);
@@ -110,7 +110,7 @@
     .mini-tile.complete { background: var(--bg-completed); color: var(--text-completed); }
 
     .grid-container {
-      display: grid; grid-template-columns: repeat(7, 1fr);
+      display: grid; grid-template-columns: repeat(var(--grid-cols, 7), 1fr);
       gap: 10px; width: 100%; max-width: 1580px;
     }
 
@@ -275,7 +275,7 @@
     .modal-close-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
     .large-map-grid {
-      display: grid; grid-template-columns: repeat(7, 1fr);
+      display: grid; grid-template-columns: repeat(var(--grid-cols, 7), 1fr);
       gap: 5px; background: var(--bg-body); padding: 10px;
       border: 2px solid var(--border-main); width: 100%; aspect-ratio: 1/1;
     }
@@ -447,18 +447,18 @@
 
     /* --- Responsive --- */
     @media (max-width: 1400px) {
-      .grid-container { grid-template-columns: repeat(5, 1fr); }
+      .grid-container { grid-template-columns: repeat(var(--grid-cols-tablet, 5), 1fr); }
       .minimap-wrapper.in-dashboard { display: none; }
       .minimap-wrapper.floating {
         display: block; position: fixed; bottom: 20px; right: 20px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.7);
         background: var(--bg-well); border: 2px solid var(--border-main); z-index: 1000;
       }
-      .minimap-wrapper.floating .minimap-container { grid-template-columns: repeat(7, 12px); grid-template-rows: repeat(7, 12px); }
+      .minimap-wrapper.floating .minimap-container { grid-template-columns: repeat(var(--grid-cols, 7), 12px); grid-template-rows: repeat(var(--grid-rows, 7), 12px); }
       .minimap-wrapper.floating .mini-tile { width: 12px; height: 12px; font-size: 7px; }
     }
     @media (min-width: 1401px) { .minimap-wrapper.floating { display: none; } }
-    @media (max-width: 1000px) { .grid-container { grid-template-columns: repeat(4, 1fr); } }
+    @media (max-width: 1000px) { .grid-container { grid-template-columns: repeat(var(--grid-cols-mobile, 4), 1fr); } }
     @media (max-width: 768px) {
       body { padding: 8px; }
       .dashboard { padding: 8px 12px; gap: 6px; }
@@ -473,7 +473,7 @@
       .event-desc-bar-text { font-size: 0.8rem; }
     }
     @media (max-width: 600px) {
-      .grid-container { grid-template-columns: repeat(3, 1fr); }
+      .grid-container { grid-template-columns: repeat(var(--grid-cols-small, 3), 1fr); }
       .dashboard { padding: 6px 10px; }
       #event-title { font-size: 1rem; }
       #team-name { font-size: 0.8rem; }
@@ -700,8 +700,10 @@
 
   <script>
 (() => {
-  const APP_VERSION = '3.100';
-  const MAX_TILES = 49;
+  const APP_VERSION = '3.110';
+  let maxTiles = 49;
+  let gridCols = 7;
+  let gridRows = 7;
 
   const STORAGE_KEYS = {
     eventConfig: 'bingo-event-config',
@@ -923,8 +925,8 @@
   let currentTeamKey = '';
   let codewordSecret = '';
   let lastSeenHash = null;
-  let completion = Array(MAX_TILES).fill(false);
-  let tiles = Array(MAX_TILES).fill(null);
+  let completion = Array(maxTiles).fill(false);
+  let tiles = Array(maxTiles).fill(null);
   let fetchController = null;
   let syncIntervalId = null;
   let syncMs = 30000;
@@ -1039,7 +1041,7 @@
     descBarClose: $('event-desc-bar-close'),
   };
 
-  const miniNodes = Array.from({ length: MAX_TILES + 1 }, () => []);
+  let miniNodes = [];
 
   /* ========================= UTILS ========================= */
   const storageSave = (k, v) => { try { localStorage.setItem(k, String(v)); } catch {} };
@@ -1096,10 +1098,10 @@
   const setMinimapComplete = (id1, done) => {
     for (const n of miniNodes[id1]) n.classList.toggle('complete', !!done);
   };
-  const resetMinimaps = () => { for (let i = 1; i <= MAX_TILES; i++) setMinimapComplete(i, false); };
+  const resetMinimaps = () => { for (let i = 1; i <= maxTiles; i++) setMinimapComplete(i, false); };
   const updateCompletedStat = () => {
     const done = completion.reduce((a, v) => a + (v ? 1 : 0), 0);
-    DOM.completedCount.innerText = `${done}/${MAX_TILES}`;
+    DOM.completedCount.innerText = `${done}/${maxTiles}`;
   };
   const flashSync = () => {
     DOM.lastSync.classList.remove('sync-error');
@@ -1129,12 +1131,13 @@
     if (!el) return;
     el.innerHTML = '';
     const frag = document.createDocumentFragment();
-    for (let i = 1; i <= MAX_TILES; i++) {
+    for (let i = 1; i <= maxTiles; i++) {
       const d = document.createElement('div');
       d.className = 'mini-tile';
       d.dataset.index = String(i);
       d.innerText = String(i);
       frag.appendChild(d);
+      if (!miniNodes[i]) miniNodes[i] = [];
       miniNodes[i].push(d);
     }
     el.appendChild(frag);
@@ -1207,7 +1210,7 @@
   const buildBigMap = () => {
     DOM.bigMap.innerHTML = '';
     const frag = document.createDocumentFragment();
-    for (let i = 1; i <= MAX_TILES; i++) {
+    for (let i = 1; i <= maxTiles; i++) {
       const cell = document.createElement('div');
       cell.className = `large-map-tile${completion[i - 1] ? ' complete' : ''}`;
       cell.dataset.index = String(i);
@@ -1358,6 +1361,25 @@
     DOM.descBar.style.display = 'flex';
   };
 
+  const updateBoardSize = (sizeStr) => {
+    let c = 7, r = 7;
+    if (sizeStr && typeof sizeStr === 'string') {
+      const parts = sizeStr.toLowerCase().split('x');
+      if (parts.length === 2) {
+        c = parseInt(parts[0].trim()) || 7;
+        r = parseInt(parts[1].trim()) || 7;
+      }
+    }
+    if (c !== gridCols || r !== gridRows) {
+      gridCols = c; gridRows = r; maxTiles = c * r;
+      document.documentElement.style.setProperty('--grid-cols', gridCols);
+      document.documentElement.style.setProperty('--grid-rows', gridRows);
+      document.documentElement.style.setProperty('--grid-cols-tablet', Math.min(5, gridCols));
+      document.documentElement.style.setProperty('--grid-cols-mobile', Math.min(4, gridCols));
+      document.documentElement.style.setProperty('--grid-cols-small', Math.min(3, gridCols));
+    }
+  };
+
   async function fetchData(manual = false) {
     // Guard: no team configured
     if (!currentTeamKey || !TEAM_MAP[currentTeamKey]) {
@@ -1365,7 +1387,7 @@
       syncError('No team configured');
 
       // Fill grid with empty tiles so it doesn't stay blank
-      tiles = Array(MAX_TILES).fill(null).map((_, i) => ({
+      tiles = Array(maxTiles).fill(null).map((_, i) => ({
         id: i + 1, title: 'No Data', img: '', percent: 0,
         barColor: getProgressColor(0), checklistHtml: '',
         description: '', isCompleted: false, points: '0', noData: true
@@ -1395,11 +1417,33 @@
       if (!manual && lastSeenHash === h) return;
       lastSeenHash = h;
       flashSync();
-      completion = Array(MAX_TILES).fill(false);
-      tiles = Array(MAX_TILES).fill(null);
-      resetMinimaps();
 
       const lines = raw.split('\n');
+      
+      // Parse Metadata from first data row (index 1) BEFORE init arrays
+      if (lines.length > 1) {
+        const metaCols = parseCSVRow(lines[1].trim());
+        if (metaCols.length >= 5) {
+          if (metaCols[0]) eventConfig.name = metaCols[0];
+          if (metaCols[1]) eventConfig.codeword = metaCols[1];
+          if (metaCols[2]) eventConfig.format = metaCols[2];
+          if (metaCols[3]) {
+            eventConfig.boardSize = metaCols[3];
+            updateBoardSize(eventConfig.boardSize);
+          }
+          if (metaCols[4]) eventConfig.teamCount = metaCols[4];
+          
+          // Save updated config so Admin/Settings can see it
+          localStorage.setItem(STORAGE_KEYS.eventConfig, JSON.stringify(eventConfig));
+        }
+      }
+
+      completion = Array(maxTiles).fill(false);
+      tiles = Array(maxTiles).fill(null);
+      miniNodes = Array.from({ length: maxTiles + 1 }, () => []);
+      buildMinimap('minimap');
+      buildMinimap('minimap-floating');
+
       const teamNumber = team.teamNumber || 1;
       
       // Calculate which columns belong to this team
@@ -1414,7 +1458,7 @@
       let count = 0;
 
       for (const line of rows) {
-        if (count >= MAX_TILES) break;
+        if (count >= maxTiles) break;
         if (!line || !line.trim()) continue;
         
         const cols = parseCSVRow(line.trim());
@@ -1422,15 +1466,11 @@
 
         // Parse Metadata from first data row
         if (count === 0) {
-          if (cols[0]) {
-            eventConfig.name = cols[0];
-            const titleEl = document.getElementById('event-title');
-            if (titleEl) titleEl.innerText = eventConfig.name;
-          }
-          if (cols[1]) {
-            eventConfig.codeword = cols[1];
-            codewordSecret = eventConfig.codeword;
-          }
+          // Metadata already parsed above, just handle UI updates
+          const titleEl = document.getElementById('event-title');
+          if (titleEl) titleEl.innerText = eventConfig.name;
+          codewordSecret = eventConfig.codeword;
+
           // Update Team Name from CSV if available (Col 5 = TeamNames)
           if (cols[5]) {
             const names = cols[5].split(',').map(s => s.trim());
@@ -1464,7 +1504,7 @@
         count++;
       }
 
-      for (let i = count; i < MAX_TILES; i++) {
+      for (let i = count; i < maxTiles; i++) {
         tiles[i] = { id: i + 1, title: 'No Data', img: '', percent: 0, barColor: getProgressColor(0), checklistHtml: '', description: '', isCompleted: false, points: '0', noData: true };
       }
       renderGrid();
@@ -1845,7 +1885,7 @@
     syncMs = parseInt(storageLoad(STORAGE_KEYS.syncInterval, String(eventConfig.syncInterval || 30000)), 10) || 30000;
     DOM.intervalSel.value = String(syncMs);
 
-    miniNodes.forEach(arr => arr.length = 0);
+    miniNodes = Array.from({ length: maxTiles + 1 }, () => []);
     buildMinimap('minimap');
     buildMinimap('minimap-floating');
 
