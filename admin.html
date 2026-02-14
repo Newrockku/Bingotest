@@ -93,6 +93,38 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
 
+    .collapsible {
+      background: var(--bg-tile); border: 2px solid var(--border-main);
+      border-radius: 6px; margin-bottom: 20px; overflow: hidden;
+      grid-column: 1 / -1;
+    }
+    .collapsible-header {
+      padding: 15px 20px; background: var(--bg-well);
+      cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+      font-weight: bold; text-transform: uppercase; letter-spacing: 1px;
+      user-select: none; color: var(--text-bright);
+    }
+    .collapsible-header:hover { background: var(--bg-tile); color: var(--accent); }
+    .collapsible-content {
+      padding: 20px; display: none; border-top: 2px solid var(--border-main);
+    }
+    .collapsible.open .collapsible-content { display: block; }
+    .arrow { transition: transform 0.3s ease; }
+    .collapsible.open .arrow { transform: rotate(180deg); }
+
+    .overview-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .section-title {
+      font-size: 1.5rem; color: var(--text-main); margin: 30px 0 15px 0;
+      text-transform: uppercase; letter-spacing: 1px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      border-bottom: 2px solid var(--border-main);
+      padding-bottom: 5px; display: inline-block;
+    }
+
     .card-title {
       font-size: 1.3rem; font-weight: bold;
       color: var(--text-bright); margin: 0 0 16px 0;
@@ -115,46 +147,49 @@
       color: var(--text-main);
     }
 
-    .team-list {
-      display: flex; flex-direction: column; gap: 12px;
+    /* Boards Grid */
+    .boards-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px; grid-column: 1 / -1;
     }
 
-    .team-item {
-      background: var(--bg-well); border-left: 4px solid var(--accent);
-      padding: 12px; border-radius: 4px;
-      display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 12px;
+    .team-board-card {
+      background: var(--bg-tile); border: 2px solid var(--border-main);
+      border-radius: 6px; padding: 15px; display: flex; flex-direction: column;
+      gap: 12px; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      cursor: pointer; text-decoration: none; color: inherit; position: relative;
+    }
+    .team-board-card:hover {
+      transform: translateY(-4px); box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+      border-color: var(--accent); z-index: 10;
+    }
+    .team-board-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    .board-header { display: flex; justify-content: space-between; align-items: center; }
+    .board-name { font-weight: bold; font-size: 1.1rem; color: var(--text-bright); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .board-points {
+      background: var(--bg-well); padding: 2px 8px; border-radius: 4px;
+      font-weight: bold; color: var(--accent); font-size: 0.9rem; flex-shrink: 0;
     }
 
-    .team-item-name {
-      font-size: 1rem; font-weight: bold;
-      color: var(--text-bright);
+    .mini-grid-wrapper {
+      aspect-ratio: 1/1; width: 100%; background: var(--bg-body);
+      border: 1px solid var(--border-main); padding: 4px;
+      display: grid;
+      grid-template-columns: repeat(var(--grid-cols, 7), 1fr);
+      grid-template-rows: repeat(var(--grid-rows, 7), 1fr);
+      gap: 2px;
     }
-
-    .team-item-points {
-      background: var(--bg-tile); padding: 4px 8px;
-      border-radius: 3px; color: var(--text-main);
-      font-weight: bold;
+    .mini-cell {
+      background: var(--bg-well); width: 100%; height: 100%;
+      border-radius: 1px;
     }
+    .mini-cell.complete { background: var(--bg-completed); }
+    .mini-cell.locked { opacity: 0.3; }
 
-    .team-item-link {
-      font-size: 0.75rem; color: var(--text-dim);
-      word-break: break-all; flex: 1 100%;
-    }
-
-    .team-item-link a {
-      color: var(--accent); text-decoration: none;
-      cursor: pointer;
-    }
-
-    .team-item-link a:hover {
-      text-decoration: underline;
-    }
-
-    .progress-bar {
-      width: 100%; height: 20px; background: var(--bg-well);
-      border: 1px solid var(--border-main); border-radius: 3px;
-      overflow: hidden; margin: 8px 0;
+    .progress-fill {
+      height: 100%; background: var(--accent);
+      transition: width 0.3s ease; display: flex;
     }
 
     .progress-fill {
@@ -222,60 +257,40 @@
   </header>
 
   <div class="dashboard-container">
-    <!-- Event Overview Card -->
-    <div class="card" style="grid-column: 1 / -1;">
-      <h2 class="card-title">📊 Event Overview</h2>
-      <div class="stat-item">
-        <span class="stat-label">Event Name</span>
-        <span class="stat-value" id="event-name-display">Bingo 2026</span>
+    <!-- Collapsible Settings Overview -->
+    <div class="collapsible" id="overview-collapsible">
+      <div class="collapsible-header" onclick="document.getElementById('overview-collapsible').classList.toggle('open')">
+        <span>⚙️ Event Settings & Overview</span>
+        <span class="arrow">▼</span>
       </div>
-      <div class="stat-item">
-        <span class="stat-label">Codeword</span>
-        <span class="stat-value" id="event-codeword-display">••••••</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">CSV URL</span>
-        <span style="font-size:0.75rem; color:var(--text-dim); word-break:break-all;" id="csv-url-display">Not configured</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">Format</span>
-        <span class="stat-value" id="event-format-display">-</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">Board Size</span>
-        <span class="stat-value" id="event-boardsize-display">-</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">Team Count</span>
-        <span class="stat-value" id="event-teamcount-display">-</span>
-      </div>
-      <div class="stat-item" style="margin-top: 12px;">
-        <span class="stat-label">Description</span>
-        <span style="font-size:0.85rem; color:var(--text-bright); flex:1;" id="event-desc-display">(No description)</span>
-      </div>
-    </div>
-
-    <!-- Team Standings Card -->
-    <div class="card">
-      <h2 class="card-title">🏆 Team Standings</h2>
-      <div id="team-standings" class="team-list">
-        <div style="color:var(--text-dim); text-align:center;">Loading teams...</div>
+      <div class="collapsible-content">
+        <div class="overview-grid">
+          <div class="stat-item"><span class="stat-label">Event Name</span><span class="stat-value" id="event-name-display">-</span></div>
+          <div class="stat-item"><span class="stat-label">Codeword</span><span class="stat-value" id="event-codeword-display">-</span></div>
+          <div class="stat-item"><span class="stat-label">Format</span><span class="stat-value" id="event-format-display">-</span></div>
+          <div class="stat-item"><span class="stat-label">Board Size</span><span class="stat-value" id="event-boardsize-display">-</span></div>
+          <div class="stat-item"><span class="stat-label">Team Count</span><span class="stat-value" id="event-teamcount-display">-</span></div>
+          <div class="stat-item" style="grid-column: 1/-1;">
+            <span class="stat-label">CSV URL</span>
+            <span style="font-size:0.75rem; color:var(--text-dim); word-break:break-all;" id="csv-url-display">Not configured</span>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Leaderboard Card -->
-    <div class="card">
+    <div class="card" style="grid-column: 1 / -1;">
       <h2 class="card-title">📈 Points Leaderboard</h2>
       <div id="leaderboard-list" style="display:flex; flex-direction:column;">
         <div style="color:var(--text-dim); text-align:center;">Loading leaderboard...</div>
       </div>
     </div>
 
-    <!-- Team Access Links Card -->
-    <div class="card" style="grid-column: 1 / -1;">
-      <h2 class="card-title">🔗 Team Access Links</h2>
-      <div id="team-links-container" class="team-list">
-        <div style="color:var(--text-dim); text-align:center;">Loading links...</div>
+    <!-- Team Boards Grid -->
+    <div style="grid-column: 1 / -1;">
+      <h2 class="section-title">Team Boards</h2>
+      <div id="boards-grid" class="boards-grid">
+        <div style="color:var(--text-dim);">Loading boards...</div>
       </div>
     </div>
   </div>
@@ -320,6 +335,8 @@
     teamCount: ''
   };
   let teamsConfig = {};
+  let gridCols = 7;
+  let gridRows = 7;
 
   const $ = id => document.getElementById(id);
 
@@ -351,11 +368,28 @@
     }
   };
 
+  const parseCSVRow = (row) => {
+    const cols = []; let cur = '', inQ = false;
+    for (let i = 0; i < row.length; i++) {
+      const ch = row[i];
+      if (inQ) {
+        if (ch === '"' && row[i + 1] === '"') { cur += '"'; i++; }
+        else if (ch === '"') inQ = false;
+        else cur += ch;
+      } else {
+        if (ch === '"') inQ = true;
+        else if (ch === ',') { cols.push(cur.trim()); cur = ''; }
+        else cur += ch;
+      }
+    }
+    cols.push(cur.trim());
+    return cols;
+  };
+
   const renderEventOverview = () => {
     const nameEl = $('event-name-display');
     const codewordEl = $('event-codeword-display');
     const csvEl = $('csv-url-display');
-    const descEl = $('event-desc-display');
     const fmtEl = $('event-format-display');
     const sizeEl = $('event-boardsize-display');
     const countEl = $('event-teamcount-display');
@@ -365,54 +399,12 @@
     if (csvEl) csvEl.textContent = teamsConfig.Team1?.url
       ? teamsConfig.Team1.url
       : 'Not configured';
-    if (descEl) descEl.textContent = eventConfig.description || '(No description)';
     if (fmtEl) fmtEl.textContent = eventConfig.format || '-';
     if (sizeEl) sizeEl.textContent = eventConfig.boardSize || '-';
     if (countEl) countEl.textContent = eventConfig.teamCount || '-';
 
     const titleEl = $('admin-event-title');
     if (titleEl) titleEl.textContent = `${eventConfig.name || 'Bingo 2026'} Admin`;
-  };
-
-  const renderTeamStandings = () => {
-    const container = $('team-standings');
-    if (!container) return;
-
-    const teams = Object.entries(teamsConfig).map(([key, team]) => ({
-      key,
-      ...team
-    }));
-
-    teams.sort((a, b) => (b.points || 0) - (a.points || 0));
-
-    if (teams.length === 0) {
-      container.innerHTML = '<div style="color:var(--text-dim); text-align:center;">No teams configured</div>';
-      return;
-    }
-
-    const frag = document.createDocumentFragment();
-    teams.forEach(team => {
-      const teamDiv = document.createElement('div');
-      teamDiv.className = 'team-item';
-
-      const baseUrl = window.location.origin + window.location.pathname.replace('admin.html', 'index.html');
-      const teamUrl = `${baseUrl}?team=${team.key}`;
-
-      teamDiv.innerHTML = `
-        <div>
-          <div class="team-item-name">${team.name || team.key}</div>
-          <div class="team-item-link">
-            <a href="${teamUrl}" target="_blank" rel="noopener noreferrer">${teamUrl}</a>
-          </div>
-        </div>
-        <div class="team-item-points">${team.points || 0} PTS</div>
-      `;
-
-      frag.appendChild(teamDiv);
-    });
-
-    container.innerHTML = '';
-    container.appendChild(frag);
   };
 
   const renderLeaderboard = () => {
@@ -455,49 +447,103 @@
     container.appendChild(frag);
   };
 
-  const renderTeamLinks = () => {
-    const container = $('team-links-container');
-    if (!container) return;
-
-    const teams = Object.entries(teamsConfig);
-
-    if (teams.length === 0) {
-      container.innerHTML = '<div style="color:var(--text-dim); text-align:center;">No teams configured</div>';
-      return;
+  const updateBoardSize = (sizeStr) => {
+    let c = 7, r = 7;
+    if (sizeStr && typeof sizeStr === 'string') {
+      const parts = sizeStr.toLowerCase().split('x');
+      if (parts.length === 2) {
+        c = parseInt(parts[0].trim()) || 7;
+        r = parseInt(parts[1].trim()) || 7;
+      }
     }
+    if (c !== gridCols || r !== gridRows) {
+      gridCols = c; gridRows = r;
+      document.documentElement.style.setProperty('--grid-cols', gridCols);
+      document.documentElement.style.setProperty('--grid-rows', gridRows);
+    }
+  };
 
+  const renderBoards = (dataRows) => {
+    const container = $('boards-grid');
+    if (!container) return;
+    
+    const teams = Object.entries(teamsConfig).sort((a,b) => a[1].teamNumber - b[1].teamNumber);
     const frag = document.createDocumentFragment();
+    const maxTiles = gridCols * gridRows;
+
     teams.forEach(([key, team]) => {
       const baseUrl = window.location.origin + window.location.pathname.replace('admin.html', 'index.html');
       const teamUrl = `${baseUrl}?team=${key}`;
+      
+      const card = document.createElement('a');
+      card.className = 'team-board-card';
+      card.href = teamUrl;
+      card.target = '_blank';
 
-      const linkDiv = document.createElement('div');
-      linkDiv.className = 'team-item';
-      linkDiv.style.display = 'flex';
-      linkDiv.style.flexDirection = 'column';
-      linkDiv.style.gap = '8px';
+      // Calculate completion
+      const teamNum = team.teamNumber || 1;
+      const currentCol = 11 + ((teamNum - 1) * 3);
+      const goalCol = 12 + ((teamNum - 1) * 3);
+      
+      let gridHtml = '';
+      for(let i=0; i<maxTiles; i++) {
+        let isComplete = false;
+        if (dataRows[i]) {
+          const cols = parseCSVRow(dataRows[i]);
+          if (cols.length > goalCol) {
+            const cur = Math.max(0, parseInt(cols[currentCol], 10) || 0);
+            const goal = Math.max(1, parseInt(cols[goalCol], 10) || 1);
+            if (cur >= goal) isComplete = true;
+          }
+        }
+        gridHtml += `<div class="mini-cell ${isComplete ? 'complete' : ''}"></div>`;
+      }
 
-      linkDiv.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
-          <div style="font-weight:bold; color:var(--text-bright);">${team.name || key}</div>
-          <button class="nav-btn" style="padding:4px 12px; font-size:0.8rem;" onclick="navigator.clipboard.writeText('${teamUrl}'); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy Link', 2000);">Copy Link</button>
+      card.innerHTML = `
+        <div class="board-header">
+          <div class="board-name">${team.name || key}</div>
+          <div class="board-points">${team.points || 0} PTS</div>
         </div>
-        <input type="text" readonly value="${teamUrl}" style="width:100%; padding:8px; background:var(--bg-well); border:1px solid var(--border-main); color:var(--text-dim); font-family:monospace; font-size:0.75rem; border-radius:3px;">
+        <div class="mini-grid-wrapper">${gridHtml}</div>
+        <div style="font-size:0.7rem; color:var(--text-dim); text-align:center; margin-top:auto;">Click to view board</div>
       `;
-
-      frag.appendChild(linkDiv);
+      frag.appendChild(card);
     });
 
     container.innerHTML = '';
     container.appendChild(frag);
   };
 
+  const fetchGameData = async () => {
+    // Use Team1 URL as master
+    const url = teamsConfig.Team1?.url;
+    if (!url) return;
+
+    try {
+      const res = await fetch(url + '&t=' + Date.now());
+      if (!res.ok) return;
+      const text = await res.text();
+      const rows = text.split('\n').map(r => r.trim()).filter(r => r);
+      
+      if (rows.length > 1) {
+        const meta = parseCSVRow(rows[1]);
+        if (meta[3]) updateBoardSize(meta[3]);
+      }
+
+      // Data rows start at index 1 (metadata row) but tile data logic usually skips it
+      // In index.html logic, row 0 is header, row 1 is metadata, row 2+ is tiles.
+      // We pass rows.slice(1) to renderBoards, but renderBoards iterates 0..maxTiles.
+      // We need to align with index.html logic where tile 1 is at rows[1] (if header is 0).
+      // Actually index.html iterates rows starting from index 1.
+      renderBoards(rows.slice(1));
+    } catch (e) { console.error(e); }
+  };
+
   const refresh = async () => {
     await loadConfig();
     renderEventOverview();
-    renderTeamStandings();
     renderLeaderboard();
-    renderTeamLinks();
+    fetchGameData();
   };
 
   const init = async () => {
