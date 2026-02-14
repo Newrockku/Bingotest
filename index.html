@@ -220,7 +220,7 @@
 
     .modal-content {
       background-color: var(--bg-tile); border: 3px solid var(--border-main);
-      width: 90vw; max-width: 450px; padding: 25px;
+      width: 95vw; max-width: 650px; padding: 25px;
       position: fixed; box-shadow: 0 0 50px rgba(0,0,0,0.8), 0 0 30px 5px var(--accent);
       display: flex; flex-direction: column;
       opacity: 0; transform: translate(-50%, -50%) scale(0);
@@ -571,7 +571,7 @@
   <main class="grid-container" id="grid" role="grid" aria-label="Bingo board"></main>
 
   <footer class="page-footer">
-    <span>v3.300</span>
+    <span>v3.301</span>
     <span>&middot;</span>
     <span id="last-sync-text" aria-live="polite">Last Sync: Never</span>
     <span class="sync-btn" id="sync-now" role="button" tabindex="0">[Sync Now]</span>
@@ -724,14 +724,14 @@
           </div>
         </div>
 
-        <div class="settings-version">Bingo Board &middot; v3.300</div>
+        <div class="settings-version">Bingo Board &middot; v3.301</div>
       </div>
     </div>
   </div>
 
   <script>
 (() => {
-  const APP_VERSION = '3.300';
+  const APP_VERSION = '3.301';
   let maxTiles = 49;
   let gridCols = 7;
   let gridRows = 7;
