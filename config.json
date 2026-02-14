@@ -1,10 +1,10 @@
 {
   "eventConfig": {
-    "name": "Hurt vs Clan 2",
+    "name": "BINGO TITLE HERE",
     "codeword": "CODEWORD",
     "description": "Test Description",
     "syncInterval": 30000,
-    "format": "Clan vs. Clan",
+    "format": "Blackout",
     "boardSize": "5 x 5",
     "teamCount": "6"
   },
