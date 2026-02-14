@@ -335,14 +335,14 @@
   </div>
 
   <footer class="page-footer">
-    <span>v3.190</span>
+    <span>v3.200</span>
     <span>&middot;</span>
     <span>Bingo Board Admin</span>
   </footer>
 
   <script>
 (() => {
-  const APP_VERSION = '3.190';
+  const APP_VERSION = '3.200';
 
   const STORAGE_KEYS = {
     eventConfig: 'bingo-event-config',
@@ -563,6 +563,8 @@
   let teamsConfig = {};
   let gridCols = 7;
   let gridRows = 7;
+  let lastSeenHash = null;
+  let fetchController = null;
 
   const $ = id => document.getElementById(id);
 
@@ -579,6 +581,13 @@
     try {
       localStorage.setItem(k, JSON.stringify(v));
     } catch {}
+  };
+
+  const normalizeNL = (s) => String(s).replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  const simpleHash = (str) => {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) { h = ((h << 5) - h) + str.charCodeAt(i); h |= 0; }
+    return h;
   };
 
   const applyTheme = (name) => {
@@ -757,10 +766,18 @@
     const url = teamsConfig.Team1?.url;
     if (!url) return;
 
+    if (fetchController) fetchController.abort();
+    fetchController = new AbortController();
+
     try {
-      const res = await fetch(url + '&t=' + Date.now());
+      const res = await fetch(url + '&t=' + Date.now(), { signal: fetchController.signal });
       if (!res.ok) return;
-      const text = await res.text();
+      const text = normalizeNL(await res.text());
+      
+      const h = simpleHash(text);
+      if (lastSeenHash === h) return;
+      lastSeenHash = h;
+
       const rows = text.split('\n').map(r => r.trim()).filter(r => r);
       
       if (rows.length > 1) {
@@ -774,7 +791,9 @@
       // We need to align with index.html logic where tile 1 is at rows[1] (if header is 0).
       // Actually index.html iterates rows starting from index 1.
       renderBoards(rows.slice(1));
-    } catch (e) { console.error(e); }
+    } catch (e) { 
+      if (e.name !== 'AbortError') console.error(e); 
+    }
   };
 
   const refresh = async () => {
