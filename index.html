@@ -554,7 +554,7 @@
   <main class="grid-container" id="grid" role="grid" aria-label="Bingo board"></main>
 
   <footer class="page-footer">
-    <span>v3.240</span>
+    <span>v3.250</span>
     <span>&middot;</span>
     <span id="last-sync-text" aria-live="polite">Last Sync: Never</span>
     <span class="sync-btn" id="sync-now" role="button" tabindex="0">[Sync Now]</span>
@@ -707,14 +707,14 @@
           </div>
         </div>
 
-        <div class="settings-version">Bingo Board &middot; v3.240</div>
+        <div class="settings-version">Bingo Board &middot; v3.250</div>
       </div>
     </div>
   </div>
 
   <script>
 (() => {
-  const APP_VERSION = '3.240';
+  const APP_VERSION = '3.250';
   let maxTiles = 49;
   let gridCols = 7;
   let gridRows = 7;
@@ -938,7 +938,9 @@
   };
   let currentTeamKey = '';
   let codewordSecret = '';
-  let lastSeenHash = null;
+  let appliedHash = null;
+  let candidateHash = null;
+  let stabilityCount = 0;
   let completion = Array(maxTiles).fill(false);
   let tiles = Array(maxTiles).fill(null);
   let fetchController = null;
@@ -1445,8 +1447,35 @@
       });
       const raw = normalizeNL(await res.text());
       const h = simpleHash(raw);
-      if (!manual && lastSeenHash === h) return;
-      lastSeenHash = h;
+
+      if (manual) {
+        // Manual sync: trust immediately
+        appliedHash = h;
+        candidateHash = null;
+        stabilityCount = 0;
+      } else {
+        // Auto sync: Stability Check
+        if (appliedHash === null) {
+          appliedHash = h;
+        } else if (h === appliedHash) {
+          candidateHash = null;
+          stabilityCount = 0;
+          return; // No change
+        } else {
+          if (h === candidateHash) {
+            stabilityCount++;
+          } else {
+            candidateHash = h;
+            stabilityCount = 1;
+          }
+          if (stabilityCount < 2) return; // Wait for confirmation
+          
+          appliedHash = h;
+          candidateHash = null;
+          stabilityCount = 0;
+        }
+      }
+
       flashSync();
 
       const lines = raw.split('\n');
