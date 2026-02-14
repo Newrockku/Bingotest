@@ -324,7 +324,7 @@
     </div>
 
     <!-- Leaderboard Card -->
-    <div class="card" style="grid-column: 1 / -1;">
+    <div class="card">
       <h2 class="card-title">📈 Points Leaderboard</h2>
       <div id="leaderboard-list" style="display:flex; flex-direction:column;">
         <div style="color:var(--text-dim); text-align:center;">Loading leaderboard...</div>
@@ -332,7 +332,7 @@
     </div>
 
     <!-- Tile Statistics -->
-    <div class="card" style="grid-column: 1 / -1;">
+    <div class="card">
       <h2 class="card-title">📊 Tile Statistics</h2>
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:30px;">
         <div>
@@ -356,14 +356,14 @@
   </div>
 
   <footer class="page-footer">
-    <span>v3.306</span>
+    <span>v3.307</span>
     <span>&middot;</span>
     <span>Bingo Board Admin</span>
   </footer>
 
   <script>
 (() => {
-  const APP_VERSION = '3.306';
+  const APP_VERSION = '3.307';
 
   const STORAGE_KEYS = {
     eventConfig: 'bingo-event-config',
