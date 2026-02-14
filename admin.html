@@ -157,6 +157,7 @@
     .boards-grid {
       display: grid; grid-template-columns: repeat(4, 1fr);
       gap: 30px; grid-column: 1 / -1;
+      align-items: start;
     }
 
     .team-board-card {
@@ -256,10 +257,18 @@
       .dashboard-container { grid-template-columns: 1fr; }
       .card { grid-column: 1 / -1; }
       .boards-grid { grid-template-columns: repeat(2, 1fr); }
+      .admin-header { flex-direction: column; align-items: flex-start; }
+      .admin-header-right { width: 100%; justify-content: space-between; margin-top: 10px; }
     }
     @media (max-width: 600px) {
+      body { padding: 10px; }
       .dashboard-container { gap: 15px; }
       .stats-grid { gap: 15px; }
+      .boards-grid { gap: 10px; }
+      .team-board-card { padding: 8px; gap: 8px; }
+      .mini-grid-wrapper { padding: 4px; gap: 2px; }
+      .board-name { font-size: 0.9rem; }
+      .board-points { font-size: 0.8rem; padding: 1px 6px; }
     }
   </style>
 </head>
@@ -368,14 +377,14 @@
   </div>
 
   <footer class="page-footer">
-    <span>v3.309</span>
+    <span>v3.310</span>
     <span>&middot;</span>
     <span>Bingo Board Admin</span>
   </footer>
 
   <script>
 (() => {
-  const APP_VERSION = '3.309';
+  const APP_VERSION = '3.310';
 
   const STORAGE_KEYS = {
     eventConfig: 'bingo-event-config',
