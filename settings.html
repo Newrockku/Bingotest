@@ -112,6 +112,11 @@
       border-radius: 4px;
     }
 
+    .form-input[readonly], .form-textarea[readonly] {
+      background: var(--bg-body); color: var(--text-dim);
+      cursor: default; border-color: transparent;
+    }
+
     .form-input:focus, .form-textarea:focus, .form-select:focus {
       border-color: var(--accent); outline: none;
       box-shadow: 0 0 8px rgba(255, 172, 0, 0.3);
@@ -230,34 +235,34 @@
 
       <div class="form-group">
         <label class="form-label">Event Name</label>
-        <input type="text" id="event-name" class="form-input" placeholder="Bingo 2026">
-        <div class="form-hint-text">The title displayed at the top of the board</div>
+        <input type="text" id="event-name" class="form-input" placeholder="Bingo 2026" readonly>
+        <div class="form-hint-text">Defined in CSV Column 1</div>
       </div>
 
       <div class="form-group">
         <label class="form-label">Codeword</label>
-        <input type="text" id="event-codeword" class="form-input" placeholder="e.g., SECRET123">
-        <div class="form-hint-text">Shared codeword for all teams (shown when players click the codeword display)</div>
+        <input type="text" id="event-codeword" class="form-input" placeholder="e.g., SECRET123" readonly>
+        <div class="form-hint-text">Defined in CSV Column 2</div>
       </div>
 
       <div class="form-group">
         <label class="form-label">Event Description (optional)</label>
-        <textarea id="event-description" class="form-textarea" placeholder="Brief description shown to all teams..."></textarea>
-        <div class="form-hint-text">Players can dismiss this banner</div>
+        <textarea id="event-description" class="form-textarea" placeholder="Brief description shown to all teams..." readonly></textarea>
+        <div class="form-hint-text">Defined in CSV (Tile Description of first tile if used as meta, or custom logic)</div>
       </div>
 
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Format</label>
-          <input type="text" id="event-format" class="form-input" placeholder="e.g. Lockout">
+          <input type="text" id="event-format" class="form-input" placeholder="e.g. Lockout" readonly>
         </div>
         <div class="form-group">
           <label class="form-label">Board Size</label>
-          <input type="text" id="event-boardsize" class="form-input" placeholder="e.g. 7x7">
+          <input type="text" id="event-boardsize" class="form-input" placeholder="e.g. 7x7" readonly>
         </div>
         <div class="form-group">
           <label class="form-label">Team Count</label>
-          <input type="text" id="event-teamcount" class="form-input" placeholder="e.g. 2">
+          <input type="text" id="event-teamcount" class="form-input" placeholder="e.g. 2" readonly>
         </div>
       </div>
 
@@ -268,8 +273,7 @@
       </div>
 
       <div class="form-actions">
-        <button class="btn" id="save-event-btn">💾 Save Event Configuration</button>
-        <button class="btn" id="import-csv-btn" style="margin-left:auto;">📥 Import Settings from CSV</button>
+        <button class="btn" id="import-csv-btn">🔄 Load Settings from CSV</button>
       </div>
     </div>
 
@@ -293,54 +297,8 @@
 
       <div class="team-grid" id="teams-grid"></div>
 
-      <div class="form-actions">
-        <button class="btn" id="save-teams-btn">💾 Save Teams</button>
-      </div>
     </div>
 
-    <!-- GitHub Integration Section -->
-    <div class="settings-section">
-      <h2 class="settings-section-title">☁️ Cloud Save (GitHub)</h2>
-      <p style="font-size:0.9rem; color:var(--text-dim); margin-bottom:12px;">
-        Save settings directly to your repository without manual uploads. Requires a <a href="https://github.com/settings/tokens" target="_blank" style="color:var(--accent);">Personal Access Token</a> with <code>repo</code> scope.
-      </p>
-      
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Owner</label>
-          <input type="text" id="gh-owner" class="form-input" placeholder="e.g. username">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Repo Name</label>
-          <input type="text" id="gh-repo" class="form-input" placeholder="e.g. Bingotest">
-        </div>
-        <div class="form-group">
-          <label class="form-label">File Path</label>
-          <input type="text" id="gh-path" class="form-input" value="config.json">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Personal Access Token</label>
-        <input type="password" id="gh-token" class="form-input" placeholder="ghp_...">
-      </div>
-
-      <div class="form-actions">
-        <button class="btn" id="gh-save-btn">☁️ Commit to GitHub</button>
-      </div>
-    </div>
-
-    <!-- Global Persistence Section -->
-    <div class="settings-section">
-      <h2 class="settings-section-title">🌍 Global Persistence</h2>
-      <p style="font-size:0.9rem; color:var(--text-dim); margin-bottom:12px;">
-        To share these settings across all browsers and devices, download the configuration file and upload it to your website's root folder as <code>config.json</code>.
-      </p>
-      <div class="form-actions" style="margin-top:0; padding-top:0; border:none;">
-        <button class="btn" id="download-config-btn">⬇️ Download config.json</button>
-        <button class="btn" id="load-live-btn" style="margin-left:auto;">🔄 Load Live Config</button>
-      </div>
-    </div>
   </div>
 
   <footer class="page-footer">
@@ -351,7 +309,7 @@
 
   <script>
 (() => {
-  const APP_VERSION = '3.100';
+  const APP_VERSION = '3.110';
 
   const STORAGE_KEYS = {
     eventConfig: 'bingo-event-config',
@@ -420,45 +378,9 @@
     // 1. Load from LocalStorage (fallback)
     eventConfig = storageLoad(STORAGE_KEYS.eventConfig, { ...DEFAULT_EVENT });
     teamsConfig = storageLoad(STORAGE_KEYS.teams, { ...DEFAULT_TEAMS });
-    // 1. Load Local Draft (pass null to check existence)
-    const localEvent = storageLoad(STORAGE_KEYS.eventConfig, null);
-    const localTeams = storageLoad(STORAGE_KEYS.teams, null);
-
-    // 2. Try to load from config.json (Override)
-    // 2. Fetch Remote
-    let remoteData = null;
-    try {
-      const res = await fetch('config.json?t=' + Date.now());
-      if (res.ok) {
-        const data = await res.json();
-        if (data.eventConfig) eventConfig = { ...eventConfig, ...data.eventConfig };
-        if (data.teams) teamsConfig = data.teams;
-      }
-      if (res.ok) remoteData = await res.json();
-    } catch (e) { /* Ignore if file missing */ }
-
-    // 3. Priority: Local Draft > Remote > Defaults
-    if (localEvent || localTeams) {
-      eventConfig = localEvent || { ...DEFAULT_EVENT };
-      teamsConfig = localTeams || { ...DEFAULT_TEAMS };
-      if (remoteData) showToast('ℹ️ Loaded local draft. Use "Load Live Config" to discard.');
-    } else if (remoteData) {
-      if (remoteData.eventConfig) eventConfig = remoteData.eventConfig;
-      if (remoteData.teams) teamsConfig = remoteData.teams;
-    } else {
-      eventConfig = { ...DEFAULT_EVENT };
-      teamsConfig = { ...DEFAULT_TEAMS };
-    }
   };
 
-  const saveEventConfig = () => {
-    eventConfig.name = ($('event-name').value.trim() || 'Bingo 2026').substring(0, 50);
-    eventConfig.codeword = $('event-codeword').value.trim();
-    eventConfig.description = $('event-description').value.trim();
-    eventConfig.format = $('event-format').value.trim();
-    eventConfig.boardSize = $('event-boardsize').value.trim();
-    eventConfig.teamCount = $('event-teamcount').value.trim();
-
+  const saveCsvUrl = () => {
     const csvUrl = $('csv-url').value.trim();
     
     // Apply CSV URL to all teams
@@ -468,124 +390,9 @@
       }
     });
 
-    // IMPORTANT: Save in correct order
-    storageSave(STORAGE_KEYS.eventConfig, eventConfig);  // Save event config first
     storageSave(STORAGE_KEYS.teams, teamsConfig);         // Then save teams with CSV URL
-
-    showToast('✓ Saved locally! Don\'t forget to download & commit config.json.');
   };
 
-  const saveToGitHub = async () => {
-    const owner = $('gh-owner').value.trim();
-    const repo = $('gh-repo').value.trim();
-    const path = $('gh-path').value.trim();
-    const token = $('gh-token').value.trim();
-
-    if (!owner || !repo || !path || !token) {
-      showToast('❌ Missing GitHub details');
-      return;
-    }
-
-    // Save GH settings locally
-    localStorage.setItem('bingo-gh-config', JSON.stringify({ owner, repo, path, token }));
-
-    const btn = $('gh-save-btn');
-    const originalText = btn.textContent;
-    btn.textContent = '⏳ Committing...';
-    btn.disabled = true;
-
-    try {
-      const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-      const headers = {
-        'Authorization': `token ${token}`,
-        'Accept': 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json'
-      };
-
-      // 1. Get current SHA
-      let sha = null;
-      try {
-        const getRes = await fetch(apiUrl, { headers });
-        if (getRes.ok) {
-          const getData = await getRes.json();
-          sha = getData.sha;
-        }
-      } catch (e) { /* File might not exist yet */ }
-
-      // 2. Prepare content
-      const content = { eventConfig, teams: teamsConfig };
-      const jsonContent = JSON.stringify(content, null, 2);
-      // Base64 encode (handle UTF-8)
-      const b64Content = btoa(unescape(encodeURIComponent(jsonContent)));
-
-      // 3. PUT request
-      const body = {
-        message: `Update config.json via Admin Settings (v${APP_VERSION})`,
-        content: b64Content
-      };
-      if (sha) body.sha = sha;
-
-      const putRes = await fetch(apiUrl, { method: 'PUT', headers, body: JSON.stringify(body) });
-
-      if (!putRes.ok) {
-        const err = await putRes.json();
-        throw new Error(err.message || 'Commit failed');
-      }
-      showToast('✅ Successfully committed to GitHub!');
-    } catch (e) { showToast('❌ Error: ' + e.message); }
-    finally { btn.textContent = originalText; btn.disabled = false; }
-  };
-
-  const saveTeamsConfig = () => {
-    // Update team names and points from form inputs
-    Object.keys(teamsConfig).forEach(key => {
-      const nameInp = document.querySelector(`[data-team-name="${key}"]`);
-      const pointsInp = document.querySelector(`[data-team-points="${key}"]`);
-
-      if (nameInp && nameInp.value.trim()) {
-        teamsConfig[key].name = nameInp.value.trim().substring(0, 30);
-      }
-
-      if (pointsInp) {
-        teamsConfig[key].points = Math.max(0, parseInt(pointsInp.value, 10) || 0);
-      }
-    });
-
-    storageSave(STORAGE_KEYS.teams, teamsConfig);
-    showToast('✓ Saved locally! Don\'t forget to download & commit config.json.');
-  };
-
-  const downloadConfig = () => {
-    const data = {
-      eventConfig,
-      teams: teamsConfig
-    };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'config.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    showToast('✓ config.json downloaded!');
-  };
-
-  const loadLiveConfig = async () => {
-    try {
-      const res = await fetch('config.json?t=' + Date.now());
-      if (res.ok) {
-        const data = await res.json();
-        if (data.eventConfig) eventConfig = data.eventConfig;
-        if (data.teams) teamsConfig = data.teams;
-        renderEventForm();
-        renderTeamsGrid();
-        storageSave(STORAGE_KEYS.eventConfig, eventConfig);
-        storageSave(STORAGE_KEYS.teams, teamsConfig);
-        showToast('✓ Live config loaded and saved locally.');
-      } else { showToast('❌ config.json not found.'); }
-    } catch (e) { showToast('❌ Failed to load config.'); }
   };
 
   const parseCSVRow = (row) => {
@@ -628,18 +435,36 @@
       if (dataRow[3]) $('event-boardsize').value = dataRow[3];
       if (dataRow[4]) $('event-teamcount').value = dataRow[4];
       
-      if (dataRow[5]) {
-        const names = dataRow[5].split(',').map(s => s.trim());
-        names.forEach((name, idx) => {
-          const key = `Team${idx+1}`;
-          if (teamsConfig[key]) {
-            teamsConfig[key].name = name;
-          }
-        });
-        renderTeamsGrid(); // Refresh grid with new names
+      // Update Event Config Object
+      eventConfig.name = dataRow[0] || eventConfig.name;
+      eventConfig.codeword = dataRow[1] || eventConfig.codeword;
+      eventConfig.format = dataRow[2] || eventConfig.format;
+      eventConfig.boardSize = dataRow[3] || eventConfig.boardSize;
+      eventConfig.teamCount = dataRow[4] || eventConfig.teamCount;
+
+      // Rebuild Teams based on Count
+      const count = parseInt(eventConfig.teamCount, 10) || 8;
+      const newTeams = {};
+      const names = dataRow[5] ? dataRow[5].split(',').map(s => s.trim()) : [];
+
+      for (let i = 1; i <= count; i++) {
+        const key = `Team${i}`;
+        newTeams[key] = {
+          name: names[i-1] || `Team ${i}`,
+          url: url,
+          points: teamsConfig[key]?.points || 0,
+          teamNumber: i
+        };
       }
+      teamsConfig = newTeams;
       
-      showToast('✓ Settings populated! Click Save to persist.');
+      renderTeamsGrid();
+      
+      // Save everything
+      storageSave(STORAGE_KEYS.eventConfig, eventConfig);
+      storageSave(STORAGE_KEYS.teams, teamsConfig);
+
+      showToast('✓ Settings loaded from CSV!');
     } catch (e) { showToast('❌ Import failed: ' + e.message); }
   };
 
@@ -670,12 +495,12 @@
         <h3 class="team-card-title">Team ${team.teamNumber}</h3>
         <div class="form-group">
           <label class="form-label">Team Name</label>
-          <input type="text" data-team-name="${key}" class="form-input" value="${team.name || ''}" placeholder="Team Name">
-          <div class="form-hint-text">How this team is displayed</div>
+          <input type="text" class="form-input" value="${team.name || ''}" readonly>
+          <div class="form-hint-text">Defined in CSV</div>
         </div>
         <div class="form-group">
           <label class="form-label">Current Points</label>
-          <input type="number" data-team-points="${key}" class="form-input" value="${team.points || 0}" min="0">
+          <input type="number" class="form-input" value="${team.points || 0}" readonly>
           <div class="form-hint-text">Admin-set points (can be updated by players if enabled)</div>
         </div>
       `;
@@ -687,31 +512,12 @@
     grid.appendChild(frag);
   };
 
-  const loadGhSettings = () => {
-    try {
-      const saved = localStorage.getItem('bingo-gh-config');
-      if (saved) {
-        const { owner, repo, path, token } = JSON.parse(saved);
-        if(owner) $('gh-owner').value = owner;
-        if(repo) $('gh-repo').value = repo;
-        if(path) $('gh-path').value = path;
-        if(token) $('gh-token').value = token;
-      }
-    } catch {}
-  };
-
   const init = async () => {
     await loadConfig();
-    loadGhSettings();
     renderEventForm();
     renderTeamsGrid();
 
-    $('save-event-btn').addEventListener('click', saveEventConfig);
-    $('save-teams-btn').addEventListener('click', saveTeamsConfig);
-    $('download-config-btn').addEventListener('click', downloadConfig);
     $('import-csv-btn').addEventListener('click', importFromCSV);
-    $('load-live-btn').addEventListener('click', loadLiveConfig);
-    $('gh-save-btn').addEventListener('click', saveToGitHub);
   };
 
   init();

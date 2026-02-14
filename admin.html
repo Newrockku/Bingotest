@@ -339,18 +339,7 @@
   };
 
   const loadConfig = async () => {
-    // 1. Try to load from config.json (Primary Source for shared settings)
-    try {
-      const res = await fetch('config.json?t=' + Date.now());
-      if (res.ok) {
-        const data = await res.json();
-        if (data.eventConfig) eventConfig = data.eventConfig;
-        if (data.teams) teamsConfig = data.teams;
-        return; // Config loaded successfully
-      }
-    } catch {}
-
-        // 2. Fallback to LocalStorage
+    // Load from LocalStorage (Populated by index.html or settings.html fetching CSV)
 
     try {
       const savedEvent = localStorage.getItem(STORAGE_KEYS.eventConfig);

@@ -1432,6 +1432,27 @@
             updateBoardSize(eventConfig.boardSize);
           }
           if (metaCols[4]) eventConfig.teamCount = metaCols[4];
+
+          // Dynamic Team Generation based on Count
+          const count = parseInt(eventConfig.teamCount, 10);
+          if (!isNaN(count) && count > 0) {
+            const newTeamMap = {};
+            const names = metaCols[5] ? metaCols[5].split(',').map(s => s.trim()) : [];
+            
+            for (let i = 1; i <= count; i++) {
+              const key = `Team${i}`;
+              const oldData = TEAM_MAP[key] || DEFAULT_TEAMS[key] || { points: 0 };
+              
+              newTeamMap[key] = {
+                name: names[i-1] || `Team ${i}`,
+                url: team.url, // Keep the working URL
+                points: oldData.points || 0,
+                teamNumber: i
+              };
+            }
+            TEAM_MAP = newTeamMap;
+            localStorage.setItem(STORAGE_KEYS.teams, JSON.stringify(TEAM_MAP));
+          }
           
           // Save updated config so Admin/Settings can see it
           localStorage.setItem(STORAGE_KEYS.eventConfig, JSON.stringify(eventConfig));
