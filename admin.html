@@ -335,14 +335,14 @@
   </div>
 
   <footer class="page-footer">
-    <span>v3.210</span>
+    <span>v3.220</span>
     <span>&middot;</span>
     <span>Bingo Board Admin</span>
   </footer>
 
   <script>
 (() => {
-  const APP_VERSION = '3.210';
+  const APP_VERSION = '3.220';
 
   const STORAGE_KEYS = {
     eventConfig: 'bingo-event-config',
@@ -797,10 +797,32 @@
         // Update Teams if names provided
         if (metaCols[5]) {
           const names = metaCols[5].split(',').map(s => s.trim());
-          Object.keys(teamsConfig).forEach((key, idx) => {
-            if (names[idx]) teamsConfig[key].name = names[idx];
+          Object.keys(teamsConfig).forEach(key => {
+            const tNum = teamsConfig[key].teamNumber;
+            if (tNum && names[tNum - 1]) {
+              teamsConfig[key].name = names[tNum - 1];
+            }
           });
         }
+
+        // Calculate Points for all teams
+        Object.keys(teamsConfig).forEach(k => teamsConfig[k].points = 0); // Reset
+
+        const dataRows = rows.slice(1); // Skip header
+        dataRows.forEach(row => {
+          const cols = parseCSVRow(row);
+          if (cols.length < 10) return;
+          const points = parseInt(cols[9], 10) || 0;
+
+          Object.values(teamsConfig).forEach(team => {
+            const tNum = team.teamNumber;
+            const curCol = 11 + ((tNum - 1) * 3);
+            const goalCol = 12 + ((tNum - 1) * 3);
+            const cur = parseInt(cols[curCol], 10) || 0;
+            const goal = parseInt(cols[goalCol], 10) || 1;
+            if (cur >= goal) team.points += points;
+          });
+        });
 
         // Persist updates to storage so loadConfig() doesn't revert them next cycle
         storageSave(STORAGE_KEYS.eventConfig, eventConfig);

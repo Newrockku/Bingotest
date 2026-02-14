@@ -554,7 +554,7 @@
   <main class="grid-container" id="grid" role="grid" aria-label="Bingo board"></main>
 
   <footer class="page-footer">
-    <span>v3.210</span>
+    <span>v3.220</span>
     <span>&middot;</span>
     <span id="last-sync-text" aria-live="polite">Last Sync: Never</span>
     <span class="sync-btn" id="sync-now" role="button" tabindex="0">[Sync Now]</span>
@@ -707,14 +707,14 @@
           </div>
         </div>
 
-        <div class="settings-version">Bingo Board &middot; v3.210</div>
+        <div class="settings-version">Bingo Board &middot; v3.220</div>
       </div>
     </div>
   </div>
 
   <script>
 (() => {
-  const APP_VERSION = '3.210';
+  const APP_VERSION = '3.220';
   let maxTiles = 49;
   let gridCols = 7;
   let gridRows = 7;
@@ -1508,6 +1508,7 @@
 
       const rows = lines.slice(1);
       let count = 0;
+      let calculatedPoints = 0;
 
       for (const line of rows) {
         if (count >= maxTiles) break;
@@ -1528,6 +1529,7 @@
             const names = cols[5].split(',').map(s => s.trim());
             if (names[teamNumber - 1]) {
               DOM.teamName.innerText = names[teamNumber - 1];
+              if (TEAM_MAP[currentTeamKey]) TEAM_MAP[currentTeamKey].name = names[teamNumber - 1];
             }
           }
         }
@@ -1537,13 +1539,14 @@
         const img = safeImgSrc(cols[6] || '');
         const title = cols[7] || `Tile ${id}`;
         const description = cols[8] || '';
-        const points = cols[9] || '0';
+        const pointsVal = parseInt(cols[9], 10) || 0;
         
         const items = cols[itemsCol] ? cols[itemsCol].split(',').map(s => s.trim()).filter(Boolean) : [];
         const current = Math.max(0, parseInt(cols[currentCol], 10) || 0);
         const goal = Math.max(1, parseInt(cols[goalCol], 10) || 1);
         const percent = Math.min((current / goal) * 100, 100);
         const isCompleted = percent === 100;
+        if (isCompleted) calculatedPoints += pointsVal;
         
         completion[count] = isCompleted;
         setMinimapComplete(id, isCompleted);
@@ -1552,13 +1555,18 @@
           `<div class="check-item"><span class="check-mark"></span> ${escapeHTML(it)}</div>`
         ).join('');
         
-        tiles[count] = { id, title, img, percent, barColor: getProgressColor(percent), checklistHtml, description, isCompleted, points, noData: false };
+        tiles[count] = { id, title, img, percent, barColor: getProgressColor(percent), checklistHtml, description, isCompleted, points: pointsVal, noData: false };
         count++;
       }
 
       for (let i = count; i < maxTiles; i++) {
         tiles[i] = { id: i + 1, title: 'No Data', img: '', percent: 0, barColor: getProgressColor(0), checklistHtml: '', description: '', isCompleted: false, points: '0', noData: true };
       }
+
+      DOM.totalPoints.innerText = calculatedPoints.toLocaleString();
+      if (TEAM_MAP[currentTeamKey]) TEAM_MAP[currentTeamKey].points = calculatedPoints;
+      storageSave(STORAGE_KEYS.teams, TEAM_MAP);
+
       renderGrid();
       updateCompletedStat();
     } catch (e) {
