@@ -198,9 +198,9 @@
     }
 
     .page-footer {
-      text-align: center; margin-top: 40px;
+      margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border-main);
       font-size: 0.7rem; color: var(--border-main);
-      padding-top: 20px; border-top: 1px solid var(--border-main);
+      display: flex; justify-content: center; align-items: center; gap: 6px;
     }
 
     .version-badge {
@@ -223,7 +223,6 @@
   <header class="settings-header" role="banner">
     <h1>⚙️ Settings</h1>
     <div class="settings-header-right">
-      <span class="version-badge">v3.160</span>
       <a href="admin.html" class="nav-btn">← Back to Admin</a>
     </div>
   </header>
@@ -337,14 +336,16 @@
   </div>
 
   <footer class="page-footer">
-    <div>Bingo Board Settings • v3.160</div>
+    <span>v3.180</span>
+    <span>&middot;</span>
+    <span>Bingo Board Settings</span>
   </footer>
 
   <div id="toast" class="toast"></div>
 
   <script>
 (() => {
-  const APP_VERSION = '3.160';
+  const APP_VERSION = '3.180';
 
   const STORAGE_KEYS = {
     eventConfig: 'bingo-event-config',

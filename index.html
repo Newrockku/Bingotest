@@ -91,6 +91,16 @@
     .settings-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     .settings-btn svg { width: 20px; height: 20px; fill: currentColor; }
 
+    #admin-back-btn {
+      width: auto; padding: 0 12px;
+      background: var(--bg-well); border-color: var(--accent);
+      color: var(--accent); font-weight: bold;
+      font-family: 'Cabin Condensed', sans-serif;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      font-size: 0.9rem; gap: 6px;
+    }
+    #admin-back-btn:hover { background: var(--accent); color: var(--bg-body); }
+
     .minimap-wrapper {
       background: var(--bg-well); padding: 4px;
       border: 2px solid var(--border-main); flex-shrink: 0;
@@ -518,6 +528,7 @@
 
     <a href="admin.html" class="settings-btn" id="admin-back-btn" style="display:none; margin-right:8px; text-decoration:none;" aria-label="Back to Admin">
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+      <span>Admin</span>
     </a>
     <button class="settings-btn" id="settings-trigger" aria-label="Open settings">
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -543,7 +554,7 @@
   <main class="grid-container" id="grid" role="grid" aria-label="Bingo board"></main>
 
   <footer class="page-footer">
-    <span>v3.160</span>
+    <span>v3.180</span>
     <span>&middot;</span>
     <span id="last-sync-text" aria-live="polite">Last Sync: Never</span>
     <span class="sync-btn" id="sync-now" role="button" tabindex="0">[Sync Now]</span>
@@ -696,14 +707,14 @@
           </div>
         </div>
 
-        <div class="settings-version">Bingo Board &middot; v3.160</div>
+        <div class="settings-version">Bingo Board &middot; v3.180</div>
       </div>
     </div>
   </div>
 
   <script>
 (() => {
-  const APP_VERSION = '3.160';
+  const APP_VERSION = '3.180';
   let maxTiles = 49;
   let gridCols = 7;
   let gridRows = 7;
@@ -1203,7 +1214,7 @@
 
       const checklistBox = document.createElement('div');
       checklistBox.className = 'checklist-box';
-      checklistBox.innerHTML = tile.checklistHtml || '<div style="color:var(--text-dim);">No items</div>';
+      checklistBox.innerHTML = tile.checklistHtml || '';
 
       const pointBadge = document.createElement('div');
       pointBadge.className = 'point-badge';
@@ -1296,7 +1307,7 @@
     DOM.modalProgressSection.style.display = t.isCompleted ? 'none' : 'block';
     DOM.modalBar.style.width = t.percent + '%';
     DOM.modalBar.style.backgroundColor = t.barColor;
-    DOM.modalList.innerHTML = t.checklistHtml || '<div style="color:var(--text-dim);">No items</div>';
+    DOM.modalList.innerHTML = t.checklistHtml || '';
     DOM.modalDesc.innerText = t.description || '(No description)';
     
     DOM.modalImage.src = '';
