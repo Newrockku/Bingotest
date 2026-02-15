@@ -574,7 +574,7 @@
   <main class="grid-container" id="grid" role="grid" aria-label="Bingo board"></main>
 
   <footer class="page-footer">
-    <span>v3.319</span>
+    <span>v3.320</span>
     <span>&middot;</span>
     <span id="last-sync-text" aria-live="polite">Last Sync: Never</span>
     <span class="sync-btn" id="sync-now" role="button" tabindex="0">[Sync Now]</span>
@@ -727,14 +727,14 @@
           </div>
         </div>
 
-        <div class="settings-version">Bingo Board &middot; v3.319</div>
+        <div class="settings-version">Bingo Board &middot; v3.320</div>
       </div>
     </div>
   </div>
 
   <script>
 (() => {
-  const APP_VERSION = '3.319';
+  const APP_VERSION = '3.320';
   let maxTiles = 49;
   let gridCols = 7;
   let gridRows = 7;
@@ -954,7 +954,8 @@
     syncInterval: 30000,
     format: '',
     boardSize: '',
-    teamCount: ''
+    teamCount: '',
+    requirePasscodes: true
   };
   let currentTeamKey = '';
   let codewordSecret = '';
@@ -978,7 +979,7 @@
       if (res.ok) {
         const data = await res.json();
         if (data.teams) TEAM_MAP = data.teams;
-        if (data.eventConfig) eventConfig = data.eventConfig;
+        if (data.eventConfig) eventConfig = { ...eventConfig, ...data.eventConfig };
         loadedRemote = true;
       }
     } catch {}
@@ -992,23 +993,13 @@
 
     try {
       const savedEvent = localStorage.getItem(STORAGE_KEYS.eventConfig);
-        if (savedEvent) eventConfig = JSON.parse(savedEvent);
+        if (savedEvent) eventConfig = { ...eventConfig, ...JSON.parse(savedEvent) };
       } catch {}
     }
 
     // Safety: If TEAM_MAP is empty (e.g. bad config or empty local storage), force defaults
     if (Object.keys(TEAM_MAP).length === 0) {
       TEAM_MAP = { ...DEFAULT_TEAMS };
-    }
-
-    // Ensure defaults if missing
-    if (!eventConfig.name) {
-      eventConfig = {
-        name: 'Bingo 2026',
-        codeword: '',
-        description: '',
-        syncInterval: 30000
-      };
     }
 
     // Apply board size if present in config
