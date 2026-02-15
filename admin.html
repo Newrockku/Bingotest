@@ -379,14 +379,14 @@
   </div>
 
   <footer class="page-footer">
-    <span>v3.330</span>
+    <span>v3.333</span>
     <span>&middot;</span>
     <span>Bingo Board Admin</span>
   </footer>
 
   <script>
 (() => {
-  const APP_VERSION = '3.330';
+  const APP_VERSION = '3.333';
 
   const STORAGE_KEYS = {
     eventConfig: 'bingo-event-config',
@@ -925,6 +925,7 @@
           updateBoardSize(metaCols[3]);
         }
         if (metaCols[4]) eventConfig.teamCount = metaCols[4];
+        if (metaCols[8]) eventConfig.description = metaCols[8];
 
         // Parse Bonuses from Col 10 in Rows 1, 2, 3 (Indices 1, 2, 3)
         let rowBonus = 0, colBonus = 0, diagBonus = 0;

@@ -82,6 +82,10 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
 
+    .settings-section:last-child {
+      margin-bottom: 0;
+    }
+
     .settings-section-title {
       font-size: 1.2rem; font-weight: bold;
       color: var(--text-bright); margin: 0 0 16px 0;
@@ -228,6 +232,72 @@
   </header>
 
   <div class="settings-container">
+    <!-- Event Configuration Section -->
+    <div class="settings-section">
+      <h2 class="settings-section-title">📋 Event Details</h2>
+
+      <div class="form-group">
+        <label class="form-label">Event Name</label>
+        <input type="text" id="event-name" class="form-input" placeholder="Bingo 2026">
+        <div class="form-hint-text">Defined in CSV Column 1</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Codeword</label>
+        <input type="text" id="event-codeword" class="form-input" placeholder="e.g., SECRET123">
+        <div class="form-hint-text">Defined in CSV Column 2</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Event Description (optional)</label>
+        <textarea id="event-description" class="form-textarea" placeholder="Brief description shown to all teams..."></textarea>
+        <div class="form-hint-text">Defined in CSV (Tile Description of first tile if used as meta, or custom logic)</div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Format</label>
+          <input type="text" id="event-format" class="form-input" placeholder="e.g. Lockout">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Board Size</label>
+          <input type="text" id="event-boardsize" class="form-input" placeholder="e.g. 7x7">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Team Count</label>
+          <input type="text" id="event-teamcount" class="form-input" placeholder="e.g. 2">
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Source Section -->
+    <div class="settings-section">
+      <h2 class="settings-section-title">💾 Data Source</h2>
+      <div class="form-group">
+        <label class="form-label">CSV Data URL</label>
+        <textarea id="csv-url" class="form-textarea" placeholder="https://docs.google.com/spreadsheets/export?..."></textarea>
+        <div class="form-hint-text">Google Sheets or spreadsheet export URL (same for all teams)</div>
+      </div>
+      <div class="form-actions" style="margin-top: 0; padding-top: 0; border-top: none;">
+        <button class="btn" id="import-csv-btn">🔄 Load Settings from CSV</button>
+      </div>
+    </div>
+
+    <!-- Security Section -->
+    <div class="settings-section">
+      <h2 class="settings-section-title">🔒 Security</h2>
+      <div class="form-group">
+        <div class="settings-row" style="justify-content: flex-start; gap: 10px; align-items: center;">
+          <input type="checkbox" id="event-require-passcodes" style="width:18px; height:18px; cursor:pointer; margin: 0;">
+          <label for="event-require-passcodes" class="settings-row-label" style="cursor:pointer; margin: 0;">Require Team Passcodes</label>
+        </div>
+        <div class="form-hint-text">If unchecked, passcodes are ignored and players can switch teams freely.</div>
+      </div>
+
+      <h3 class="settings-section-title" style="border: none; color: var(--text-bright); margin-top: 20px; font-size: 1rem;">Team Passcodes</h3>
+      <div id="team-passcodes-list"></div>
+    </div>
+
     <!-- Appearance Section -->
     <div class="settings-section">
       <h2 class="settings-section-title">🎨 Appearance</h2>
@@ -274,70 +344,6 @@
       </div>
     </div>
 
-    <!-- Event Configuration Section -->
-    <div class="settings-section">
-      <h2 class="settings-section-title">📋 Event Configuration</h2>
-
-      <div class="form-group">
-        <label class="form-label">CSV Data URL</label>
-        <textarea id="csv-url" class="form-textarea" placeholder="https://docs.google.com/spreadsheets/export?..."></textarea>
-        <div class="form-hint-text">Google Sheets or spreadsheet export URL (same for all teams)</div>
-      </div>
-
-      <div class="form-actions" style="margin-top: 0; padding-top: 0; border-top: none; margin-bottom: 20px;">
-        <button class="btn" id="import-csv-btn">🔄 Load Settings from CSV</button>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Event Name</label>
-        <input type="text" id="event-name" class="form-input" placeholder="Bingo 2026" readonly>
-        <div class="form-hint-text">Defined in CSV Column 1</div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Codeword</label>
-        <input type="text" id="event-codeword" class="form-input" placeholder="e.g., SECRET123" readonly>
-        <div class="form-hint-text">Defined in CSV Column 2</div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Event Description (optional)</label>
-        <textarea id="event-description" class="form-textarea" placeholder="Brief description shown to all teams..." readonly></textarea>
-        <div class="form-hint-text">Defined in CSV (Tile Description of first tile if used as meta, or custom logic)</div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Security</label>
-        <div class="settings-row" style="justify-content: flex-start; gap: 10px;">
-          <input type="checkbox" id="event-require-passcodes" style="width:18px; height:18px; cursor:pointer;">
-          <label for="event-require-passcodes" class="settings-row-label" style="cursor:pointer;">Require Team Passcodes</label>
-        </div>
-        <div class="form-hint-text">If unchecked, passcodes are ignored and players can switch teams freely.</div>
-      </div>
-
-      <!-- Team Passcodes Section -->
-      <div class="settings-section" style="margin-top: 20px; box-shadow: none; border: none; padding: 0; background: none;">
-        <h3 class="settings-section-title" style="border: none; color: var(--text-bright);">🔒 Team Passcodes</h3>
-        <div id="team-passcodes-list"></div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Format</label>
-          <input type="text" id="event-format" class="form-input" placeholder="e.g. Lockout" readonly>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Board Size</label>
-          <input type="text" id="event-boardsize" class="form-input" placeholder="e.g. 7x7" readonly>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Team Count</label>
-          <input type="text" id="event-teamcount" class="form-input" placeholder="e.g. 2" readonly>
-        </div>
-      </div>
-
-    </div>
-
     <!-- Global Config Export -->
     <div class="settings-section">
       <h2 class="settings-section-title">🌍 Share Settings</h2>
@@ -351,7 +357,7 @@
   </div>
 
   <footer class="page-footer">
-    <span>v3.330</span>
+    <span>v3.333</span>
     <span>&middot;</span>
     <span>Bingo Board Settings</span>
   </footer>
@@ -360,7 +366,7 @@
 
   <script>
 (() => {
-  const APP_VERSION = '3.330';
+  const APP_VERSION = '3.333';
 
   const STORAGE_KEYS = {
     eventConfig: 'bingo-event-config',
@@ -637,11 +643,13 @@
       const team = teamsConfig[key];
       const div = document.createElement('div');
       div.className = 'settings-row';
-      div.style.justifyContent = 'flex-start';
+      div.style.display = 'flex';
+      div.style.alignItems = 'center';
       div.style.gap = '10px';
+      div.style.justifyContent = 'flex-start';
       div.innerHTML = `
-        <label class="settings-row-label" style="width: 150px;">${escapeHTML(team.name)}</label>
-        <input type="text" class="form-input team-passcode-input" data-key="${key}" value="${escapeHTML(team.passcode || '')}" placeholder="Passcode (optional)" style="flex:1;">
+        <label class="settings-row-label" style="width: 200px; flex-shrink: 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHTML(team.name)}</label>
+        <input type="text" class="form-input team-passcode-input" data-key="${key}" value="${escapeHTML(team.passcode || '')}" placeholder="Passcode (optional)" style="flex-grow: 1;">
       `;
       container.appendChild(div);
     });
@@ -804,6 +812,17 @@
     $('event-require-passcodes').addEventListener('change', (e) => {
       eventConfig.requirePasscodes = e.target.checked;
       storageSave(STORAGE_KEYS.eventConfig, eventConfig);
+    });
+
+    // Listeners for manual edits
+    ['event-name', 'event-codeword', 'event-description', 'event-format', 'event-boardsize', 'event-teamcount'].forEach(id => {
+      const el = $(id);
+      if (el) el.addEventListener('input', (e) => {
+        const key = id.replace('event-', '');
+        const configKey = key === 'boardsize' ? 'boardSize' : (key === 'teamcount' ? 'teamCount' : key);
+        eventConfig[configKey] = e.target.value;
+        storageSave(STORAGE_KEYS.eventConfig, eventConfig);
+      });
     });
   };
 
