@@ -1120,11 +1120,15 @@
     const sel = DOM.themeSel;
     if (!sel) return;
 
-    // Clear existing options except optgroup
     const optGroup = DOM.customOptgroup;
+
+    // Clear existing options except optgroup
     Array.from(sel.children).forEach(child => {
       if (child !== optGroup) sel.removeChild(child);
     });
+
+    // Ensure optGroup is attached
+    if (optGroup && !sel.contains(optGroup)) sel.appendChild(optGroup);
 
     // Populate standard themes
     if (window.BINGO_THEME_METADATA) {
@@ -1133,7 +1137,7 @@
         opt.value = meta.value;
         opt.textContent = meta.label;
         if (optGroup) sel.insertBefore(opt, optGroup);
-        else sel.appendChild(opt);
+        else sel.appendChild(opt); // Fallback if optGroup missing
       });
     }
     
@@ -1148,12 +1152,10 @@
   };
 
   const init = async () => {
-    ThemeEditor.init();
     await loadConfig();
     setupThemeDropdown();
     renderEventForm();
     renderTeamPasscodes();
-
     ThemeEditor.init();
 
     $('import-csv-btn').addEventListener('click', importFromCSV);

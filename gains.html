@@ -769,7 +769,11 @@
             const opt = document.createElement('option');
             opt.value = meta.value;
             opt.textContent = meta.label;
-            if (DOM.customOptgroup) themeSel.insertBefore(opt, DOM.customOptgroup);
+            
+            // Safe insert
+            if (DOM.customOptgroup && themeSel.contains(DOM.customOptgroup)) {
+              themeSel.insertBefore(opt, DOM.customOptgroup);
+            }
             else themeSel.appendChild(opt);
           });
         }
