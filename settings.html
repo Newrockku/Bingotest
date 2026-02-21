@@ -971,11 +971,31 @@
   };
 
   const loadConfig = async () => {
-    // 1. Load from LocalStorage (fallback)
-    eventConfig = storageLoad(STORAGE_KEYS.eventConfig, { ...DEFAULT_EVENT });
-    teamsConfig = storageLoad(STORAGE_KEYS.teams, { ...DEFAULT_TEAMS });
+    // 1. Try to load from config.json
+    try {
+      const res = await fetch('config.json?t=' + Date.now());
+      if (res.ok) {
+        const data = await res.json();
+        if (data.eventConfig) {
+          eventConfig = { ...DEFAULT_EVENT, ...data.eventConfig };
+          storageSave(STORAGE_KEYS.eventConfig, eventConfig);
+        }
+        if (data.teams) {
+          teamsConfig = data.teams;
+          storageSave(STORAGE_KEYS.teams, teamsConfig);
+        }
+      }
+    } catch (e) {
+      console.log('Config load failed or missing, using local storage');
+    }
+
+    // 2. Load from LocalStorage (fallback or override)
+    const storedEvent = storageLoad(STORAGE_KEYS.eventConfig, null);
+    if (storedEvent) eventConfig = { ...eventConfig, ...storedEvent };
     
-    // Fix: Ensure teamsConfig is populated if storage was empty object
+    const storedTeams = storageLoad(STORAGE_KEYS.teams, null);
+    if (storedTeams) teamsConfig = storedTeams;
+    
     if (!teamsConfig || Object.keys(teamsConfig).length === 0) {
       teamsConfig = { ...DEFAULT_TEAMS };
     }
@@ -1097,12 +1117,17 @@
   };
 
   const setupThemeDropdown = () => {
-    const sel = $('settings-theme-dropdown');
+    const sel = DOM.themeSel;
     if (!sel) return;
+
+    // Clear existing options except optgroup
+    const optGroup = DOM.customOptgroup;
+    Array.from(sel.children).forEach(child => {
+      if (child !== optGroup) sel.removeChild(child);
+    });
 
     // Populate standard themes
     if (window.BINGO_THEME_METADATA) {
-      const optGroup = sel.querySelector('optgroup');
       window.BINGO_THEME_METADATA.forEach(meta => {
         const opt = document.createElement('option');
         opt.value = meta.value;
@@ -1119,15 +1144,7 @@
       applyTheme(sel.value);
     });
 
-    // Visuals
-    const defaultStyle = { '--bg-tile': '#494034', '--text-main': '#ffac00' };
-    Array.from(sel.options).forEach(opt => {
-      const t = THEMES[opt.value] || defaultStyle;
-      if (t) {
-        opt.style.backgroundColor = t['--bg-tile'] || t['--bg-body'];
-        opt.style.color = t['--text-main'];
-      }
-    });
+    updateThemeDropdownVisuals();
   };
 
   const init = async () => {

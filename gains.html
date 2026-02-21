@@ -27,6 +27,11 @@
       font-family: 'Cabin Condensed', sans-serif; margin: 0; padding: 20px;
       min-height: 100vh;
     }
+    .sr-only {
+      position: absolute !important;
+      width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0); border: 0; white-space: nowrap;
+    }
     .gains-header {
       background: var(--bg-tile); border: 2px solid var(--border-main);
       padding: 20px; margin: 0 auto 30px auto; max-width: 95%;
@@ -124,6 +129,139 @@
     }
     .settings-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--bg-well); }
     .settings-btn svg { width: 20px; height: 20px; fill: currentColor; }
+
+    /* Modal & Settings CSS */
+    #modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.75); display: none;
+      justify-content: center; align-items: center; z-index: 2000;
+      backdrop-filter: blur(3px);
+    }
+    #modal-overlay.active { display: flex; }
+    .modal-content {
+      background-color: var(--bg-tile); border: 3px solid var(--border-main);
+      width: 95vw; max-width: 600px; padding: 25px;
+      box-shadow: 0 0 50px rgba(0,0,0,0.8), 0 0 30px 5px var(--accent);
+      display: flex; flex-direction: column; max-height: 90vh; overflow-y: auto;
+    }
+    .modal-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .modal-close-btn {
+      background: none; border: none; padding: 4px; cursor: pointer;
+      color: var(--text-dim); font-size: 2rem; line-height: 1;
+    }
+    .modal-close-btn:hover { color: var(--accent); }
+    .modal-header {
+      font-size: 1.8rem; margin: 0 0 15px 0; text-align: center;
+      font-weight: bold; color: var(--text-main);
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    }
+    .settings-section { margin-bottom: 18px; }
+    .settings-section-title {
+      font-size: 0.75rem; text-transform: uppercase; font-weight: bold;
+      color: var(--text-dim); letter-spacing: 1px; margin-bottom: 8px;
+      padding-bottom: 4px; border-bottom: 1px solid var(--border-main);
+    }
+    .settings-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+    .settings-row-label { font-size: 1rem; color: var(--text-bright); }
+    .settings-row-hint { font-size: 0.7rem; color: var(--text-dim); margin-top: 2px; }
+    .settings-select {
+      background: var(--bg-well); color: var(--text-main);
+      border: 1px solid var(--border-main); padding: 5px 10px;
+      font-family: 'Cabin Condensed'; cursor: pointer;
+      font-size: 1rem; border-radius: 0; min-width: 140px;
+    }
+    .settings-select:focus { border-color: var(--accent); outline: none; }
+
+    /* Theme Editor CSS */
+    .theme-editor-toggle { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+    .theme-editor-btn {
+      background: var(--bg-well); border: 1px solid var(--border-main);
+      color: var(--text-main); padding: 5px 12px;
+      font-family: 'Cabin Condensed', sans-serif; font-size: 0.85rem;
+      cursor: pointer; border-radius: 0; transition: all 0.2s ease;
+    }
+    .theme-editor-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--bg-tile); }
+    .theme-editor-btn.danger { border-color: var(--danger); color: var(--danger); }
+    .theme-editor-btn.danger:hover { background: var(--danger); color: #000; }
+
+    .theme-editor-grid {
+      display: none; flex-direction: column; gap: 6px; margin-top: 10px;
+      padding: 10px; background: var(--bg-well); border: 1px solid var(--border-main);
+      border-radius: 0; max-height: 260px; overflow-y: auto;
+    }
+    .theme-editor-grid.open { display: flex; }
+
+    .color-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 3px 0; }
+    .color-row-label {
+      font-size: 0.8rem; color: var(--text-bright); flex: 1; min-width: 0;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .color-row-controls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .color-picker-wrapper {
+      position: relative; width: 32px; height: 26px;
+      border: 2px solid var(--border-main); border-radius: 0;
+      overflow: hidden; cursor: pointer; transition: border-color 0.2s ease;
+    }
+    .color-picker-wrapper:hover { border-color: var(--accent); }
+    .color-picker-wrapper input[type="color"] {
+      position: absolute; top: -4px; left: -4px;
+      width: calc(100% + 8px); height: calc(100% + 8px);
+      border: none; cursor: pointer; padding: 0; background: none;
+    }
+    .color-hex-input {
+      width: 72px; background: var(--bg-body); border: 1px solid var(--border-main);
+      color: var(--text-bright); font-family: 'Cabin Condensed', monospace;
+      font-size: 0.8rem; padding: 3px 6px; border-radius: 0; text-transform: lowercase;
+    }
+    .color-hex-input:focus { border-color: var(--accent); outline: none; }
+    .color-hex-input.invalid { border-color: var(--danger); color: var(--danger); }
+
+    .theme-editor-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+    .theme-editor-name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .theme-name-input {
+      flex: 1; background: var(--bg-body); border: 1px solid var(--border-main);
+      color: var(--text-bright); font-family: 'Cabin Condensed', sans-serif;
+      font-size: 0.9rem; padding: 4px 8px; border-radius: 0;
+    }
+    .theme-name-input:focus { border-color: var(--accent); outline: none; }
+
+    .custom-theme-list { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+    .custom-theme-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 4px 8px; background: var(--bg-body);
+      border: 1px solid var(--border-main); border-radius: 0;
+    }
+    .custom-theme-item-name {
+      font-size: 0.85rem; color: var(--text-bright); cursor: pointer;
+      flex: 1; padding: 2px 0;
+    }
+    .custom-theme-item-name:hover { color: var(--accent); }
+    .custom-theme-item-actions { display: flex; gap: 4px; flex-shrink: 0; }
+
+    .mini-btn {
+      background: none; border: 1px solid var(--border-main);
+      color: var(--text-dim); font-size: 0.7rem; padding: 2px 6px;
+      cursor: pointer; border-radius: 0; font-family: 'Cabin Condensed', sans-serif;
+      transition: all 0.2s ease;
+    }
+    .mini-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .mini-btn.del:hover { border-color: var(--danger); color: var(--danger); }
+
+    .theme-editor-toast {
+      font-size: 0.75rem; color: var(--text-completed);
+      opacity: 0; transition: opacity 0.3s ease; min-height: 1.2em;
+    }
+    .theme-editor-toast.show { opacity: 1; }
+
+    .theme-editor-import-export { display: flex; gap: 6px; margin-top: 8px; }
+    .theme-export-area {
+      width: 100%; min-height: 60px; max-height: 100px;
+      background: var(--bg-body); border: 1px solid var(--border-main);
+      color: var(--text-bright); font-family: 'Cabin Condensed', monospace;
+      font-size: 0.7rem; padding: 6px; border-radius: 0;
+      resize: vertical; margin-top: 6px;
+    }
+    .theme-export-area:focus { border-color: var(--accent); outline: none; }
   </style>
 </head>
 <body>
@@ -131,12 +269,10 @@
   <header class="gains-header" role="banner">
     <h1><svg style="width:1em; height:1em; fill:currentColor; vertical-align: -0.15em; margin-right: 10px;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 9.2h3V19H5zM10.6 5h3v14h-3zm5.6 8h3v6h-3z"/></svg>Gains Tracker</h1>
     <div style="display:flex; gap:10px; align-items:center;">
-      <select id="theme-select" class="nav-btn" style="padding: 6px; border-radius: 0;">
-      </select>
-      <a href="settings.html" class="settings-btn" aria-label="Settings">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1115.6 12 3.611 3.611 0 0112 15.6z"/></svg>
-      </a>
       <a href="admin.html" id="admin-back-btn" class="nav-btn" style="display:none;">← Admin</a>
+      <button class="settings-btn" id="settings-trigger" aria-label="Open settings">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1115.6 12 3.611 3.611 0 0112 15.6z"/></svg>
+      </button>
     </div>
   </header>
 
@@ -147,6 +283,58 @@
         <thead id="gains-table-head"></thead>
         <tbody id="gains-table-body"></tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-top-bar">
+        <div></div>
+        <button class="modal-close-btn" id="modal-close" aria-label="Close settings">&times;</button>
+      </div>
+      <div class="modal-header">SETTINGS</div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">Appearance</div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-row-label">Theme</div>
+            <div class="settings-row-hint">Choose a visual style</div>
+          </div>
+          <label for="settings-theme-dropdown" class="sr-only">Select Theme</label>
+          <select id="settings-theme-dropdown" class="settings-select">
+            <optgroup id="custom-theme-optgroup" label="Custom Themes"></optgroup>
+          </select>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">Theme Editor</div>
+        <div id="custom-themes-list" class="custom-theme-list"></div>
+        <div class="theme-editor-toggle">
+          <button class="theme-editor-btn" id="editor-new-btn">+ New Custom Theme</button>
+          <button class="theme-editor-btn" id="editor-edit-btn" style="display:none;">Edit Current</button>
+        </div>
+        <div class="theme-editor-grid" id="theme-editor-panel">
+          <div class="theme-editor-name-row">
+            <label for="custom-theme-name" class="sr-only">Theme Name</label>
+            <input type="text" id="custom-theme-name" class="theme-name-input" placeholder="My Custom Theme" maxlength="30">
+          </div>
+          <div id="color-rows-container"></div>
+          <div class="theme-editor-actions">
+            <button class="theme-editor-btn" id="editor-save-btn">Save Theme</button>
+            <button class="theme-editor-btn" id="editor-reset-btn">Reset to Base</button>
+            <button class="theme-editor-btn" id="editor-cancel-btn">Cancel</button>
+          </div>
+          <span class="theme-editor-toast" id="editor-toast"></span>
+          <div class="theme-editor-import-export">
+            <button class="theme-editor-btn" id="editor-export-btn">Export</button>
+            <button class="theme-editor-btn" id="editor-import-btn">Import</button>
+          </div>
+          <textarea class="theme-export-area" id="editor-io-area" placeholder="Paste theme JSON here to import..." style="display:none;"></textarea>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -173,38 +361,265 @@
     let gainsData = [];
     let sortState = { column: 'Total', order: 'desc' };
 
+    const STORAGE_KEYS = {
+      theme: 'bingo-theme',
+      customThemes: 'bingo-custom-themes'
+    };
+
     const $ = id => document.getElementById(id);
+    const escapeHTML = (str) => {
+      const d = document.createElement('div');
+      d.appendChild(document.createTextNode(String(str ?? '')));
+      return d.innerHTML;
+    };
 
     const storageLoad = (k, fb) => {
       try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch { return fb; }
     };
     const storageSave = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
 
+    const THEME_VARS = window.BINGO_THEME_VARS;
     const THEMES = window.BINGO_THEMES;
 
-    const loadCustomThemes = () => {
-      try {
-        const custom = JSON.parse(localStorage.getItem('bingo-custom-themes') || '{}');
-        const sel = $('theme-select');
-        for (const [slug, data] of Object.entries(custom)) {
-          THEMES[slug] = data.vars;
-          if (sel && !sel.querySelector(`option[value="${slug}"]`)) {
-             const opt = document.createElement('option');
-             opt.value = slug;
-             opt.textContent = data.name;
-             sel.appendChild(opt);
-          }
-        }
-      } catch {}
+    const DOM = {
+      themeSel: $('settings-theme-dropdown'),
+      customOptgroup: $('custom-theme-optgroup'),
+      editorPanel: $('theme-editor-panel'),
+      editorNewBtn: $('editor-new-btn'),
+      editorEditBtn: $('editor-edit-btn'),
+      editorSaveBtn: $('editor-save-btn'),
+      editorResetBtn: $('editor-reset-btn'),
+      editorCancelBtn: $('editor-cancel-btn'),
+      editorToast: $('editor-toast'),
+      editorExportBtn: $('editor-export-btn'),
+      editorImportBtn: $('editor-import-btn'),
+      editorIOArea: $('editor-io-area'),
+      colorRows: $('color-rows-container'),
+      customThemeName: $('custom-theme-name'),
+      customThemeList: $('custom-themes-list'),
+      modalOverlay: $('modal-overlay'),
+      modalClose: $('modal-close'),
+      settingsTrigger: $('settings-trigger')
     };
 
     const applyTheme = (name) => {
       const root = document.documentElement;
-      const THEME_VARS = ['--bg-body','--bg-tile','--bg-well','--bg-completed','--bg-completed-well','--border-main','--border-completed','--accent','--text-main','--text-bright','--text-dim','--text-completed'];
       for (const k of THEME_VARS) root.style.setProperty(k, '');
       const t = THEMES[name];
       if (t) for (const [k, v] of Object.entries(t)) root.style.setProperty(k, v);
-      storageSave('bingo-theme', name);
+      storageSave(STORAGE_KEYS.theme, name);
+      if (DOM.themeSel) DOM.themeSel.value = name;
+    };
+
+    const updateThemeDropdownVisuals = () => {
+      if (!DOM.themeSel) return;
+      const defaultStyle = { '--bg-tile': '#494034', '--text-main': '#ffac00' };
+      Array.from(DOM.themeSel.options).forEach(opt => {
+        const t = THEMES[opt.value] || defaultStyle;
+        if (t) {
+          opt.style.backgroundColor = t['--bg-tile'] || t['--bg-body'];
+          opt.style.color = t['--text-main'];
+        }
+      });
+    };
+
+    /* ========================= THEME EDITOR ========================= */
+    const ThemeEditor = (() => {
+      const VAR_LABELS = {
+        '--bg-body': 'Background', '--bg-tile': 'Tile Background', '--bg-well': 'Well / Inset',
+        '--bg-completed': 'Completed Tile BG', '--bg-completed-well': 'Completed Well',
+        '--border-main': 'Border', '--border-completed': 'Completed Border', '--accent': 'Accent',
+        '--text-main': 'Primary Text', '--text-bright': 'Bright Text', '--text-dim': 'Dim Text',
+        '--text-completed': 'Completed Text'
+      };
+      let customThemes = {};
+      let editorOpen = false;
+      let editingSlug = null;
+      let liveVars = {};
+
+      const loadCustomThemes = () => {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEYS.customThemes);
+          if (raw) customThemes = JSON.parse(raw);
+        } catch { customThemes = {}; }
+      };
+      const saveCustomThemes = () => { try { localStorage.setItem(STORAGE_KEYS.customThemes, JSON.stringify(customThemes)); } catch {} };
+      const slugify = (name) => 'custom_' + name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '').substring(0, 30);
+      const isValidHex = (v) => /^#[0-9a-f]{6}$/i.test(v);
+      const rgbToHex = (r, g, b) => '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+      const parseColorToHex = (val) => {
+        const s = String(val).trim().toLowerCase();
+        if (isValidHex(s)) return s;
+        if (/^#[0-9a-f]{3}$/i.test(s)) return '#' + s[1]+s[1] + s[2]+s[2] + s[3]+s[3];
+        const temp = document.createElement('div');
+        temp.style.color = s;
+        document.body.appendChild(temp);
+        const computed = getComputedStyle(temp).color;
+        document.body.removeChild(temp);
+        const m = computed.match(/(\d+)/g);
+        if (m && m.length >= 3) return rgbToHex(+m[0], +m[1], +m[2]);
+        return null;
+      };
+      const getCurrentVars = () => {
+        const root = document.documentElement;
+        const cs = getComputedStyle(root);
+        const vars = {};
+        for (const key of THEME_VARS) {
+          const raw = cs.getPropertyValue(key).trim();
+          const hex = parseColorToHex(raw);
+          vars[key] = hex || '#000000';
+        }
+        return vars;
+      };
+      const previewVars = (vars) => {
+        const root = document.documentElement;
+        for (const [k, v] of Object.entries(vars)) root.style.setProperty(k, v);
+      };
+      const toast = (msg, duration = 2000) => {
+        DOM.editorToast.textContent = msg;
+        DOM.editorToast.classList.add('show');
+        setTimeout(() => DOM.editorToast.classList.remove('show'), duration);
+      };
+      const buildColorRows = () => {
+        DOM.colorRows.innerHTML = '';
+        const frag = document.createDocumentFragment();
+        for (const cssVar of THEME_VARS) {
+          const label = VAR_LABELS[cssVar] || cssVar;
+          const currentVal = liveVars[cssVar] || '#000000';
+          const row = document.createElement('div');
+          row.className = 'color-row';
+          row.innerHTML = `<span class="color-row-label" title="${cssVar}">${escapeHTML(label)}</span><div class="color-row-controls"><div class="color-picker-wrapper"><input type="color" value="${currentVal}" data-var="${cssVar}"></div><input type="text" class="color-hex-input" value="${currentVal}" data-var="${cssVar}" maxlength="7"></div>`;
+          const picker = row.querySelector('input[type="color"]');
+          const hexInput = row.querySelector('.color-hex-input');
+          picker.addEventListener('input', () => {
+            const val = picker.value; hexInput.value = val; hexInput.classList.remove('invalid'); liveVars[cssVar] = val; previewVars(liveVars);
+          });
+          hexInput.addEventListener('input', () => {
+            let val = hexInput.value.trim(); if (val && !val.startsWith('#')) val = '#' + val;
+            const hex = parseColorToHex(val);
+            if (hex) { hexInput.classList.remove('invalid'); picker.value = hex; liveVars[cssVar] = hex; previewVars(liveVars); } else { hexInput.classList.add('invalid'); }
+          });
+          frag.appendChild(row);
+        }
+        DOM.colorRows.appendChild(frag);
+      };
+      const openEditor = (slug) => {
+        editingSlug = slug || null; editorOpen = true;
+        if (slug && customThemes[slug]) { liveVars = { ...customThemes[slug].vars }; DOM.customThemeName.value = customThemes[slug].name; }
+        else { liveVars = getCurrentVars(); DOM.customThemeName.value = ''; }
+        previewVars(liveVars); buildColorRows();
+        DOM.editorPanel.classList.add('open'); DOM.editorIOArea.style.display = 'none';
+        DOM.editorNewBtn.style.display = 'none'; DOM.editorEditBtn.style.display = 'none';
+      };
+      const closeEditor = (revert = true) => {
+        editorOpen = false; editingSlug = null;
+        DOM.editorPanel.classList.remove('open'); DOM.editorIOArea.style.display = 'none';
+        DOM.editorNewBtn.style.display = ''; updateEditButton();
+        if (revert) { const saved = storageLoad(STORAGE_KEYS.theme, 'osrs'); applyTheme(saved); }
+      };
+      const saveTheme = () => {
+        const name = DOM.customThemeName.value.trim();
+        if (!name) { toast('Please enter a theme name'); DOM.customThemeName.focus(); return; }
+        for (const key of THEME_VARS) if (!isValidHex(liveVars[key])) { toast(`Invalid color for ${VAR_LABELS[key] || key}`); return; }
+        const slug = editingSlug || slugify(name);
+        if (!editingSlug && THEMES.hasOwnProperty(slug.replace('custom_', ''))) { toast('Name conflicts with a built-in theme'); return; }
+        customThemes[slug] = { name: name, vars: { ...liveVars } };
+        saveCustomThemes(); refreshCustomDropdown(); refreshCustomList();
+        THEMES[slug] = { ...liveVars }; applyTheme(slug); DOM.themeSel.value = slug;
+        toast('Theme saved!'); closeEditor(false);
+      };
+      const resetToBase = () => {
+        const currentThemeKey = DOM.themeSel.value;
+        if (editingSlug && customThemes[editingSlug]) liveVars = { ...customThemes[editingSlug].vars };
+        else if (THEMES[currentThemeKey] && currentThemeKey !== editingSlug) liveVars = { ...THEMES[currentThemeKey] };
+        else { applyTheme('osrs'); liveVars = getCurrentVars(); }
+        previewVars(liveVars); buildColorRows(); toast('Reset to base colors');
+      };
+      const deleteTheme = (slug) => {
+        if (!customThemes[slug]) return;
+        const name = customThemes[slug].name; delete customThemes[slug]; delete THEMES[slug];
+        saveCustomThemes(); refreshCustomDropdown(); refreshCustomList();
+        const current = storageLoad(STORAGE_KEYS.theme, 'osrs');
+        if (current === slug) { applyTheme('osrs'); DOM.themeSel.value = 'osrs'; }
+        toast(`Deleted "${name}"`);
+      };
+      const exportTheme = () => {
+        const name = DOM.customThemeName.value.trim() || 'Untitled';
+        const data = { name: name, version: APP_VERSION, vars: { ...liveVars } };
+        DOM.editorIOArea.value = JSON.stringify(data, null, 2);
+        DOM.editorIOArea.style.display = 'block'; DOM.editorIOArea.focus(); DOM.editorIOArea.select();
+        toast('Theme JSON exported');
+      };
+      const importTheme = () => {
+        const area = DOM.editorIOArea;
+        if (area.style.display === 'none') { area.style.display = 'block'; area.value = ''; area.placeholder = 'Paste theme JSON here...'; area.focus(); return; }
+        const raw = area.value.trim(); if (!raw) { toast('Paste theme JSON first'); return; }
+        try {
+          const data = JSON.parse(raw);
+          if (!data.vars) { toast('Invalid theme format'); return; }
+          for (const key of THEME_VARS) {
+            const hex = parseColorToHex(data.vars[key]);
+            if (!hex) { toast(`Invalid color for ${key}`); return; }
+            data.vars[key] = hex;
+          }
+          DOM.customThemeName.value = data.name || 'Imported Theme';
+          liveVars = { ...data.vars }; previewVars(liveVars); buildColorRows();
+          area.style.display = 'none'; toast('Theme imported! Click Save.');
+        } catch (e) { toast('Invalid JSON format'); }
+      };
+      const refreshCustomDropdown = () => {
+        DOM.customOptgroup.innerHTML = '';
+        const slugs = Object.keys(customThemes).sort((a, b) => customThemes[a].name.localeCompare(customThemes[b].name));
+        for (const slug of slugs) {
+          const opt = document.createElement('option'); opt.value = slug; opt.textContent = customThemes[slug].name;
+          DOM.customOptgroup.appendChild(opt);
+        }
+        DOM.customOptgroup.style.display = slugs.length ? '' : 'none';
+        updateThemeDropdownVisuals();
+      };
+      const refreshCustomList = () => {
+        DOM.customThemeList.innerHTML = '';
+        const slugs = Object.keys(customThemes).sort((a, b) => customThemes[a].name.localeCompare(customThemes[b].name));
+        if (!slugs.length) { DOM.customThemeList.innerHTML = '<div style="font-size:0.75rem; color:var(--text-dim);">No custom themes yet</div>'; return; }
+        const frag = document.createDocumentFragment();
+        for (const slug of slugs) {
+          const item = document.createElement('div'); item.className = 'custom-theme-item';
+          item.innerHTML = `<span class="custom-theme-item-name" data-slug="${slug}">${escapeHTML(customThemes[slug].name)}</span><div class="custom-theme-item-actions"><button class="mini-btn edit-custom" data-slug="${slug}">Edit</button><button class="mini-btn del del-custom" data-slug="${slug}">Del</button></div>`;
+          frag.appendChild(item);
+        }
+        DOM.customThemeList.appendChild(frag);
+      };
+      const updateEditButton = () => { const current = DOM.themeSel.value; DOM.editorEditBtn.style.display = customThemes[current] ? '' : 'none'; };
+      const registerAllCustom = () => { for (const [slug, data] of Object.entries(customThemes)) THEMES[slug] = { ...data.vars }; };
+      const init = () => {
+        loadCustomThemes(); registerAllCustom(); refreshCustomDropdown(); refreshCustomList(); updateEditButton();
+        DOM.editorNewBtn.addEventListener('click', () => openEditor(null));
+        DOM.editorEditBtn.addEventListener('click', () => { const current = DOM.themeSel.value; if (customThemes[current]) openEditor(current); });
+        DOM.editorSaveBtn.addEventListener('click', saveTheme);
+        DOM.editorResetBtn.addEventListener('click', resetToBase);
+        DOM.editorCancelBtn.addEventListener('click', () => closeEditor(true));
+        DOM.editorExportBtn.addEventListener('click', exportTheme);
+        DOM.editorImportBtn.addEventListener('click', importTheme);
+        DOM.customThemeList.addEventListener('click', (e) => {
+          const slug = e.target.dataset?.slug; if (!slug) return;
+          if (e.target.classList.contains('custom-theme-item-name')) { THEMES[slug] = { ...customThemes[slug].vars }; applyTheme(slug); DOM.themeSel.value = slug; updateEditButton(); }
+          else if (e.target.classList.contains('edit-custom')) openEditor(slug);
+          else if (e.target.classList.contains('del-custom')) { if (confirm(`Delete "${customThemes[slug]?.name}"?`)) deleteTheme(slug); }
+        });
+        DOM.themeSel.addEventListener('change', () => updateEditButton());
+      };
+      return { init, refreshCustomDropdown, refreshCustomList, updateEditButton, closeEditor };
+    })();
+
+    const openSettings = () => {
+      DOM.modalOverlay.classList.add('active');
+      ThemeEditor.refreshCustomDropdown();
+      ThemeEditor.refreshCustomList();
+      ThemeEditor.updateEditButton();
+    };
+    const closeSettings = () => {
+      DOM.modalOverlay.classList.remove('active');
+      ThemeEditor.closeEditor(false);
     };
 
     const parseCSV = (text) => {
@@ -342,11 +757,11 @@
         if (btn) btn.style.display = 'inline-flex';
       }
 
-      loadCustomThemes();
-      const savedTheme = storageLoad('bingo-theme', 'osrs');
+      ThemeEditor.init();
+      const savedTheme = storageLoad(STORAGE_KEYS.theme, 'osrs');
       applyTheme(savedTheme);
       
-      const themeSel = $('theme-select');
+      const themeSel = DOM.themeSel;
       if (themeSel) {
         // Populate standard themes
         if (window.BINGO_THEME_METADATA) {
@@ -354,12 +769,12 @@
             const opt = document.createElement('option');
             opt.value = meta.value;
             opt.textContent = meta.label;
-            themeSel.appendChild(opt);
+            if (DOM.customOptgroup) themeSel.insertBefore(opt, DOM.customOptgroup);
+            else themeSel.appendChild(opt);
           });
         }
 
         themeSel.value = savedTheme;
-        themeSel.addEventListener('change', () => applyTheme(themeSel.value));
 
         // Visuals
         const defaultStyle = { '--bg-tile': '#494034', '--text-main': '#ffac00' };
@@ -370,7 +785,15 @@
             opt.style.color = t['--text-main'];
           }
         });
+
+        themeSel.addEventListener('change', () => {
+          applyTheme(themeSel.value);
+          ThemeEditor.updateEditButton();
+        });
       }
+
+      DOM.settingsTrigger.addEventListener('click', openSettings);
+      DOM.modalClose.addEventListener('click', closeSettings);
 
       try {
         const [snap1, snap2] = await Promise.all([
